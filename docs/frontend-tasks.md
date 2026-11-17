@@ -736,7 +736,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 8.1 — Patient types and schemas
 
-- [ ] **Deliverable:** Patient resource type; form schema; filter schema (condition, doctor, dates).
+- [x] **Deliverable:** Patient resource type; form schema; filter schema (condition, doctor, dates).
 
 **Files:**
 
@@ -750,7 +750,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 8.2 — Patient feature API
 
-- [ ] **Deliverable:** `patientApi.list`, `update`, `delete`, `createUnderDoctor`.
+- [x] **Deliverable:** `patientApi.list`, `update`, `delete`, `createUnderDoctor`.
 
 **Files:**
 
@@ -762,7 +762,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 8.3 — Patient list hook
 
-- [ ] **Deliverable:** `usePatientList(query)` — key `["patients", query]` including optional `doctorId`.
+- [x] **Deliverable:** `usePatientList(query)` — key `["patients", query]` including optional `doctorId`.
 
 **Files:**
 
@@ -776,7 +776,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 8.4 — Patient mutations hook
 
-- [ ] **Deliverable:** Create/update/delete — invalidate `["patients"]`, `["doctors", doctorId]`, `["dashboard"]` per §5.
+- [x] **Deliverable:** Create/update/delete — invalidate `["patients"]`, `["doctors", doctorId]`, `["dashboard"]` per §5.
 
 **Files:**
 
@@ -790,7 +790,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 8.5 — Patient table and filters
 
-- [ ] **Deliverable:** Condition badge with text; doctor filter on global page only; debounced `q`.
+- [x] **Deliverable:** Condition badge with text; doctor filter on global page only; debounced `q`.
 
 **Files:**
 
@@ -804,7 +804,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 8.6 — Patient edit dialog
 
-- [ ] **Deliverable:** Opens from row; seeds form from row data — **no** `GET /patients/:id`.
+- [x] **Deliverable:** Opens from row; seeds form from row data — **no** `GET /patients/:id`.
 
 **Files:**
 
@@ -818,7 +818,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 8.7 — Delete patient confirm
 
-- [ ] **Deliverable:** Confirm dialog **names the patient**; calls delete mutation.
+- [x] **Deliverable:** Confirm dialog **names the patient**; calls delete mutation.
 
 **Files:**
 
@@ -834,7 +834,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 8.8 — Patient screen and patients page
 
-- [ ] **Deliverable:** `PatientScreen` with optional `doctorId` prop for scoped list.
+- [x] **Deliverable:** `PatientScreen` with optional `doctorId` prop for scoped list.
 
 **Files:**
 
@@ -847,7 +847,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 8.9 — Doctor detail: patient list + add patient
 
-- [ ] **Deliverable:** Wire `PatientScreen doctorId={id}`; add patient dialog posts to `POST /doctors/:id/patients`.
+- [x] **Deliverable:** Wire `PatientScreen doctorId={id}`; add patient dialog posts to `POST /doctors/:id/patients`.
 
 **Files:**
 

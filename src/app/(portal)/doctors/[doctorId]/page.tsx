@@ -1,21 +1,23 @@
+"use client";
+
+import { use } from "react";
+
+import { useDoctor } from "@/features/doctors/hooks/use-doctor";
 import { DoctorSummary } from "@/features/doctors/ui/doctor-summary";
+import { PatientScreen } from "@/features/patients/ui/patient-screen";
 
 type DoctorDetailPageProps = {
   params: Promise<{ doctorId: string }>;
 };
 
-export default async function DoctorDetailPage({ params }: DoctorDetailPageProps) {
-  const { doctorId } = await params;
+export default function DoctorDetailPage({ params }: DoctorDetailPageProps) {
+  const { doctorId } = use(params);
+  const doctor = useDoctor(doctorId);
 
   return (
     <div className="flex flex-col gap-4">
       <DoctorSummary doctorId={doctorId} />
-      <section className="portal-card">
-        <h2>Patients</h2>
-        <p className="mt-2 text-sm text-ink-secondary">
-          This doctor&apos;s patients arrive with the patient list.
-        </p>
-      </section>
+      <PatientScreen doctorId={doctorId} doctorName={doctor.data?.name} />
     </div>
   );
 }
