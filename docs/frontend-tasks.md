@@ -110,7 +110,7 @@ Do these four tasks in order. Each one is config and a verify command. No featur
 
 ### Task 0.3 — Lefthook
 
-- [ ] **Deliverable:** Commits are formatted, linted, and message-checked. Pushes run typecheck and tests.
+- [x] **Deliverable:** Commits are formatted, linted, and message-checked. Pushes run typecheck and tests.
 
 **Files:**
 

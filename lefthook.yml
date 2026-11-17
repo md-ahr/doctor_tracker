@@ -1,0 +1,24 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: prettier
+      glob: "*.{js,cjs,mjs,ts,tsx,json,yml,yaml,md,css}"
+      run: npx prettier --write {staged_files}
+      stage_fixed: true
+    - name: eslint
+      glob: "*.{js,cjs,mjs,ts,tsx}"
+      run: npx eslint --fix {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: npx commitlint --edit {1}
+
+pre-push:
+  piped: true
+  jobs:
+    - name: typecheck
+      run: npm run typecheck
+    - name: test
+      run: npm test
