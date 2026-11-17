@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": ".cursor/hooks/session-context.mjs"
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": ".cursor/hooks/guard-shell.mjs"
+      }
+    ],
+    "preToolUse": [
+      {
+        "command": ".cursor/hooks/guard-edits.mjs",
+        "matcher": "Write|StrReplace"
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": ".cursor/hooks/mark-edit.mjs"
+      }
+    ],
+    "afterShellExecution": [
+      {
+        "command": ".cursor/hooks/mark-edit.mjs"
+      }
+    ],
+    "stop": [
+      {
+        "command": ".cursor/hooks/verify-task.mjs",
+        "timeout": 900,
+        "loop_limit": 4
+      }
+    ]
+  }
+}

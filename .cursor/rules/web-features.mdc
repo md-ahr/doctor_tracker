@@ -1,0 +1,27 @@
+---
+description: Feature folders, import direction, and the route proxy
+globs: "{src,web/src}/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Feature boundaries
+
+```text
+page → feature UI → feature hook → feature api → HTTP client → API
+```
+
+| File | May import | Must not import |
+| --- | --- | --- |
+| `features/doctors` | `lib/api`, `lib/query`, `components/ui` | `features/patients`, `features/dashboard` |
+| `features/patients` | `lib/api`, `lib/query`, `components/ui` | `features/doctors` |
+| `features/dashboard` | `lib/api`, `lib/time`, `components/ui` | other features |
+| `features/auth` | `lib/api`, `lib/auth` | other features |
+| `app/(portal)/doctors/[doctorId]/page.tsx` | doctor feature and patient feature | `fetch` |
+| feature UI | its own hooks | `HttpDoctorTrackerApi`, `fetch` |
+| hooks | their feature `api` module | a sibling feature |
+
+`components/ui` has no doctor or patient words. `"use client"` only where there is state, a query, or a form.
+
+The cookie gate is `src/proxy.ts`, export name `proxy`. It checks that `dt_refresh` exists. It does not validate the token. Matcher: `/login`, `/dashboard/:path*`, `/doctors/:path*`, `/patients/:path*`.
+
+Each feature uses `model/`, `api/`, `hooks/`, and `ui/`.

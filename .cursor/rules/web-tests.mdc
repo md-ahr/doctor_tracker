@@ -1,0 +1,27 @@
+---
+description: Vitest, Testing Library, MSW, and Playwright for the portal
+globs: "{src,web/src,e2e,web/e2e}/**/*.{test,spec}.{ts,tsx}"
+alwaysApply: false
+---
+
+# Portal tests
+
+| Layer | How |
+| --- | --- |
+| `lib` without React | Vitest. Mock `fetch` or use MSW |
+| Zod schemas | `safeParse` fixtures |
+| feature `api` and `lib/api` | MSW or a mocked `apiRequest` |
+| hooks | `renderHook` plus `QueryClientProvider` plus MSW |
+| UI | Testing Library. Mock hooks or use MSW |
+| `proxy.ts` | call `proxy` with a stub request and cookies |
+| Phase 12 | Playwright for login redirect, form errors, delete confirm, empty dashboard series |
+
+Assert query keys and invalidation in the hook tests. Assert the access token is the module variable after login. Assert a 401 triggers one refresh and one retry.
+
+```bash
+npm test -- src/lib/auth/access-token.test.ts
+npm test
+npm run test:e2e
+```
+
+`test:e2e` exists after Phase 12. Commit from the web repository. Scopes: `ui`, `lib`, `auth`, `doctors`, `patients`, `dashboard`, `app`. Subject under 50 characters.

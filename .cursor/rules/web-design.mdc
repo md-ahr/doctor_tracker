@@ -1,0 +1,25 @@
+---
+description: Doctor Tracker visual tokens, type, and screen density
+globs: "{src,web/src}/**/*.{tsx,css}"
+alwaysApply: false
+---
+
+# Portal design
+
+One light theme. Full rules are in `docs/design.md`. Components use semantic tokens, not raw hex, except when defining the tokens.
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `paper-0` | `#F7F4EE` | page ground |
+| `paper-1` | `#FFFCF7` | dialogs, menus, login panel |
+| `green-600` | `#1B6B56` | primary button, focus, active nav |
+| `ink-900` | `#1A2332` | names and figures |
+| `brick-700` | `#8E2F2A` | errors and destructive confirm |
+
+Newsreader (500, 600) for the wordmark, page titles, and dashboard figures. Atkinson Hyperlegible (400, 600) for controls, tables, and body. Do not substitute Inter or the system UI font.
+
+Controls are 40px tall. Filters are 36px. Corners are 2px on controls and 4px on dialogs. Shadow only on dialogs and menus. Condition marks always include the word. Order is critical, serious, observation, stable, recovering, chronic.
+
+One primary action at the right of the page title. Loading, empty, and error are different. An all-zero chart says "Nothing registered in this range".
+
+Add and edit use a dialog. Delete confirms with the patient's name.

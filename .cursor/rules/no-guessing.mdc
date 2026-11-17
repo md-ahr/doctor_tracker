@@ -1,0 +1,32 @@
+---
+description: Stop guessing and default-kit UI in the Doctor Tracker portal
+alwaysApply: true
+---
+
+# Contract over invention
+
+If `docs/lld.md`, `docs/frontend-structure.md`, `docs/design.md`, or the current task does not state the behavior, stop and name the missing line. Do not invent a route, query key, field, label, or color.
+
+Confirm an unfamiliar Next.js, TanStack Query, React Hook Form, Zod, Recharts, or Playwright signature with Context7. Add shadcn primitives through the shadcn MCP, then restyle them to the design doc.
+
+## Allowed shapes
+
+Query keys are only `["auth", "me"]`, `["doctors", query]`, `["doctors", "facets"]`, `["doctors", id]`, `["patients", query]`, and `["dashboard", from, to]`.
+
+Type is Newsreader and Atkinson Hyperlegible. Page ground is paper `#F7F4EE`. Action color is `#1B6B56`. Controls are 40px with 2px corners. Dialogs are 4px. One light theme.
+
+## Filler that does not ship
+
+- `any`, `as any`, `as unknown as`, `@ts-ignore`, `@ts-expect-error`, `eslint-disable`
+- `TODO`, `FIXME`, `not implemented`, `lorem ipsum`, `coming soon`
+- Inter, Roboto, `bg-white`, Tailwind blue/slate/zinc, `dark:`, `rounded-lg` and larger, heavy shadows
+- A component, chart, or empty state the task did not name
+- Comments that restate the next line
+
+```tsx
+// Bad: default kit
+<Button className="rounded-lg bg-blue-600 shadow-lg">Continue</Button>
+
+// Good: 40px control, 2px corner, action token from the design doc
+<Button className="h-10 rounded-sm bg-action-bg text-action-fg">Add doctor</Button>
+```

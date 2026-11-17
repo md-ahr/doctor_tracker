@@ -1,0 +1,18 @@
+---
+description: Doctor Tracker portal workflow. One frontend task at a time.
+alwaysApply: true
+---
+
+# Portal workflow
+
+1. Read the lowest unchecked task in `docs/frontend-tasks.md` (or `../docs/frontend-tasks.md`).
+2. Change only the files that task names.
+3. Prefer the test first when the task lists concrete cases.
+4. From the web root run, in order, every script that exists: `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`.
+5. Commit with `docs/commit-guidelines.md` only after that gate is green. Subject under 50 characters. One task, one commit. Do not start the next task.
+
+Load `implement-web-task` before feature work. Load `stay-on-contract` when a screen, label, query key, color, or library call is not already written in the task or the design docs. Do not invent it.
+
+Stack: Next.js App Router, React, TypeScript strict, Tailwind, shadcn/ui, TanStack Query, React Hook Form, Zod, Recharts, Temporal, Vitest, Testing Library, MSW, Playwright.
+
+`NEXT_PUBLIC_API_URL` is the API origin with no trailing slash. The app does not connect to MongoDB.

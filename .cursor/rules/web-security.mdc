@@ -1,0 +1,19 @@
+---
+description: XSS, CSRF, token theft, and SSRF controls for the portal
+alwaysApply: true
+---
+
+# Portal security
+
+The portal is a client of one API. It is not a second backend. Load `web-security` before rendering user text, touching the session, or adding a redirect.
+
+| Risk | Required control |
+| --- | --- |
+| XSS | Render names, notes, and errors as React text. No `dangerouslySetInnerHTML`, `innerHTML`, `eval`, or `javascript:` URLs |
+| CSRF | `credentials: "include"` on API calls. Do not add a Next.js route that forwards the cookie |
+| Token theft | Access token stays in memory. No `localStorage` or `sessionStorage`. No `NEXT_PUBLIC_` secret, Mongo URL, or JWT secret |
+| SSRF | Call only `NEXT_PUBLIC_API_URL`. No Route Handler and no fetch of a URL from the query string |
+| Open redirect | Redirects go to `/login` or `/dashboard` only |
+| Clickjacking | Do not frame untrusted HTML. `target="_blank"` uses `rel="noopener noreferrer"` |
+
+User content is text. A chart tooltip gets the same string the table cell gets. Do not parse notes as HTML.

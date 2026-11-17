@@ -1,0 +1,28 @@
+---
+description: Access token, HTTP refresh, and TanStack Query keys
+globs: "{src,web/src}/{lib,features}/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Server data
+
+The access token is a module variable in `lib/auth/access-token.ts`. It is never written to `localStorage`, `sessionStorage`, or a JavaScript-readable cookie.
+
+`lib/api/http-client.ts` sends `credentials: "include"`, sets `Authorization` when a token exists, and on `401` calls `POST /auth/refresh` once and retries the original request once. A failed refresh clears the token and sends the admin to `/login`.
+
+Read `success`, `message`, `data`, and `meta`. Do not invent a second envelope.
+
+| Key | Data | Stale time |
+| --- | --- | --- |
+| `["auth", "me"]` | current admin | 30s default |
+| `["doctors", query]` | doctor page | 30s |
+| `["doctors", "facets"]` | filter values | 30s |
+| `["doctors", id]` | doctor detail | 30s |
+| `["patients", query]` | patient page, including `doctorId` | 30s |
+| `["dashboard", from, to]` | every tile and chart | 60s |
+
+After a doctor write, invalidate `["doctors"]`. After a patient write or delete, invalidate `["patients"]`, `["doctors", doctorId]`, and `["dashboard"]`.
+
+Login, logout, refresh, mutations, filter text, page, dialogs, and the date range are not queries. Debounce search text before it enters a query key. Edit a patient from the row already loaded. Do not add `GET /patients/:id` to open the dialog.
+
+Chart labels print the API's `YYYY-MM-DD` string. Do not pass that string through `new Date()`.
