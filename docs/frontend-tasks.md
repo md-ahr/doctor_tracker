@@ -408,7 +408,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 4.1 — Auth client methods
 
-- [ ] **Deliverable:** `login`, `logout`, `refresh` (if exposed), `me` — `login` calls `setAccessToken`.
+- [x] **Deliverable:** `login`, `logout`, `refresh` (if exposed), `me` — `login` calls `setAccessToken`.
 
 **Files:**
 
@@ -425,7 +425,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 4.2 — Doctor client methods
 
-- [ ] **Deliverable:** `listDoctors`, `createDoctor`, `doctorFacets`, `getDoctor`, `updateDoctor`, `listDoctorPatients`, `createPatientUnderDoctor`.
+- [x] **Deliverable:** `listDoctors`, `createDoctor`, `doctorFacets`, `getDoctor`, `updateDoctor`, `listDoctorPatients`, `createPatientUnderDoctor`.
 
 **Files:**
 
@@ -442,7 +442,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 4.3 — Patient client methods
 
-- [ ] **Deliverable:** `listPatients`, `updatePatient`, `deletePatient` (no `getPatient` for edit dialog).
+- [x] **Deliverable:** `listPatients`, `updatePatient`, `deletePatient` (no `getPatient` for edit dialog).
 
 **Files:**
 
@@ -458,7 +458,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 4.4 — Dashboard client method
 
-- [ ] **Deliverable:** `getDashboard({ from?, to? })`.
+- [x] **Deliverable:** `getDashboard({ from?, to? })`.
 
 **Files:**
 
