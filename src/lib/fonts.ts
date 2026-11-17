@@ -11,5 +11,6 @@ export const uiFont = Atkinson_Hyperlegible_Next({
   subsets: ["latin"],
   weight: ["400", "600"],
   display: "swap",
+  adjustFontFallback: false,
   variable: "--font-ui-loaded",
 });

@@ -1,3 +1,27 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-ui);
+  --font-serif: var(--font-display);
+  --color-action: var(--action-bg);
+  --color-action-hover: var(--action-bg-hover);
+  --color-action-fg: var(--action-fg);
+  --color-sheet: var(--bg-sheet);
+  --color-inset: var(--bg-inset);
+  --color-selected: var(--bg-selected);
+  --color-ink: var(--text-primary);
+  --color-ink-secondary: var(--text-secondary);
+  --color-ink-tertiary: var(--text-tertiary);
+  --color-line: var(--border-subtle);
+  --color-control: var(--border-control);
+  --color-focus: var(--border-focus);
+  --color-danger: var(--danger-bg);
+  --color-danger-fg: var(--danger-fg);
+  --color-danger-text: var(--danger-text);
+  --color-danger-wash: var(--brick-100);
+  --color-paper: var(--paper-0);
+}
+
 :root {
   --paper-0: #f7f4ee;
   --paper-1: #fffcf7;

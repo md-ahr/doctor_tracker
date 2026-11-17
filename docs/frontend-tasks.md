@@ -205,7 +205,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 1.3 — shadcn/ui init and Button
 
-- [ ] **Deliverable:** Tailwind + shadcn configured; `Button` matches 40px height and verdigris primary per design §2.
+- [x] **Deliverable:** Tailwind + shadcn configured; `Button` matches 40px height and verdigris primary per design §2.
 
 **Files:**
 
