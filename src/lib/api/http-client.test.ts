@@ -28,11 +28,11 @@ test("returns typed data from a success envelope", async () => {
   );
   vi.stubGlobal("fetch", fetchMock);
 
-  const body = await apiRequest<{ id: string; name: string }>("/api/v1/doctors");
+  const body = await apiRequest<{ id: string; name: string }>("/doctors");
 
   expect(body.data).toEqual({ id: "doc-1", name: "Ada" });
   expect(fetchMock).toHaveBeenCalledWith(
-    "http://api.test/api/v1/doctors",
+    "http://api.test/doctors",
     expect.objectContaining({ credentials: "include" }),
   );
 });
@@ -57,7 +57,7 @@ test("throws ApiError with details when the envelope reports failure", async () 
     ),
   );
 
-  const error = await apiRequest("/api/v1/doctors").catch((caught: unknown) => caught);
+  const error = await apiRequest("/doctors").catch((caught: unknown) => caught);
 
   expect(error).toBeInstanceOf(ApiError);
   expect(error).toMatchObject({

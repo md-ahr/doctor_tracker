@@ -38,7 +38,7 @@ function renderSession() {
 test("does not request the profile when there is no access token", async () => {
   let calls = 0;
   server.use(
-    http.get(`${api}/api/v1/auth/me`, () => {
+    http.get(`${api}/auth/me`, () => {
       calls += 1;
       return HttpResponse.json({
         success: true,
@@ -58,7 +58,7 @@ test("does not request the profile when there is no access token", async () => {
 test("returns the admin name and email", async () => {
   setAccessToken("jwt-1");
   server.use(
-    http.get(`${api}/api/v1/auth/me`, () =>
+    http.get(`${api}/auth/me`, () =>
       HttpResponse.json({
         success: true,
         message: "Admin profile retrieved successfully",

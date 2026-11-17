@@ -50,7 +50,7 @@ test("retries once with the refreshed access token after a 401", async () => {
     );
   vi.stubGlobal("fetch", fetchMock);
 
-  const body = await apiRequest<{ id: string }[]>("/api/v1/doctors");
+  const body = await apiRequest<{ id: string }[]>("/doctors");
 
   expect(body.data).toEqual([{ id: "doc-1" }]);
   expect(getAccessToken()).toBe("fresh");
@@ -59,7 +59,7 @@ test("retries once with the refreshed access token after a 401", async () => {
     (fetchMock.mock.calls[2]?.[1] as RequestInit | undefined)?.headers,
   );
   expect(retryHeaders.get("Authorization")).toBe("Bearer fresh");
-  expect(fetchMock.mock.calls[1]?.[0]).toBe("http://api.test/api/v1/auth/refresh");
+  expect(fetchMock.mock.calls[1]?.[0]).toBe("http://api.test/auth/refresh");
 });
 
 test("does not loop when refresh fails and sends the admin to login", async () => {
@@ -81,7 +81,7 @@ test("does not loop when refresh fails and sends the admin to login", async () =
   );
   vi.stubGlobal("fetch", fetchMock);
 
-  const error = await apiRequest("/api/v1/doctors").catch((caught: unknown) => caught);
+  const error = await apiRequest("/doctors").catch((caught: unknown) => caught);
 
   expect(error).toBeInstanceOf(ApiError);
   expect(error).toMatchObject({ status: 401, code: "UNAUTHENTICATED" });
@@ -109,7 +109,7 @@ test("does not refresh again when the refresh path itself returns 401", async ()
   );
   vi.stubGlobal("fetch", fetchMock);
 
-  await expect(apiRequest("/api/v1/auth/refresh", { method: "POST" })).rejects.toMatchObject({
+  await expect(apiRequest("/auth/refresh", { method: "POST" })).rejects.toMatchObject({
     status: 401,
     code: "UNAUTHENTICATED",
   });

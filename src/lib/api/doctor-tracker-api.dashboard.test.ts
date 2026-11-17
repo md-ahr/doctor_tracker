@@ -31,7 +31,7 @@ afterAll(() => {
 
 test("passes from and to when they are set", async () => {
   server.use(
-    http.get(`${api}/api/v1/dashboard`, ({ request }) => {
+    http.get(`${api}/dashboard`, ({ request }) => {
       const url = new URL(request.url);
       expect(url.searchParams.get("from")).toBe("2026-10-20");
       expect(url.searchParams.get("to")).toBe("2026-11-18");
@@ -48,7 +48,7 @@ test("passes from and to when they are set", async () => {
 
 test("omits the query string when the range is empty", async () => {
   server.use(
-    http.get(`${api}/api/v1/dashboard`, ({ request }) => {
+    http.get(`${api}/dashboard`, ({ request }) => {
       expect(new URL(request.url).search).toBe("");
       return HttpResponse.json({
         success: true,

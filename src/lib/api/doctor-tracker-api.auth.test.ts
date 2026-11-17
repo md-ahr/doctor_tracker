@@ -25,7 +25,7 @@ afterAll(() => {
 
 test("login stores the access token from the response body", async () => {
   server.use(
-    http.post(`${api}/api/v1/auth/login`, async ({ request }) => {
+    http.post(`${api}/auth/login`, async ({ request }) => {
       expect(await request.json()).toEqual({
         email: "admin@example.com",
         password: "correct horse",
@@ -50,7 +50,7 @@ test("login stores the access token from the response body", async () => {
 
 test("refresh stores the replacement access token", async () => {
   server.use(
-    http.post(`${api}/api/v1/auth/refresh`, () =>
+    http.post(`${api}/auth/refresh`, () =>
       HttpResponse.json({
         success: true,
         message: "Session refreshed successfully",
@@ -72,7 +72,7 @@ test("logout posts with credentials and clears the access token", async () => {
   setAccessToken("jwt-1");
   const fetchSpy = vi.spyOn(globalThis, "fetch");
   server.use(
-    http.post(`${api}/api/v1/auth/logout`, () =>
+    http.post(`${api}/auth/logout`, () =>
       HttpResponse.json({
         success: true,
         message: "Signed out successfully",
@@ -93,7 +93,7 @@ test("logout posts with credentials and clears the access token", async () => {
 
 test("me returns the admin profile", async () => {
   server.use(
-    http.get(`${api}/api/v1/auth/me`, () =>
+    http.get(`${api}/auth/me`, () =>
       HttpResponse.json({
         success: true,
         message: "Admin profile retrieved successfully",

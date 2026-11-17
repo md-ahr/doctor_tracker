@@ -41,7 +41,7 @@ afterAll(() => {
 
 test("list parses top-level meta and omits empty optional filters", async () => {
   server.use(
-    http.get(`${api}/api/v1/doctors`, ({ request }) => {
+    http.get(`${api}/doctors`, ({ request }) => {
       const url = new URL(request.url);
       expect(url.searchParams.get("q")).toBeNull();
       expect(url.searchParams.get("specialization")).toBeNull();
@@ -74,34 +74,34 @@ test("list parses top-level meta and omits empty optional filters", async () => 
 
 test("creates, reads, updates, and lists a doctor's patients", async () => {
   server.use(
-    http.post(`${api}/api/v1/doctors`, () =>
+    http.post(`${api}/doctors`, () =>
       HttpResponse.json(
         { success: true, message: "Doctor created successfully", data: doctor },
         { status: 201 },
       ),
     ),
-    http.get(`${api}/api/v1/doctors/facets`, () =>
+    http.get(`${api}/doctors/facets`, () =>
       HttpResponse.json({
         success: true,
         message: "Doctor facets retrieved successfully",
         data: { specializations: ["Cardiology"], hospitals: ["City General"] },
       }),
     ),
-    http.get(`${api}/api/v1/doctors/doc-1`, () =>
+    http.get(`${api}/doctors/doc-1`, () =>
       HttpResponse.json({
         success: true,
         message: "Doctor retrieved successfully",
         data: { ...doctor, activePatientCount: 2 },
       }),
     ),
-    http.patch(`${api}/api/v1/doctors/doc-1`, () =>
+    http.patch(`${api}/doctors/doc-1`, () =>
       HttpResponse.json({
         success: true,
         message: "Doctor updated successfully",
         data: { ...doctor, hospital: "River Clinic" },
       }),
     ),
-    http.get(`${api}/api/v1/doctors/doc-1/patients`, () =>
+    http.get(`${api}/doctors/doc-1/patients`, () =>
       HttpResponse.json({
         success: true,
         message: "Patients retrieved successfully",
@@ -109,7 +109,7 @@ test("creates, reads, updates, and lists a doctor's patients", async () => {
         meta: { page: 1, limit: 10, total: 0, totalPages: 0 },
       }),
     ),
-    http.post(`${api}/api/v1/doctors/doc-1/patients`, () =>
+    http.post(`${api}/doctors/doc-1/patients`, () =>
       HttpResponse.json(
         {
           success: true,

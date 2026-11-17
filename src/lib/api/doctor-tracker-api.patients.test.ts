@@ -42,7 +42,7 @@ afterAll(() => {
 
 test("lists patients and updates one", async () => {
   server.use(
-    http.get(`${api}/api/v1/patients`, ({ request }) => {
+    http.get(`${api}/patients`, ({ request }) => {
       const url = new URL(request.url);
       expect(url.searchParams.get("condition")).toBe("stable");
       expect(url.searchParams.get("q")).toBeNull();
@@ -53,7 +53,7 @@ test("lists patients and updates one", async () => {
         meta: { page: 1, limit: 10, total: 1, totalPages: 1 },
       });
     }),
-    http.patch(`${api}/api/v1/patients/pat-1`, async ({ request }) => {
+    http.patch(`${api}/patients/pat-1`, async ({ request }) => {
       expect(await request.json()).toEqual({ notes: null });
       return HttpResponse.json({
         success: true,
@@ -78,7 +78,7 @@ test("lists patients and updates one", async () => {
 
 test("delete expects 200 and data null", async () => {
   server.use(
-    http.delete(`${api}/api/v1/patients/pat-1`, () =>
+    http.delete(`${api}/patients/pat-1`, () =>
       HttpResponse.json(
         { success: true, message: "Patient deleted successfully", data: null },
         { status: 200 },
