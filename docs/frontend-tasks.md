@@ -266,7 +266,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 2.1 — Access token module
 
-- [ ] **Deliverable:** `getAccessToken`, `setAccessToken`, `clearAccessToken` — module scope only.
+- [x] **Deliverable:** `getAccessToken`, `setAccessToken`, `clearAccessToken` — module scope only.
 
 **Files:**
 
@@ -282,7 +282,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 2.2 — API envelope types
 
-- [ ] **Deliverable:** `ApiSuccess`, `ApiErrorBody`, `PageMeta`, `ApiError` class.
+- [x] **Deliverable:** `ApiSuccess`, `ApiErrorBody`, `PageMeta`, `ApiError` class.
 
 **Files:**
 
@@ -298,7 +298,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 2.3 — HTTP client: success and error parsing
 
-- [ ] **Deliverable:** `apiRequest` — JSON envelope, throws `ApiError` on failure.
+- [x] **Deliverable:** `apiRequest` — JSON envelope, throws `ApiError` on failure.
 
 **Files:**
 
@@ -315,7 +315,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 2.4 — HTTP client: 401 refresh retry
 
-- [ ] **Deliverable:** Single refresh attempt, sets token, retries once; failed refresh clears token and assigns `/login` (guard `window` in test).
+- [x] **Deliverable:** Single refresh attempt, sets token, retries once; failed refresh clears token and assigns `/login` (guard `window` in test).
 
 **Files:**
 
@@ -333,7 +333,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 2.5 — Query client factory
 
-- [ ] **Deliverable:** `createQueryClient` — `staleTime: 30_000`, `retry: 1`, `refetchOnWindowFocus: false`.
+- [x] **Deliverable:** `createQueryClient` — `staleTime: 30_000`, `retry: 1`, `refetchOnWindowFocus: false`.
 
 **Files:**
 
@@ -349,7 +349,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 2.6 — Calendar helpers
 
-- [ ] **Deliverable:** `parsePlainDate`, `isDateOrderValid`, `formatChartDate`, default dashboard range (last 30 days via Temporal).
+- [x] **Deliverable:** `parsePlainDate`, `isDateOrderValid`, `formatChartDate`, default dashboard range (last 30 days via Temporal).
 
 **Files:**
 
@@ -367,7 +367,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 2.7 — App providers
 
-- [ ] **Deliverable:** Client `Providers` with `QueryClientProvider`.
+- [x] **Deliverable:** Client `Providers` with `QueryClientProvider`.
 
 **Files:**
 
