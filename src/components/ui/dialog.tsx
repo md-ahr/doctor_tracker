@@ -1,6 +1,6 @@
 "use client";
 
-import { Dialog as DialogPrimitive } from "radix-ui";
+import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import type { ComponentProps } from "react";
 
 import { cn } from "@/lib/utils";
@@ -21,9 +21,9 @@ function DialogClose({ ...props }: ComponentProps<typeof DialogPrimitive.Close>)
   return <DialogPrimitive.Close {...props} />;
 }
 
-function DialogOverlay({ className, ...props }: ComponentProps<typeof DialogPrimitive.Overlay>) {
+function DialogOverlay({ className, ...props }: ComponentProps<typeof DialogPrimitive.Backdrop>) {
   return (
-    <DialogPrimitive.Overlay
+    <DialogPrimitive.Backdrop
       className={cn("fixed inset-0 z-50 bg-[rgba(26,35,50,0.4)]", className)}
       {...props}
     />
@@ -34,11 +34,11 @@ function DialogContent({
   className,
   children,
   ...props
-}: ComponentProps<typeof DialogPrimitive.Content>) {
+}: ComponentProps<typeof DialogPrimitive.Popup>) {
   return (
     <DialogPortal>
       <DialogOverlay />
-      <DialogPrimitive.Content
+      <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
           "fixed top-1/2 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-sheet)] bg-sheet p-6 font-sans text-ink shadow-[var(--shadow-overlay)] outline-none",
@@ -47,7 +47,7 @@ function DialogContent({
         {...props}
       >
         {children}
-      </DialogPrimitive.Content>
+      </DialogPrimitive.Popup>
     </DialogPortal>
   );
 }

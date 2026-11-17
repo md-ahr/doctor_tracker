@@ -7,7 +7,7 @@ alwaysApply: true
 
 If `docs/lld.md`, `docs/frontend-structure.md`, `docs/design.md`, or the current task does not state the behavior, stop and name the missing line. Do not invent a route, query key, field, label, or color.
 
-Confirm an unfamiliar Next.js, TanStack Query, React Hook Form, Zod, Recharts, or Playwright signature with Context7. Add shadcn primitives through the shadcn MCP, then restyle them to the design doc.
+Confirm an unfamiliar Next.js, TanStack Query, React Hook Form, Zod, Recharts, or Playwright signature with Context7. Add shadcn primitives from the `base-nova` style (`@base-ui/react`), then restyle them to the design doc. Do not add Radix.
 
 ## Allowed shapes
 

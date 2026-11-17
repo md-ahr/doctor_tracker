@@ -124,11 +124,11 @@ h3 {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  [data-slot="dialog-content"][data-state="open"] {
+  [data-slot="dialog-content"][data-open] {
     animation: dialog-in 160ms ease-out;
   }
 
-  [data-slot="dialog-content"][data-state="closed"] {
+  [data-slot="dialog-content"][data-ending-style] {
     animation: dialog-out 120ms ease-in;
   }
 }

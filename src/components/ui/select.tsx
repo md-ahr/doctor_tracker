@@ -1,6 +1,6 @@
 "use client";
 
-import { Select as SelectPrimitive } from "radix-ui";
+import { Select as SelectPrimitive } from "@base-ui/react/select";
 import type { ComponentProps } from "react";
 
 import { cn } from "@/lib/utils";
@@ -42,29 +42,28 @@ function SelectTrigger({
 function SelectContent({
   className,
   children,
-  position = "popper",
   ...props
-}: ComponentProps<typeof SelectPrimitive.Content>) {
+}: ComponentProps<typeof SelectPrimitive.Popup>) {
   return (
     <SelectPrimitive.Portal>
-      <SelectPrimitive.Content
-        className={cn(
-          "z-50 max-h-80 min-w-[8rem] overflow-y-auto rounded-[var(--radius-sheet)] bg-sheet text-ink shadow-[var(--shadow-overlay)]",
-          position === "popper" && "w-[var(--radix-select-trigger-width)]",
-          className,
-        )}
-        position={position}
-        {...props}
-      >
-        <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
-      </SelectPrimitive.Content>
+      <SelectPrimitive.Positioner className="z-50">
+        <SelectPrimitive.Popup
+          className={cn(
+            "max-h-80 min-w-[8rem] overflow-y-auto rounded-[var(--radius-sheet)] bg-sheet text-ink shadow-[var(--shadow-overlay)] outline-none",
+            className,
+          )}
+          {...props}
+        >
+          {children}
+        </SelectPrimitive.Popup>
+      </SelectPrimitive.Positioner>
     </SelectPrimitive.Portal>
   );
 }
 
-function SelectLabel({ className, ...props }: ComponentProps<typeof SelectPrimitive.Label>) {
+function SelectLabel({ className, ...props }: ComponentProps<typeof SelectPrimitive.GroupLabel>) {
   return (
-    <SelectPrimitive.Label
+    <SelectPrimitive.GroupLabel
       className={cn("px-3 py-1 text-xs font-semibold text-ink-secondary", className)}
       {...props}
     />
@@ -79,12 +78,12 @@ function SelectItem({
   return (
     <SelectPrimitive.Item
       className={cn(
-        "flex h-9 items-center px-3 text-[15px] outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-inset data-[state=checked]:bg-selected",
+        "flex h-9 items-center px-3 text-[15px] outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-inset data-[selected]:bg-selected",
         className,
       )}
       {...props}
     >
-      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+      {children}
     </SelectPrimitive.Item>
   );
 }

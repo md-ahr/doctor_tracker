@@ -1,0 +1,12 @@
+---
+description: Interactive portal primitives come from Base UI, never Radix.
+alwaysApply: true
+---
+
+# Base UI
+
+Interactive primitives use `@base-ui/react`. Do not add `radix-ui` or `@radix-ui/*`.
+
+`components.json` stays `base-nova`. When a task names a shadcn primitive, add it from that style, then restyle it to `docs/design.md`. Compose with the `render` prop. Do not bring back `asChild` or Radix `Slot`.
+
+A native element is allowed only when Base UI has no primitive for it. The label and the table are native. The input, button, dialog, and select are Base UI.

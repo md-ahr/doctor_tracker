@@ -7,7 +7,7 @@ Query Context7 for current signatures. Use the shadcn MCP for registry component
 | `next` | App Router. `src/proxy.ts` exports `proxy`. No `middleware.ts`. `"use client"` only for state, queries, and forms |
 | `react` | Function components. Memoize only when a measurement shows a need |
 | `tailwindcss` | Utilities over the CSS variables from `docs/design.md`. Page ground is paper, not white |
-| shadcn/ui | Copy primitives into `components/ui`. Restyle height, radius, and color. No domain words in those files |
+| shadcn/ui | `base-nova` only. Primitives import `@base-ui/react`. No Radix. Restyle height, radius, and color. No domain words in those files |
 | `@tanstack/react-query` | One `QueryClient` in `app/providers.tsx`. Stale time 30s, dashboard 60s. Keys listed in the data rule |
 | `react-hook-form` | Field state stays in the form. Dialogs edit the row already on screen |
 | `@hookform/resolvers` | Zod resolver for login, doctor, and patient forms |
@@ -27,7 +27,7 @@ Query Context7 for current signatures. Use the shadcn MCP for registry component
 
 | Server | Use |
 | --- | --- |
-| `shadcn` | Search the registry and get the add command for button, input, dialog, table, select, dropdown |
+| `shadcn` | Add `base-nova` primitives only (`@base-ui/react`): button, input, dialog, table, select, dropdown |
 | `context7` | Current Next.js, TanStack Query, React Hook Form, Recharts, Zod, Vitest, and Playwright APIs |
 | `next-devtools` | Route tree, build failures, and App Router behavior while the app is running |
 

@@ -16,7 +16,7 @@ If this repository is `web/` inside the contract workspace, those files live in 
 
 - Implement the lowest-numbered open task. One task, then its tests.
 - Load `implement-web-task` before feature work.
-- Add shadcn primitives through the `shadcn` MCP, then restyle them to `docs/design.md`.
+- Add shadcn primitives from the `base-nova` style (`@base-ui/react`), then restyle them to `docs/design.md`. Do not add Radix.
 - Query `context7` for Next.js, TanStack Query, React Hook Form, Zod, Recharts, Tailwind, Vitest, and Playwright signatures.
 - Use `next-devtools` when a route, build error, or Next.js runtime detail is unclear.
 

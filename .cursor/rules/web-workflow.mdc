@@ -13,6 +13,6 @@ alwaysApply: true
 
 Load `implement-web-task` before feature work. Load `stay-on-contract` when a screen, label, query key, color, or library call is not already written in the task or the design docs. Do not invent it.
 
-Stack: Next.js App Router, React, TypeScript strict, Tailwind, shadcn/ui, TanStack Query, React Hook Form, Zod, Recharts, Temporal, Vitest, Testing Library, MSW, Playwright.
+Stack: Next.js App Router, React, TypeScript strict, Tailwind, shadcn/ui on Base UI (`base-nova`), TanStack Query, React Hook Form, Zod, Recharts, Temporal, Vitest, Testing Library, MSW, Playwright. Do not add Radix.
 
 `NEXT_PUBLIC_API_URL` is the API origin with no trailing slash. The app does not connect to MongoDB.

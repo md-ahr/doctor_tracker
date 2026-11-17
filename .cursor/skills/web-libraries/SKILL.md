@@ -10,7 +10,7 @@ Read [reference.md](reference.md) for the project rule on each package.
 ## Before using a library API
 
 1. Use the helper the repo already owns: `lib/api/http-client.ts`, `lib/auth/access-token.ts`, `lib/query/query-client.ts`, `lib/time/calendar.ts`.
-2. For a shadcn component, call the `shadcn` MCP (`get_add_command_for_items` or the registry search) and install into `components/ui`. Then apply `docs/design.md`.
+2. For a shadcn component, add the `base-nova` item into `components/ui`. It must import `@base-ui/react`, not Radix. Then apply `docs/design.md`.
 3. For Next.js App Router behavior, call `next-devtools` or Context7. Resolve the library id before a Context7 query. Do not send tokens or cookies in the query.
 4. For TanStack Query, React Hook Form, Zod, Recharts, Vitest, MSW, or Playwright signatures, query Context7.
 

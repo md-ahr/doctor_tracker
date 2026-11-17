@@ -5,7 +5,7 @@ description: Builds Doctor Tracker screens with the paper theme, shadcn primitiv
 
 # Portal UI
 
-Read `docs/design.md` before drawing a screen. Use the `shadcn` MCP to add a primitive, then restyle it to the tokens. Do not leave the default zinc and blue theme.
+Read `docs/design.md` before drawing a screen. Add primitives from the `base-nova` shadcn style, which uses `@base-ui/react`. Do not add Radix. Restyle every primitive to the tokens. Do not leave the default zinc and blue theme.
 
 ## Primitives
 
