@@ -27,7 +27,7 @@ function TableRow({ className, ...props }: ComponentProps<"tr">) {
   return (
     <tr
       className={cn(
-        "h-[var(--row-height)] border-b border-line transition-colors duration-[120ms] ease-out hover:bg-inset data-[state=selected]:bg-selected",
+        "h-(--row-height) border-b border-line transition-colors duration-120 ease-out hover:bg-inset data-[state=selected]:bg-selected",
         className,
       )}
       {...props}

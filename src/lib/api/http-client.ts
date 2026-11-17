@@ -9,7 +9,7 @@ function apiOrigin(): string {
 }
 
 async function refreshSession(): Promise<boolean> {
-  refreshPromise ??= fetch(`${apiOrigin()}/api/v1/auth/refresh`, {
+  refreshPromise ??= fetch(`${apiOrigin()}/auth/refresh`, {
     method: "POST",
     credentials: "include",
   })

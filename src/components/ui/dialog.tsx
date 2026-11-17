@@ -41,7 +41,7 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-sheet)] bg-sheet p-6 font-sans text-ink shadow-[var(--shadow-overlay)] outline-none",
+          "fixed top-1/2 left-1/2 z-50 w-full max-w-120 -translate-x-1/2 -translate-y-1/2 rounded-(--radius-sheet) bg-sheet p-6 font-sans text-ink shadow-(--shadow-overlay) outline-none",
           className,
         )}
         {...props}
@@ -64,7 +64,7 @@ function DialogTitle({ className, ...props }: ComponentProps<typeof DialogPrimit
   return (
     <DialogPrimitive.Title
       className={cn(
-        "font-serif text-[22px] leading-[1.25] font-medium tracking-[-0.01em] text-ink",
+        "font-serif text-[22px] leading-tight font-medium tracking-[-0.01em] text-ink",
         className,
       )}
       {...props}

@@ -477,7 +477,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 5.1 — Login form schema
 
-- [ ] **Deliverable:** Zod schema mirroring API limits.
+- [x] **Deliverable:** Zod schema mirroring API limits.
 
 **Files:**
 
@@ -491,7 +491,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 5.2 — Auth feature API wrapper
 
-- [ ] **Deliverable:** `authApi.login`, `logout`, `me`.
+- [x] **Deliverable:** `authApi.login`, `logout`, `me`.
 
 **Files:**
 
@@ -505,7 +505,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 5.3 — `useSession` hook
 
-- [ ] **Deliverable:** Query key `["auth", "me"]`; enabled only when token or post-refresh bootstrap applies.
+- [x] **Deliverable:** Query key `["auth", "me"]`; enabled only when token or post-refresh bootstrap applies.
 
 **Files:**
 
@@ -521,7 +521,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 5.4 — Login form UI
 
-- [ ] **Deliverable:** RHF + Zod; maps `ApiError` to root or field errors; navigates to `/dashboard` on success.
+- [x] **Deliverable:** RHF + Zod; maps `ApiError` to root or field errors; navigates to `/dashboard` on success.
 
 **Files:**
 
@@ -539,7 +539,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 5.5 — Portal nav and logout
 
-- [ ] **Deliverable:** Links Dashboard / Doctors / Patients; admin name from `useSession`; logout clears token and routes to login.
+- [x] **Deliverable:** Links Dashboard / Doctors / Patients; admin name from `useSession`; logout clears token and routes to login.
 
 **Files:**
 
@@ -555,7 +555,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 5.6 — Portal session bootstrap
 
-- [ ] **Deliverable:** On portal entry, if token missing but cookie present, trigger refresh once before data queries (layout or small client wrapper).
+- [x] **Deliverable:** On portal entry, if token missing but cookie present, trigger refresh once before data queries (layout or small client wrapper).
 
 **Files:**
 
@@ -575,7 +575,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 6.1 — Portal layout
 
-- [ ] **Deliverable:** `PortalNav` + `<main>` content column per design measure.
+- [x] **Deliverable:** `PortalNav` + `<main>` content column per design measure.
 
 **Files:**
 
@@ -589,7 +589,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 6.2 — Placeholder portal routes
 
-- [ ] **Deliverable:** Empty pages for dashboard, doctors, patients (text stub) inside portal layout.
+- [x] **Deliverable:** Empty pages for dashboard, doctors, patients (text stub) inside portal layout.
 
 **Files:**
 
@@ -607,7 +607,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 7.1 — Doctor types and form schema
 
-- [ ] **Deliverable:** `Doctor`, `DoctorFormValues`, `doctorFormSchema`.
+- [x] **Deliverable:** `Doctor`, `DoctorFormValues`, `doctorFormSchema`.
 
 **Files:**
 
@@ -621,7 +621,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 7.2 — Doctor feature API
 
-- [ ] **Deliverable:** `doctorApi.list`, `create`, `facets`, `get`, `update`.
+- [x] **Deliverable:** `doctorApi.list`, `create`, `facets`, `get`, `update`.
 
 **Files:**
 
@@ -633,7 +633,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 7.3 — Doctor list and facets hooks
 
-- [ ] **Deliverable:** `useDoctorList`, `useDoctorFacets` — keys `["doctors", query]`, `["doctors", "facets"]`.
+- [x] **Deliverable:** `useDoctorList`, `useDoctorFacets` — keys `["doctors", query]`, `["doctors", "facets"]`.
 
 **Files:**
 
@@ -647,7 +647,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 7.4 — Doctor mutations hook
 
-- [ ] **Deliverable:** `useCreateDoctor`, `useUpdateDoctor` — invalidate `["doctors"]` on success.
+- [x] **Deliverable:** `useCreateDoctor`, `useUpdateDoctor` — invalidate `["doctors"]` on success.
 
 **Files:**
 
@@ -663,7 +663,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 7.5 — Doctor table and filters
 
-- [ ] **Deliverable:** Pagination controls; debounced search (~300ms); specialization/hospital selects from facets; date range for `createdFrom`/`createdTo`.
+- [x] **Deliverable:** Pagination controls; debounced search (~300ms); specialization/hospital selects from facets; date range for `createdFrom`/`createdTo`.
 
 **Files:**
 
@@ -679,7 +679,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 7.6 — Doctor form dialog
 
-- [ ] **Deliverable:** Create doctor dialog; maps `ApiError.details` to fields.
+- [x] **Deliverable:** Create doctor dialog; maps `ApiError.details` to fields.
 
 **Files:**
 
@@ -693,7 +693,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 7.7 — Doctor screen and doctors page
 
-- [ ] **Deliverable:** `DoctorScreen` composes header, filters, table, add dialog.
+- [x] **Deliverable:** `DoctorScreen` composes header, filters, table, add dialog.
 
 **Files:**
 
@@ -708,7 +708,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 7.8 — Doctor summary (detail header)
 
-- [ ] **Deliverable:** `useDoctor(doctorId)` — key `["doctors", id]`; shows `activePatientCount`.
+- [x] **Deliverable:** `useDoctor(doctorId)` — key `["doctors", id]`; shows `activePatientCount`.
 
 **Files:**
 
@@ -722,7 +722,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 7.9 — Doctor detail page shell
 
-- [ ] **Deliverable:** Route `/doctors/[doctorId]` composes `DoctorSummary` + patient slot (stub until Phase 9).
+- [x] **Deliverable:** Route `/doctors/[doctorId]` composes `DoctorSummary` + patient slot (stub until Phase 9).
 
 **Files:**
 

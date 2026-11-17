@@ -116,7 +116,7 @@ function queryString(query: object): string {
 }
 
 export async function login(input: { email: string; password: string }) {
-  const body = await apiRequest<AuthSession>("/api/v1/auth/login", {
+  const body = await apiRequest<AuthSession>("/auth/login", {
     method: "POST",
     body: JSON.stringify(input),
   });
@@ -125,7 +125,7 @@ export async function login(input: { email: string; password: string }) {
 }
 
 export async function refresh() {
-  const body = await apiRequest<AuthSession>("/api/v1/auth/refresh", {
+  const body = await apiRequest<AuthSession>("/auth/refresh", {
     method: "POST",
   });
   setAccessToken(body.data.accessToken);
@@ -133,17 +133,17 @@ export async function refresh() {
 }
 
 export async function logout() {
-  await apiRequest<null>("/api/v1/auth/logout", { method: "POST" });
+  await apiRequest<null>("/auth/logout", { method: "POST" });
   clearAccessToken();
 }
 
 export async function me() {
-  const body = await apiRequest<AdminProfile>("/api/v1/auth/me");
+  const body = await apiRequest<AdminProfile>("/auth/me");
   return body.data;
 }
 
 export async function listDoctors(query: DoctorListQuery): Promise<Page<Doctor>> {
-  const body = await apiRequest<Doctor[]>(`/api/v1/doctors${queryString(query)}`);
+  const body = await apiRequest<Doctor[]>(`/doctors${queryString(query)}`);
   return { items: body.data, meta: body.meta as PageMeta };
 }
 
@@ -154,7 +154,7 @@ export async function createDoctor(input: {
   phone: string;
   email: string;
 }) {
-  const body = await apiRequest<Doctor>("/api/v1/doctors", {
+  const body = await apiRequest<Doctor>("/doctors", {
     method: "POST",
     body: JSON.stringify(input),
   });
@@ -163,18 +163,18 @@ export async function createDoctor(input: {
 
 export async function doctorFacets() {
   const body = await apiRequest<{ specializations: string[]; hospitals: string[] }>(
-    "/api/v1/doctors/facets",
+    "/doctors/facets",
   );
   return body.data;
 }
 
 export async function getDoctor(id: string) {
-  const body = await apiRequest<DoctorDetail>(`/api/v1/doctors/${encodeURIComponent(id)}`);
+  const body = await apiRequest<DoctorDetail>(`/doctors/${encodeURIComponent(id)}`);
   return body.data;
 }
 
 export async function updateDoctor(id: string, patch: DoctorPatch) {
-  const body = await apiRequest<Doctor>(`/api/v1/doctors/${encodeURIComponent(id)}`, {
+  const body = await apiRequest<Doctor>(`/doctors/${encodeURIComponent(id)}`, {
     method: "PATCH",
     body: JSON.stringify(patch),
   });
@@ -186,29 +186,26 @@ export async function listDoctorPatients(
   query: Omit<PatientListQuery, "doctorId">,
 ): Promise<Page<Patient>> {
   const body = await apiRequest<Patient[]>(
-    `/api/v1/doctors/${encodeURIComponent(doctorId)}/patients${queryString(query)}`,
+    `/doctors/${encodeURIComponent(doctorId)}/patients${queryString(query)}`,
   );
   return { items: body.data, meta: body.meta as PageMeta };
 }
 
 export async function createPatientUnderDoctor(doctorId: string, input: NewPatientInput) {
-  const body = await apiRequest<Patient>(
-    `/api/v1/doctors/${encodeURIComponent(doctorId)}/patients`,
-    {
-      method: "POST",
-      body: JSON.stringify(input),
-    },
-  );
+  const body = await apiRequest<Patient>(`/doctors/${encodeURIComponent(doctorId)}/patients`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
   return body.data;
 }
 
 export async function listPatients(query: PatientListQuery): Promise<Page<Patient>> {
-  const body = await apiRequest<Patient[]>(`/api/v1/patients${queryString(query)}`);
+  const body = await apiRequest<Patient[]>(`/patients${queryString(query)}`);
   return { items: body.data, meta: body.meta as PageMeta };
 }
 
 export async function updatePatient(id: string, patch: PatientPatch) {
-  const body = await apiRequest<Patient>(`/api/v1/patients/${encodeURIComponent(id)}`, {
+  const body = await apiRequest<Patient>(`/patients/${encodeURIComponent(id)}`, {
     method: "PATCH",
     body: JSON.stringify(patch),
   });
@@ -216,10 +213,10 @@ export async function updatePatient(id: string, patch: PatientPatch) {
 }
 
 export async function deletePatient(id: string): Promise<void> {
-  await apiRequest<null>(`/api/v1/patients/${encodeURIComponent(id)}`, { method: "DELETE" });
+  await apiRequest<null>(`/patients/${encodeURIComponent(id)}`, { method: "DELETE" });
 }
 
 export async function getDashboard(range: { from?: string; to?: string } = {}) {
-  const body = await apiRequest<Dashboard>(`/api/v1/dashboard${queryString(range)}`);
+  const body = await apiRequest<Dashboard>(`/dashboard${queryString(range)}`);
   return body.data;
 }

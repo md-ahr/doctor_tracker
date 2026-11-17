@@ -1,3 +1,7 @@
 export default function HomePage() {
-  return <h1>Doctor Tracker</h1>;
+  return (
+    <main className="content-column">
+      <h1>Doctor Tracker</h1>
+    </main>
+  );
 }

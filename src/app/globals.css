@@ -67,7 +67,7 @@
   --space-7: 48px;
   --space-8: 64px;
 
-  --radius-control: 2px;
+  --radius-control: 8px;
   --radius-sheet: 4px;
   --radius-mark: 999px;
 
@@ -110,6 +110,10 @@ h3 {
   line-height: 1.25;
 }
 
+button {
+  cursor: pointer;
+}
+
 .content-column {
   box-sizing: border-box;
   max-width: var(--content-max);
@@ -142,6 +146,116 @@ h3 {
   to {
     opacity: 1;
     transform: translate(-50%, -50%);
+  }
+}
+
+.portal-frame {
+  --portal-canvas: #e8edf8;
+  --portal-card: #ffffff;
+  --portal-violet: #6c4dff;
+  --portal-violet-deep: #5838e6;
+  --portal-violet-soft: #efeaff;
+  --portal-ink: #1d2030;
+  --portal-muted: #8d93a8;
+  --portal-line: #eef0f6;
+  --portal-mint: #5dccb0;
+  --portal-rose: #ef6d86;
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  min-height: 100dvh;
+  background: var(--portal-canvas);
+  color: var(--portal-ink);
+}
+
+.portal-nav {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  background: var(--portal-card);
+  padding: 28px 18px 20px;
+}
+
+.portal-stage {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px 28px 32px 12px;
+}
+
+.portal-top {
+  display: grid;
+  grid-template-columns: auto minmax(180px, 420px) auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.portal-search {
+  display: flex;
+  height: 44px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  background: var(--portal-card);
+  padding: 0 16px;
+  box-shadow: 0 8px 24px rgba(80, 90, 140, 0.06);
+}
+
+.portal-search input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--portal-ink);
+  font: inherit;
+  outline: none;
+}
+
+.portal-card {
+  border-radius: 22px;
+  background: var(--portal-card);
+  padding: 18px 18px 16px;
+  box-shadow: 0 10px 30px rgba(73, 84, 130, 0.06);
+}
+
+.portal-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(260px, 0.78fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.portal-board-main,
+.portal-board-side {
+  display: grid;
+  gap: 16px;
+}
+
+.portal-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 1080px) {
+  .portal-board,
+  .portal-stats,
+  .portal-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .portal-frame {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-nav {
+    min-height: 0;
+    padding: 16px;
+  }
+
+  .portal-stage {
+    padding: 16px;
   }
 }
 

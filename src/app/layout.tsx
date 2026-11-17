@@ -13,9 +13,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html className={`${displayFont.variable} ${uiFont.variable}`} lang="en">
       <body>
-        <Providers>
-          <main className="content-column">{children}</main>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
