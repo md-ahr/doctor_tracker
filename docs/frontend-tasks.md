@@ -175,7 +175,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 1.1 — CSS variables and base layout
 
-- [ ] **Deliverable:** Global tokens from `docs/design.md` §4–§5 applied on `body` and content column.
+- [x] **Deliverable:** Global tokens from `docs/design.md` §4–§5 applied on `body` and content column.
 
 **Files:**
 

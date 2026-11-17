@@ -1,0 +1,75 @@
+:root {
+  --paper-0: #f7f4ee;
+  --paper-1: #fffcf7;
+  --paper-2: #efeae1;
+  --rule: #e4ddd2;
+  --rule-strong: #cdbfa8;
+  --ink-900: #1a2332;
+  --ink-700: #3e4a5c;
+  --ink-500: #6a6258;
+  --green-700: #145c4a;
+  --green-600: #1b6b56;
+  --green-100: #e5f2ed;
+  --brick-700: #8e2f2a;
+  --brick-100: #f8e8e6;
+
+  --bg-page: var(--paper-0);
+  --bg-sheet: var(--paper-1);
+  --bg-inset: var(--paper-2);
+  --bg-selected: var(--green-100);
+  --text-primary: var(--ink-900);
+  --text-secondary: var(--ink-700);
+  --text-tertiary: var(--ink-500);
+  --border-subtle: var(--rule);
+  --border-control: var(--rule-strong);
+  --border-focus: var(--green-600);
+  --action-bg: var(--green-600);
+  --action-bg-hover: var(--green-700);
+  --action-fg: var(--paper-0);
+  --danger-bg: var(--brick-700);
+  --danger-fg: var(--paper-0);
+  --danger-text: var(--brick-700);
+
+  --font-display: "Newsreader", "Iowan Old Style", Palatino, "Palatino Linotype", serif;
+  --font-ui: "Atkinson Hyperlegible", "Avenir Next", "Segoe UI", sans-serif;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --radius-control: 2px;
+  --radius-sheet: 4px;
+  --radius-mark: 999px;
+
+  --shadow-overlay: 0 16px 40px rgba(26, 35, 50, 0.12);
+
+  --control-height: 40px;
+  --control-height-compact: 36px;
+  --row-height: 52px;
+  --content-max: 1120px;
+  --rail-width: 216px;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+.content-column {
+  box-sizing: border-box;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: var(--space-4);
+}
+
+@media (min-width: 720px) {
+  .content-column {
+    padding: var(--space-6);
+  }
+}

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import "./globals.css";
+
 type RootLayoutProps = {
   children: ReactNode;
 };
@@ -7,7 +9,9 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <main className="content-column">{children}</main>
+      </body>
     </html>
   );
 }
