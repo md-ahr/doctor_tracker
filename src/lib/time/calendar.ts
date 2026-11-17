@@ -2,6 +2,11 @@ export function parsePlainDate(value: string): Temporal.PlainDate {
   return Temporal.PlainDate.from(value);
 }
 
+export function toPlainDate(value: string): string {
+  if (!value.includes("T")) return value;
+  return Temporal.Instant.from(value).toZonedDateTimeISO("UTC").toPlainDate().toString();
+}
+
 export function isDateOrderValid(from: string, to: string): boolean {
   return Temporal.PlainDate.compare(parsePlainDate(from), parsePlainDate(to)) <= 0;
 }

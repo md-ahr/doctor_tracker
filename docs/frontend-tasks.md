@@ -864,7 +864,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 9.1 — Dashboard model types
 
-- [ ] **Deliverable:** Types matching LLD dashboard `data` shape (totals, series arrays).
+- [x] **Deliverable:** Types matching LLD dashboard `data` shape (totals, series arrays).
 
 **Files:**
 
@@ -876,7 +876,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 9.2 — Dashboard API wrapper and hook
 
-- [ ] **Deliverable:** `useDashboard(from, to)` — key `["dashboard", from, to]`, `staleTime: 60_000`.
+- [x] **Deliverable:** `useDashboard(from, to)` — key `["dashboard", from, to]`, `staleTime: 60_000`.
 
 **Files:**
 
@@ -891,7 +891,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 9.3 — Stat tiles
 
-- [ ] **Deliverable:** Four figures — Newsreader 40px, tabular nums.
+- [x] **Deliverable:** Four figures — Newsreader 40px, tabular nums.
 
 **Files:**
 
@@ -905,7 +905,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 9.4 — Bar charts (doctors + condition)
 
-- [ ] **Deliverable:** Recharts horizontal bar + condition bar; colors from design §4.3.
+- [x] **Deliverable:** Recharts horizontal bar + condition bar; colors from design §4.3.
 
 **Files:**
 
@@ -919,7 +919,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 9.5 — Line charts and empty copy
 
-- [ ] **Deliverable:** Shared date axis; string `date` category; all-zero → `"Nothing registered in this range"`.
+- [x] **Deliverable:** Shared date axis; string `date` category; all-zero → `"Nothing registered in this range"`.
 
 **Files:**
 
@@ -935,7 +935,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 9.6 — Date range control
 
-- [ ] **Deliverable:** Local state for `from`/`to`; `isDateOrderValid` before updating query key; default last 30 days.
+- [x] **Deliverable:** Local state for `from`/`to`; `isDateOrderValid` before updating query key; default last 30 days.
 
 **Files:**
 
@@ -949,7 +949,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 9.7 — Dashboard screen and page
 
-- [ ] **Deliverable:** Single `useDashboard`; charts receive slices as props — charts do not call `useQuery`.
+- [x] **Deliverable:** Single `useDashboard`; charts receive slices as props — charts do not call `useQuery`.
 
 **Files:**
 

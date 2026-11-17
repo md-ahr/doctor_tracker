@@ -8,6 +8,7 @@ import {
   formatChartDate,
   isDateOrderValid,
   parsePlainDate,
+  toPlainDate,
 } from "@/lib/time/calendar";
 
 test("rejects a range whose start is after its end", () => {
@@ -21,6 +22,12 @@ test("returns the last 30 inclusive calendar days as date strings", () => {
 
   expect(range).toEqual({ from: "2026-10-20", to: "2026-11-18" });
   expect(formatChartDate(range.from)).toBe("2026-10-20");
+});
+
+test("keeps a plain date and reads an instant as a UTC calendar day", () => {
+  expect(toPlainDate("2026-11-18")).toBe("2026-11-18");
+  expect(toPlainDate("2026-11-18T02:30:00.000Z")).toBe("2026-11-18");
+  expect(toPlainDate("2026-11-18T02:00:00+06:00")).toBe("2026-11-17");
 });
 
 test("does not parse chart keys with the Date constructor", () => {

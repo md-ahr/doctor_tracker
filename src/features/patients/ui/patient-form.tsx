@@ -27,8 +27,9 @@ import {
   patientFormSchema,
   type PatientFormValues,
 } from "@/features/patients/model/patient-schema";
-import { ApiError } from "@/lib/api/types";
 import type { NewPatientInput, PatientPatch } from "@/lib/api/doctor-tracker-api";
+import { ApiError } from "@/lib/api/types";
+import { toPlainDate } from "@/lib/time/calendar";
 
 const fieldClass =
   "h-(--control-height) w-full rounded-(--radius-control) border border-control bg-sheet px-3 font-sans text-[15px] text-ink outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus aria-invalid:border-danger aria-invalid:bg-danger-wash";
@@ -326,11 +327,6 @@ function assignOptional<Key extends "dateOfBirth" | "sex" | "phone" | "email" | 
   const previous = current ?? "";
   if (next === previous) return;
   patch[key] = (next === "" ? null : next) as PatientPatch[Key];
-}
-
-function toPlainDate(value: string): string {
-  if (!value.includes("T")) return value;
-  return Temporal.Instant.from(value).toZonedDateTimeISO("UTC").toPlainDate().toString();
 }
 
 function FieldLabel({
