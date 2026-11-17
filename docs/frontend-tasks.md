@@ -386,7 +386,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 3.1 — Proxy cookie gate
 
-- [ ] **Deliverable:** `proxy` + `config.matcher` per frontend-structure §7.1.
+- [x] **Deliverable:** `proxy` + `config.matcher` per frontend-structure §7.1.
 
 **Files:**
 
