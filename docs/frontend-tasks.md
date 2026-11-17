@@ -61,7 +61,7 @@ Do these four tasks in order. Each one is config and a verify command. No featur
 
 ### Task 0.1 — Next.js package scaffold
 
-- [ ] **Deliverable:** Next.js app typechecks, builds, and Vitest runs one smoke test.
+- [x] **Deliverable:** Next.js app typechecks, builds, and Vitest runs one smoke test.
 
 **Files:**
 
