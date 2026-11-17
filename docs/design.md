@@ -2,7 +2,7 @@
 
 Status: ready for implementation
 Scope: visual language and interface behavior of the Next.js admin portal
-Sources: `docs/project_guide.md`, `docs/requirements-spec.md`, `docs/frontend-structure.md`
+Sources: `docs/project_guide.md`, `docs/requirements-spec.md`, `docs/frontend-structure.md`, `docs/ui-example/medic-dashboard-reference.png`
 
 This is the style guide. It decides color, type, space, and how each screen behaves. Implementation comes after this document. Tokens are named so they can be copied into CSS variables later. Components are specified by anatomy and behavior, not by code.
 
@@ -27,9 +27,35 @@ One theme only. The paper surface is the identity. A dark theme is out of scope.
 
 These choices are the difference between this portal and a default component kit: no cool-gray page, no blue primary, no 8px-rounded buttons, no shadow on every card, no icon-and-pill sidebar, no uppercase tracking on every label.
 
+### 1.2 Arrangement
+
+`docs/ui-example/medic-dashboard-reference.png` decides where the dashboard regions sit. It does not decide color. The lavender surfaces, purple action, and cool gray page in that file are not part of this portal. Fills, inks, borders, and chart series stay the values in §4. Those values do not change to match the picture.
+
+From 720px up the dashboard content is two columns inside the main column, gap 24px. The wide column is about two thirds. The narrow column is the rest. Both columns start at the same top.
+
+Wide column, top to bottom:
+
+1. Page title and context line.
+2. Range row: From and To. From 720px up, "Last 30 days" is in the content top bar. Below 720px it sits in this row.
+3. Three figure sheets in one row: Doctors, Patients, Registered. The anatomy is §10.2. Registered may draw a sparkline of `patientsRegisteredByDay` in `green-600`. Doctors and Patients do not, because those totals are not a daily series.
+4. "Over this range". A wash of `green-600` under the patients line is allowed so the plot reads as the area chart in the reference. The wash is that same green, not a new color. Dots and the doctors series stay as specified in §10.2.
+5. "Patients per doctor".
+
+Narrow column, top to bottom:
+
+1. The month of the range's end date. The title is the month and year in the section-title style. The caption is the window, such as "20 Oct 2026 – 18 Nov 2026". Weekday letters are Mo, Tu, We, Th, Fr, Sa, Su, 12px, ink-500, not uppercase. Day numbers are 14px, tabular. Days inside the window use `green-100`. From and To, when they fall in that month, use `green-600` with `paper-0` text. Days are not buttons. From and To fields remain the control. The grid is `aria-hidden="true"`.
+2. "By condition".
+3. The Doctors added figure, with a sparkline of `doctorsCreatedByDay` in the observation ink from §4.4.
+
+Dashboard sheets use `paper-1`, a 1px `rule`, and `radius-sheet`. They do not add a shadow and they do not add a color. Doctors and Patients list pages stay as §9.5: a table has no outer sheet.
+
+Below 720px the columns stack in this order: title, range, the four figures as a 2×2, Over this range, the month, By condition, Doctors added, Patients per doctor.
+
+The picture also shows payment, stock, help, appointments, and balance rings. Those are not screens in this portal. Do not add them.
+
 ## 2. Principles
 
-1. **One obvious action per page.** It sits at the right of the page title. Everything else is quieter.
+1. **One obvious action per page.** From 720px up it sits at the right of the content top bar. Below that it sits at the right of the page title. Everything else is quieter.
 2. **Names first.** A doctor or patient name is the strongest text in a row. Metadata follows in ink-700.
 3. **Color means a condition or an action.** It is not decoration. Charts and status marks use the catalog in §4.3 and nothing else.
 4. **The same control, the same size.** Inputs, selects, and buttons share a 40px height. Filters use the 36px compact size. Do not invent a third height.
@@ -205,7 +231,7 @@ Shadow is one value, used only by dialogs and menus:
 --shadow-overlay: 0 16px 40px rgba(26, 35, 50, 0.12);
 ```
 
-Cards do not float. A summary block on the doctor page is a region with a bottom rule, not a shadowed box.
+Cards do not float. A summary block on the doctor page is a region with a bottom rule, not a shadowed box. Dashboard sheets in §1.2 use `paper-1` and a 1px `rule` only. They do not take a new shadow or a new color.
 
 ### 5.5 Focus
 
@@ -231,7 +257,9 @@ The rail is `paper-0` with a 1px `rule` on its right edge. It does not use a dif
 2. Navigation, 32px below that rule. Three items: Dashboard, Doctors, Patients. Atkinson 15px. Inactive is ink-700. Active is ink-900, weight 600, with a 2px by 16px green-600 bar at the left of the label, 8px away from the word. Hit area is 40px tall and the full rail width. Padding-left is 24px.
 3. Admin block, pinned to the bottom with 24px padding. Admin name in 14px ink-900, email in 12px ink-700, then a "Log out" text button.
 
-There is no top bar and no icon column. The page title lives once, at the top of the main column.
+The main column has a top bar, 56px, `paper-0`, with a 1px `rule` on its bottom edge. It does not cover the rail and it does not use a second background. Search sits at the left when §9.4 gives the page a search field. The primary action sits at the right. The dashboard has no search; "Last 30 days" sits at the right of this bar, and From and To stay in the content under the title. There is no icon column. The page title lives once, in the content under the top bar.
+
+Below 720px this content bar is not a second strip. Search and the primary action return to the title row in §7, under the compact bar that replaces the rail.
 
 Below 720px the rail is replaced by a top bar, 56px, with the wordmark at the left and the three links in a row at the right if they fit. Below 480px the three links wrap onto a second row under the wordmark and the bar grows to fit. The admin name and "Log out" sit on that bar's right end, and the email is omitted. Do not introduce a hamburger for three destinations.
 
@@ -249,7 +277,7 @@ Filters or range, when the page has them
 Content
 ```
 
-The title and the primary action share one row, aligned to the cap height of the title. The context line is 12px caption, ink-700, 4px under the title. A 1px rule follows, 24px below the title block. Content starts 24px under that rule.
+From 720px up, search and the primary action sit in the content top bar (§6). The title and the context line stay in the content. Below 720px the title and the primary action share one row, aligned to the cap height of the title. The context line is 12px caption, ink-700, 4px under the title. A 1px rule follows, 24px below the title block. Content starts 24px under that rule. The dashboard follows §1.2 instead of a single stacked chart column.
 
 | Route           | Title             | Context line                                                             | Primary action                              |
 | --------------- | ----------------- | ------------------------------------------------------------------------ | ------------------------------------------- |
@@ -328,7 +356,7 @@ Server field errors from `error.details` land on the same slot. A form-level ser
 
 ### 9.4 Filter bar
 
-A single wrapping row, gap 8px, aligned to the bottom of the controls. Search comes first and grows to fill the row, min-width 200px. Then the selects. Then the date pair. Then "Clear", a quiet button, visible only when a filter is set.
+A single wrapping row, gap 8px, aligned to the bottom of the controls. From 720px up, search sits in the content top bar and grows there, min-width 200px. The filter row then starts with the selects. Below 720px, search comes first in the filter row. Then the date pair. Then "Clear", a quiet button, visible only when a filter is set. Doctor detail keeps its search with that doctor's patients, in the top bar from 720px up and above the table below 720px.
 
 Search does not call the API on each keystroke. It waits 300ms after the last change. Changing any filter resets the page to 1.
 
@@ -389,9 +417,9 @@ There is no "forgot password" and no registration link. Those flows do not exist
 
 ### 10.2 Dashboard
 
-Under the header rule, a range row: From, To, and a quiet "Last 30 days" button that restores the default. The default window is the last 30 days inclusive in the API timezone. The caption under the title already explains that totals ignore the range.
+The regions and their order are §1.2. From, To, and a quiet "Last 30 days" button restore or set the window. The default window is the last 30 days inclusive in the API timezone. "Last 30 days" sits at the right of the content top bar from 720px up, and in the range row below that. The caption under the title already explains that totals ignore the range.
 
-Then four figures in a row, gap 24px. Below 720px they become a 2×2 grid. Each figure is:
+Each figure is a sheet. Below 720px the four figures are a 2×2 grid. Each figure is:
 
 - Eyebrow, uppercase, 11px
 - Number, Newsreader 40px, tabular
@@ -406,7 +434,7 @@ Then four figures in a row, gap 24px. Below 720px they become a 2×2 grid. Each 
 
 The last two are derived in the client from series the API already returns. They are labeled "In this range" so they cannot be read as all-time totals.
 
-Charts stack with 48px between them. Each chart block has a section title and a 12px caption, then the plot at 280px tall (240px below 720px).
+From 720px up, "Over this range" is the wide column and "By condition" is the narrow column, as in §1.2. Below 720px they stack, with 48px between chart blocks. Each chart block has a section title and a 12px caption, then the plot at 280px tall (240px below 720px). The month grid is not a chart and has no plot height.
 
 | Chart               | Title               | Caption                                                            | Form                                                                                                                      |
 | ------------------- | ------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
@@ -483,11 +511,11 @@ Hit targets are at least 40px on the primary controls and 36px on compact ones. 
 
 ## 13. Responsive summary
 
-| Width     | Shell                   | Tables           | Figures         | Charts     |
-| --------- | ----------------------- | ---------------- | --------------- | ---------- |
-| ≥ 720px   | Left rail, 216px        | Rows and columns | One row of four | 280px tall |
-| 480–719px | Top bar, links in a row | Stacked records  | 2×2             | 240px tall |
-| < 480px   | Top bar, links wrap     | Stacked records  | 2×2             | 240px tall |
+| Width     | Shell                                                          | Tables           | Figures                                          | Charts                              |
+| --------- | -------------------------------------------------------------- | ---------------- | ------------------------------------------------ | ----------------------------------- |
+| ≥ 720px   | Left rail 216px, content top bar, dashboard two columns (§1.2) | Rows and columns | Three across, Doctors added in the narrow column | Wide and narrow columns, 280px tall |
+| 480–719px | Rail becomes a top bar, links in a row                         | Stacked records  | 2×2                                              | Stacked, 240px tall                 |
+| < 480px   | Rail becomes a top bar, links wrap                             | Stacked records  | 2×2                                              | Stacked, 240px tall                 |
 
 Breakpoints are 720px and 480px. No other layout changes.
 
