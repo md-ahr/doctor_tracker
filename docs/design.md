@@ -16,14 +16,14 @@ One theme only. The paper surface is the identity. A dark theme is out of scope.
 
 ### 1.1 What this look is built from
 
-| Choice | Decision |
-| --- | --- |
-| Ground | Warm paper, `#F7F4EE`. Never pure white as the page, never cool gray. |
-| Type | Newsreader for the wordmark, page titles, and dashboard figures. Atkinson Hyperlegible for every control, label, table cell, and paragraph. |
-| Action color | Verdigris `#1B6B56`, used for the primary button, the active nav mark, links, and the focus ring. |
-| Shape | 2px corners on controls. 4px on sheets and dialogs. Pills are reserved for condition marks. |
-| Depth | A change of paper tone plus a 1px rule. Shadow exists only on dialogs and menus. |
-| Icons | Rare. Three nav items are words. An icon appears only when it names a tool, such as search. |
+| Choice       | Decision                                                                                                                                    |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ground       | Warm paper, `#F7F4EE`. Never pure white as the page, never cool gray.                                                                       |
+| Type         | Newsreader for the wordmark, page titles, and dashboard figures. Atkinson Hyperlegible for every control, label, table cell, and paragraph. |
+| Action color | Verdigris `#1B6B56`, used for the primary button, the active nav mark, links, and the focus ring.                                           |
+| Shape        | 2px corners on controls. 4px on sheets and dialogs. Pills are reserved for condition marks.                                                 |
+| Depth        | A change of paper tone plus a 1px rule. Shadow exists only on dialogs and menus.                                                            |
+| Icons        | Rare. Three nav items are words. An icon appears only when it names a tool, such as search.                                                 |
 
 These choices are the difference between this portal and a default component kit: no cool-gray page, no blue primary, no 8px-rounded buttons, no shadow on every card, no icon-and-pill sidebar, no uppercase tracking on every label.
 
@@ -40,10 +40,10 @@ These choices are the difference between this portal and a default component kit
 
 Load two families, two weights each.
 
-| Family | Weights | Use |
-| --- | --- | --- |
-| Newsreader | 500, 600 | Wordmark, page titles, dashboard figures |
-| Atkinson Hyperlegible | 400, 600 | UI, tables, forms, navigation, body |
+| Family                | Weights  | Use                                      |
+| --------------------- | -------- | ---------------------------------------- |
+| Newsreader            | 500, 600 | Wordmark, page titles, dashboard figures |
+| Atkinson Hyperlegible | 400, 600 | UI, tables, forms, navigation, body      |
 
 ```css
 --font-display: "Newsreader", "Iowan Old Style", Palatino, "Palatino Linotype", serif;
@@ -56,18 +56,18 @@ Newsreader is a text face, so titles stay quiet. Atkinson Hyperlegible distingui
 
 Root size is 16px. Sizes below are the only ones in the product.
 
-| Role | Font | Size | Line height | Weight | Tracking | Color |
-| --- | --- | --- | --- | --- | --- | --- |
-| Figure | Newsreader | 40px | 1.1 | 500 | −0.02em | ink-900 |
-| Page title | Newsreader | 28px | 1.2 | 500 | −0.015em | ink-900 |
-| Section title | Newsreader | 22px | 1.25 | 500 | −0.01em | ink-900 |
-| Dialog title | Newsreader | 22px | 1.25 | 500 | −0.01em | ink-900 |
-| UI | Atkinson | 15px | 1.4 | 400 | 0 | ink-900 |
-| UI strong | Atkinson | 15px | 1.4 | 600 | 0 | ink-900 |
-| Table cell | Atkinson | 14px | 1.4 | 400 | 0 | ink-900 |
-| Table header | Atkinson | 12px | 1.3 | 600 | 0 | ink-700 |
-| Caption | Atkinson | 12px | 1.35 | 400 | 0 | ink-700 |
-| Eyebrow | Atkinson | 11px | 1.3 | 600 | 0.06em | ink-500 |
+| Role          | Font       | Size | Line height | Weight | Tracking | Color   |
+| ------------- | ---------- | ---- | ----------- | ------ | -------- | ------- |
+| Figure        | Newsreader | 40px | 1.1         | 500    | −0.02em  | ink-900 |
+| Page title    | Newsreader | 28px | 1.2         | 500    | −0.015em | ink-900 |
+| Section title | Newsreader | 22px | 1.25        | 500    | −0.01em  | ink-900 |
+| Dialog title  | Newsreader | 22px | 1.25        | 500    | −0.01em  | ink-900 |
+| UI            | Atkinson   | 15px | 1.4         | 400    | 0        | ink-900 |
+| UI strong     | Atkinson   | 15px | 1.4         | 600    | 0        | ink-900 |
+| Table cell    | Atkinson   | 14px | 1.4         | 400    | 0        | ink-900 |
+| Table header  | Atkinson   | 12px | 1.3         | 600    | 0        | ink-700 |
+| Caption       | Atkinson   | 12px | 1.35        | 400    | 0        | ink-700 |
+| Eyebrow       | Atkinson   | 11px | 1.3         | 600    | 0.06em   | ink-500 |
 
 Eyebrows are the only uppercase text. They label the four dashboard figures and nothing else. Buttons, nav items, and table headers are sentence case.
 
@@ -83,44 +83,44 @@ Values are the source of truth. Semantic names are what components use. A compon
 
 ### 4.1 Primitives
 
-| Token | Hex | Role |
-| --- | --- | --- |
-| `paper-0` | `#F7F4EE` | Page ground |
-| `paper-1` | `#FFFCF7` | Sheets: dialogs, menus, the login panel |
-| `paper-2` | `#EFEAE1` | Inset: table header, pressed row, filter field on the page |
-| `rule` | `#E4DDD2` | Hairline between rows and regions |
-| `rule-strong` | `#CDBFA8` | Input border, stronger separators |
-| `ink-900` | `#1A2332` | Primary text |
-| `ink-700` | `#3E4A5C` | Secondary text, table headers |
-| `ink-500` | `#6A6258` | Placeholders, eyebrows, chart axes |
-| `green-700` | `#145C4A` | Primary hover, links |
-| `green-600` | `#1B6B56` | Primary button, focus, active mark |
-| `green-100` | `#E5F2ED` | Selected row tint, stable wash |
-| `brick-700` | `#8E2F2A` | Errors, destructive confirm |
-| `brick-100` | `#F8E8E6` | Error field wash |
+| Token         | Hex       | Role                                                       |
+| ------------- | --------- | ---------------------------------------------------------- |
+| `paper-0`     | `#F7F4EE` | Page ground                                                |
+| `paper-1`     | `#FFFCF7` | Sheets: dialogs, menus, the login panel                    |
+| `paper-2`     | `#EFEAE1` | Inset: table header, pressed row, filter field on the page |
+| `rule`        | `#E4DDD2` | Hairline between rows and regions                          |
+| `rule-strong` | `#CDBFA8` | Input border, stronger separators                          |
+| `ink-900`     | `#1A2332` | Primary text                                               |
+| `ink-700`     | `#3E4A5C` | Secondary text, table headers                              |
+| `ink-500`     | `#6A6258` | Placeholders, eyebrows, chart axes                         |
+| `green-700`   | `#145C4A` | Primary hover, links                                       |
+| `green-600`   | `#1B6B56` | Primary button, focus, active mark                         |
+| `green-100`   | `#E5F2ED` | Selected row tint, stable wash                             |
+| `brick-700`   | `#8E2F2A` | Errors, destructive confirm                                |
+| `brick-100`   | `#F8E8E6` | Error field wash                                           |
 
 `ink-500` on `paper-0` is 5.5:1. Placeholders use it so hint text meets WCAG AA. Disabled controls do not fade their label. The label stays `ink-700`, the field fills with `paper-2`, and the control does not respond to the pointer.
 
 ### 4.2 Semantic tokens
 
-| Token | Light value | Use |
-| --- | --- | --- |
-| `bg-page` | `paper-0` | Portal and login ground |
-| `bg-sheet` | `paper-1` | Dialog, menu, login panel |
-| `bg-inset` | `paper-2` | Table header, hover row |
-| `bg-selected` | `green-100` | Selected table row, active filter chip |
-| `text-primary` | `ink-900` | Names, values, titles |
-| `text-secondary` | `ink-700` | Supporting columns, help |
-| `text-tertiary` | `ink-500` | Placeholder, axis, eyebrow |
-| `border-subtle` | `rule` | Row and region rules |
-| `border-control` | `rule-strong` | Inputs at rest |
-| `border-focus` | `green-600` | Focus ring |
-| `action-bg` | `green-600` | Primary button |
-| `action-bg-hover` | `green-700` | Primary hover |
-| `action-fg` | `paper-0` | Text on the primary button |
-| `danger-bg` | `brick-700` | Confirm delete |
-| `danger-fg` | `paper-0` | Text on confirm delete |
-| `danger-text` | `brick-700` | Inline error, row-level Delete |
+| Token             | Light value   | Use                                    |
+| ----------------- | ------------- | -------------------------------------- |
+| `bg-page`         | `paper-0`     | Portal and login ground                |
+| `bg-sheet`        | `paper-1`     | Dialog, menu, login panel              |
+| `bg-inset`        | `paper-2`     | Table header, hover row                |
+| `bg-selected`     | `green-100`   | Selected table row, active filter chip |
+| `text-primary`    | `ink-900`     | Names, values, titles                  |
+| `text-secondary`  | `ink-700`     | Supporting columns, help               |
+| `text-tertiary`   | `ink-500`     | Placeholder, axis, eyebrow             |
+| `border-subtle`   | `rule`        | Row and region rules                   |
+| `border-control`  | `rule-strong` | Inputs at rest                         |
+| `border-focus`    | `green-600`   | Focus ring                             |
+| `action-bg`       | `green-600`   | Primary button                         |
+| `action-bg-hover` | `green-700`   | Primary hover                          |
+| `action-fg`       | `paper-0`     | Text on the primary button             |
+| `danger-bg`       | `brick-700`   | Confirm delete                         |
+| `danger-fg`       | `paper-0`     | Text on confirm delete                 |
+| `danger-text`     | `brick-700`   | Inline error, row-level Delete         |
 
 Link text is `green-700`, underlined, with offset 2px. Links are underlined at rest so they are not identified by color alone.
 
@@ -128,14 +128,14 @@ Link text is `green-700`, underlined, with offset 2px. Links are underlined at r
 
 Six conditions, six fixed pairs. The word is always present. The wash is the mark background. The ink is the word. Each pair is at least 5.9:1.
 
-| Condition | Ink | Wash | Reading |
-| --- | --- | --- | --- |
-| `critical` | `#8E2F2A` | `#F8E8E6` | Needs attention now |
-| `serious` | `#8A4B12` | `#F8EEDF` | Unstable |
-| `observation` | `#2C4A6E` | `#E6EDF5` | Being watched |
-| `stable` | `#145C4A` | `#E5F2ED` | Holding |
-| `recovering` | `#3E5A14` | `#EEF3E0` | Improving |
-| `chronic` | `#5C3D55` | `#F3EAF0` | Long-term |
+| Condition     | Ink       | Wash      | Reading             |
+| ------------- | --------- | --------- | ------------------- |
+| `critical`    | `#8E2F2A` | `#F8E8E6` | Needs attention now |
+| `serious`     | `#8A4B12` | `#F8EEDF` | Unstable            |
+| `observation` | `#2C4A6E` | `#E6EDF5` | Being watched       |
+| `stable`      | `#145C4A` | `#E5F2ED` | Holding             |
+| `recovering`  | `#3E5A14` | `#EEF3E0` | Improving           |
+| `chronic`     | `#5C3D55` | `#F3EAF0` | Long-term           |
 
 Do not reuse these inks for buttons, links, or navigation. `stable` shares a family with the action green. That overlap is acceptable because the condition mark always carries the word "Stable", and the action green appears on buttons and the focus ring.
 
@@ -143,14 +143,14 @@ Sort and chart order is fixed, from most acute to long-term: critical, serious, 
 
 ### 4.4 Chart series
 
-| Series | Color | Token |
-| --- | --- | --- |
-| Patients per doctor | `#1A2332` | `ink-900` |
-| Patients registered by day | `#1B6B56` | `green-600` |
-| Doctors created by day | `#2C4A6E` | observation ink |
-| Patients by condition | the six condition inks | §4.3 |
-| Axis and grid | `#E4DDD2` | `rule` |
-| Axis text | `#6A6258` | `ink-500` |
+| Series                     | Color                  | Token           |
+| -------------------------- | ---------------------- | --------------- |
+| Patients per doctor        | `#1A2332`              | `ink-900`       |
+| Patients registered by day | `#1B6B56`              | `green-600`     |
+| Doctors created by day     | `#2C4A6E`              | observation ink |
+| Patients by condition      | the six condition inks | §4.3            |
+| Axis and grid              | `#E4DDD2`              | `rule`          |
+| Axis text                  | `#6A6258`              | `ink-500`       |
 
 One series, one color. Patients-per-doctor is not a rainbow. Specialization is written beside the name, not encoded as a bar color.
 
@@ -160,40 +160,40 @@ One series, one color. Patients-per-doctor is not a rainbow. Specialization is w
 
 Base unit is 4px. These steps are the only ones used.
 
-| Token | px | Typical use |
-| --- | --- | --- |
-| `space-1` | 4 | Icon gap, focus offset |
-| `space-2` | 8 | Gap inside a compact control group |
-| `space-3` | 12 | Padding inside a table cell, gap between label and field |
-| `space-4` | 16 | Control padding, stack gap inside a form |
-| `space-5` | 24 | Gap between page title and the filter rule, dialog padding |
-| `space-6` | 32 | Page padding from 720px up, section gap |
-| `space-7` | 48 | Gap between dashboard figures and the first chart |
-| `space-8` | 64 | Login panel offset from the top of the viewport |
+| Token     | px  | Typical use                                                |
+| --------- | --- | ---------------------------------------------------------- |
+| `space-1` | 4   | Icon gap, focus offset                                     |
+| `space-2` | 8   | Gap inside a compact control group                         |
+| `space-3` | 12  | Padding inside a table cell, gap between label and field   |
+| `space-4` | 16  | Control padding, stack gap inside a form                   |
+| `space-5` | 24  | Gap between page title and the filter rule, dialog padding |
+| `space-6` | 32  | Page padding from 720px up, section gap                    |
+| `space-7` | 48  | Gap between dashboard figures and the first chart          |
+| `space-8` | 64  | Login panel offset from the top of the viewport            |
 
 ### 5.2 Layout sizes
 
-| Token | Value | Use |
-| --- | --- | --- |
-| Rail width | 216px | Desktop navigation |
-| Content max | 1120px | Main column, centered in the remaining viewport |
-| Page padding | 16px below 720px, 32px from 720px | Inset of the main column |
-| Control height | 40px | Buttons, inputs, selects |
-| Control height, compact | 36px | Filters and pagination |
-| Table row | 52px | One doctor or one patient |
-| Table header | 36px | Column labels |
-| Dialog width | 480px | Create and edit. 420px for delete confirm |
-| Login panel | 400px | The only element on the login page |
+| Token                   | Value                             | Use                                             |
+| ----------------------- | --------------------------------- | ----------------------------------------------- |
+| Rail width              | 216px                             | Desktop navigation                              |
+| Content max             | 1120px                            | Main column, centered in the remaining viewport |
+| Page padding            | 16px below 720px, 32px from 720px | Inset of the main column                        |
+| Control height          | 40px                              | Buttons, inputs, selects                        |
+| Control height, compact | 36px                              | Filters and pagination                          |
+| Table row               | 52px                              | One doctor or one patient                       |
+| Table header            | 36px                              | Column labels                                   |
+| Dialog width            | 480px                             | Create and edit. 420px for delete confirm       |
+| Login panel             | 400px                             | The only element on the login page              |
 
 The content max keeps a table from stretching into an unreadable line on a wide monitor. Below 720px the column is the viewport minus 16px on each side.
 
 ### 5.3 Radius
 
-| Token | Value | Use |
-| --- | --- | --- |
-| `radius-control` | 2px | Buttons, inputs, selects |
-| `radius-sheet` | 4px | Login panel, dialog, menu |
-| `radius-mark` | 999px | Condition marks only |
+| Token            | Value | Use                       |
+| ---------------- | ----- | ------------------------- |
+| `radius-control` | 2px   | Buttons, inputs, selects  |
+| `radius-sheet`   | 4px   | Login panel, dialog, menu |
+| `radius-mark`    | 999px | Condition marks only      |
 
 ### 5.4 Rules and shadow
 
@@ -213,11 +213,11 @@ Every interactive element uses the same ring: 2px solid `green-600`, offset by 2
 
 ### 5.6 Motion
 
-| Interaction | Duration | Easing |
-| --- | --- | --- |
-| Hover color, button, row | 120ms | ease-out |
-| Dialog and menu enter | 160ms | ease-out |
-| Dialog and menu exit | 120ms | ease-in |
+| Interaction              | Duration | Easing   |
+| ------------------------ | -------- | -------- |
+| Hover color, button, row | 120ms    | ease-out |
+| Dialog and menu enter    | 160ms    | ease-out |
+| Dialog and menu exit     | 120ms    | ease-in  |
 
 Dialogs enter by fading and moving 4px up. They do not scale. `prefers-reduced-motion: reduce` sets every duration to 0ms. No bounce, no spring, no page-load stagger.
 
@@ -251,13 +251,13 @@ Content
 
 The title and the primary action share one row, aligned to the cap height of the title. The context line is 12px caption, ink-700, 4px under the title. A 1px rule follows, 24px below the title block. Content starts 24px under that rule.
 
-| Route | Title | Context line | Primary action |
-| --- | --- | --- | --- |
-| `/dashboard` | Dashboard | "Counts are all active records. The charts below follow the range." | none — the range control is the page's tool |
-| `/doctors` | Doctors | "Directory of doctors. Date filter uses the day the record was created." | Add doctor |
-| `/doctors/[id]` | The doctor's name | Specialization · hospital | Add patient |
-| `/patients` | Patients | "Active patients across every doctor." | none — edit and delete live on the row |
-| `/login` | Doctor Tracker | "Sign in to the directory." | Sign in, inside the form |
+| Route           | Title             | Context line                                                             | Primary action                              |
+| --------------- | ----------------- | ------------------------------------------------------------------------ | ------------------------------------------- |
+| `/dashboard`    | Dashboard         | "Counts are all active records. The charts below follow the range."      | none — the range control is the page's tool |
+| `/doctors`      | Doctors           | "Directory of doctors. Date filter uses the day the record was created." | Add doctor                                  |
+| `/doctors/[id]` | The doctor's name | Specialization · hospital                                                | Add patient                                 |
+| `/patients`     | Patients          | "Active patients across every doctor."                                   | none — edit and delete live on the row      |
+| `/login`        | Doctor Tracker    | "Sign in to the directory."                                              | Sign in, inside the form                    |
 
 The doctor detail title is the name, in the page-title style, so the admin always knows whose list they are editing. Specialization and hospital are the context line, not a second heading.
 
@@ -275,14 +275,14 @@ Charts reserve their final height while loading, so the page does not jump.
 
 Centered in the content region, 64px of space above it. One sentence in 15px ink-900, then one sentence of guidance in 14px ink-700. If the page can create the missing record, the primary action is repeated as a button under the copy.
 
-| Surface | Title | Guidance |
-| --- | --- | --- |
-| Doctors, no records at all | No doctors yet | Add the first doctor to start the directory. |
-| Doctors, filters match nothing | No doctors match | Clear the search or widen the dates. |
-| Doctor detail, no patients | No patients for this doctor | Add a patient to assign them here. |
-| Patients, no records | No patients yet | Open a doctor and add a patient. |
-| Patients, filters match nothing | No patients match | Clear the search or choose a different condition. |
-| Dashboard series, all zeros | Nothing registered in this range | Totals above are unchanged. Widen the range to see earlier days. |
+| Surface                         | Title                            | Guidance                                                         |
+| ------------------------------- | -------------------------------- | ---------------------------------------------------------------- |
+| Doctors, no records at all      | No doctors yet                   | Add the first doctor to start the directory.                     |
+| Doctors, filters match nothing  | No doctors match                 | Clear the search or widen the dates.                             |
+| Doctor detail, no patients      | No patients for this doctor      | Add a patient to assign them here.                               |
+| Patients, no records            | No patients yet                  | Open a doctor and add a patient.                                 |
+| Patients, filters match nothing | No patients match                | Clear the search or choose a different condition.                |
+| Dashboard series, all zeros     | Nothing registered in this range | Totals above are unchanged. Widen the range to see earlier days. |
 
 An empty filter result keeps the filter bar. An empty directory hides it.
 
@@ -298,13 +298,13 @@ Field errors are separate and sit under the field (§9.3). They do not use this 
 
 Height 40px, horizontal padding 16px, radius 2px, Atkinson 15px weight 600, sentence case. Icon-only buttons are not used.
 
-| Variant | Rest | Hover | Where |
-| --- | --- | --- | --- |
-| Primary | `green-600` fill, `paper-0` text | `green-700` fill | The page's one action, and Sign in |
-| Secondary | `paper-1` fill, 1px `rule-strong`, ink-900 text | `paper-2` fill | Cancel, Clear filters, Previous, Next |
-| Quiet | no fill, no border, ink-700 text | ink-900 text, `paper-2` fill | Log out, Try again, row Edit |
-| Danger quiet | no fill, `brick-700` text | `brick-100` fill | Row Delete |
-| Danger | `brick-700` fill, `paper-0` text | 8% darker | The confirm button inside the delete dialog only |
+| Variant      | Rest                                            | Hover                        | Where                                            |
+| ------------ | ----------------------------------------------- | ---------------------------- | ------------------------------------------------ |
+| Primary      | `green-600` fill, `paper-0` text                | `green-700` fill             | The page's one action, and Sign in               |
+| Secondary    | `paper-1` fill, 1px `rule-strong`, ink-900 text | `paper-2` fill               | Cancel, Clear filters, Previous, Next            |
+| Quiet        | no fill, no border, ink-700 text                | ink-900 text, `paper-2` fill | Log out, Try again, row Edit                     |
+| Danger quiet | no fill, `brick-700` text                       | `brick-100` fill             | Row Delete                                       |
+| Danger       | `brick-700` fill, `paper-0` text                | 8% darker                    | The confirm button inside the delete dialog only |
 
 A busy button keeps its width, replaces the label with "Saving…", and ignores further clicks. Disabled is the treatment in §4.1, not a reduced opacity.
 
@@ -343,15 +343,15 @@ Desktop, from 720px:
 - Hover fill is `paper-2`. The row is a link when the whole row navigates (the doctor list). Edit and Delete are real buttons and do not trigger the row link.
 - No zebra stripes. No outer card. No rounded container.
 
-Below 720px the table becomes a stack of records. Each record is a block with 16px vertical padding and a bottom rule. The name is the first line. Each remaining field is a line of "Label  value", label in ink-700. Edit and Delete sit on the last line. Horizontal scrolling of a wide table is not used. A stack keeps every field on screen.
+Below 720px the table becomes a stack of records. Each record is a block with 16px vertical padding and a bottom rule. The name is the first line. Each remaining field is a line of "Label value", label in ink-700. Edit and Delete sit on the last line. Horizontal scrolling of a wide table is not used. A stack keeps every field on screen.
 
 Column order:
 
-| Table | Columns |
-| --- | --- |
-| Doctors | Name, Specialization, Hospital, Patients, Created |
-| Doctor's patients | Name, Condition, Registered, Phone, and the row actions |
-| Patients | Name, Condition, Doctor, Registered, Phone, and the row actions |
+| Table             | Columns                                                         |
+| ----------------- | --------------------------------------------------------------- |
+| Doctors           | Name, Specialization, Hospital, Patients, Created               |
+| Doctor's patients | Name, Condition, Registered, Phone, and the row actions         |
+| Patients          | Name, Condition, Doctor, Registered, Phone, and the row actions |
 
 Patients is a count, right aligned. Created and Registered print as `12 Nov 2026`, in the application's timezone, from the `YYYY-MM-DD` or ISO value. Do not show a time of day.
 
@@ -397,22 +397,22 @@ Then four figures in a row, gap 24px. Below 720px they become a 2×2 grid. Each 
 - Number, Newsreader 40px, tabular
 - Caption, 12px ink-700, naming the scope
 
-| Figure | Eyebrow | Source | Caption |
-| --- | --- | --- | --- |
-| Doctors | Doctors | `totals.doctors` | All records |
-| Patients | Patients | `totals.patients` | Active |
-| Registered | Registered | sum of `patientsRegisteredByDay` | In this range |
-| Added | Doctors added | sum of `doctorsCreatedByDay` | In this range |
+| Figure     | Eyebrow       | Source                           | Caption       |
+| ---------- | ------------- | -------------------------------- | ------------- |
+| Doctors    | Doctors       | `totals.doctors`                 | All records   |
+| Patients   | Patients      | `totals.patients`                | Active        |
+| Registered | Registered    | sum of `patientsRegisteredByDay` | In this range |
+| Added      | Doctors added | sum of `doctorsCreatedByDay`     | In this range |
 
 The last two are derived in the client from series the API already returns. They are labeled "In this range" so they cannot be read as all-time totals.
 
 Charts stack with 48px between them. Each chart block has a section title and a 12px caption, then the plot at 280px tall (240px below 720px).
 
-| Chart | Title | Caption | Form |
-| --- | --- | --- | --- |
-| Patients per doctor | Patients per doctor | All active patients. Includes doctors with zero. | Horizontal bars, ink-900. Label is the doctor name, with specialization in ink-700 after it. Value at the end of the bar. |
-| By condition | By condition | All active patients, in fixed condition order. | Horizontal bars in the condition inks. The word is the label. Zero still draws the label and a value of 0. |
-| Over time | Over this range | Patients registered and doctors created, including days with zero. | Two lines on one date axis. Green for patients, observation ink for doctors. Dots on each day. |
+| Chart               | Title               | Caption                                                            | Form                                                                                                                      |
+| ------------------- | ------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| Patients per doctor | Patients per doctor | All active patients. Includes doctors with zero.                   | Horizontal bars, ink-900. Label is the doctor name, with specialization in ink-700 after it. Value at the end of the bar. |
+| By condition        | By condition        | All active patients, in fixed condition order.                     | Horizontal bars in the condition inks. The word is the label. Zero still draws the label and a value of 0.                |
+| Over time           | Over this range     | Patients registered and doctors created, including days with zero. | Two lines on one date axis. Green for patients, observation ink for doctors. Dots on each day.                            |
 
 Grid lines are horizontal only, in `rule`. No vertical grid. No chart background fill. Tooltip is a `paper-1` sheet, radius 4px, 12px type, showing the date or name and the count. Legends are a single line under the title, using a 8px square and the series name, for the line chart only. The bar charts are labeled directly and have no legend.
 
@@ -442,9 +442,9 @@ The doctor cell links to that doctor's page. Edit opens the patient dialog. Dele
 
 ### 10.6 Create and edit forms
 
-| Form | Fields, in order |
-| --- | --- |
-| Doctor | Name, Specialization, Hospital, Phone, Email |
+| Form    | Fields, in order                                                                  |
+| ------- | --------------------------------------------------------------------------------- |
+| Doctor  | Name, Specialization, Hospital, Phone, Email                                      |
 | Patient | Full name, Condition, Doctor, Registered, Date of birth, Sex, Phone, Email, Notes |
 
 Doctor, condition, and registered are required on a patient. The optional fields sit after the required ones and are labeled "Optional" in the label row. Sex is a select: Female, Male, Other, Unknown, and an empty "Not recorded". Date of birth is a date field and may be empty.
@@ -455,39 +455,39 @@ The doctor field is omitted when the dialog was opened from a doctor page, and t
 
 Short, specific, and calm. Address the admin as the person doing the task. Use the record's name.
 
-| Write | Avoid |
-| --- | --- |
-| Delete Amina Rahman? | Are you sure? |
-| No doctors match | Oops, nothing here |
-| Invalid email or password | User not found |
-| Saving… | Please wait |
-| Add doctor | + New |
+| Write                     | Avoid              |
+| ------------------------- | ------------------ |
+| Delete Amina Rahman?      | Are you sure?      |
+| No doctors match          | Oops, nothing here |
+| Invalid email or password | User not found     |
+| Saving…                   | Please wait        |
+| Add doctor                | + New              |
 
 Buttons are verbs. Titles are nouns. Errors say what happened and, when the admin can fix it, what to change.
 
 ## 12. Accessibility
 
-| Requirement | Rule |
-| --- | --- |
-| Contrast | Body text, labels, placeholders, and button labels meet WCAG AA. Pairs in §4 were checked. |
-| Keyboard | Every control is reachable in DOM order. Dialogs trap focus. Escape closes menus and dialogs. |
-| Focus | The ring in §5.5 is always visible on `:focus-visible`. |
-| Names | Inputs have visible labels. Icon-only controls are not used, so no control depends on `aria-label` alone. The search field is labeled "Search". |
-| Status | Condition is text plus color. Errors are text plus a border change. |
-| Live regions | The error band is `aria-live="polite"`. A successful save does not use a toast. The dialog closes and the new row is in the table. |
-| Motion | Honors `prefers-reduced-motion`. |
-| Zoom | Layout holds at 200% on a 1280px canvas. The record stack from §9.5 is what narrow and zoomed viewports use. |
-| Language | The document is `lang="en"`. |
+| Requirement  | Rule                                                                                                                                            |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Contrast     | Body text, labels, placeholders, and button labels meet WCAG AA. Pairs in §4 were checked.                                                      |
+| Keyboard     | Every control is reachable in DOM order. Dialogs trap focus. Escape closes menus and dialogs.                                                   |
+| Focus        | The ring in §5.5 is always visible on `:focus-visible`.                                                                                         |
+| Names        | Inputs have visible labels. Icon-only controls are not used, so no control depends on `aria-label` alone. The search field is labeled "Search". |
+| Status       | Condition is text plus color. Errors are text plus a border change.                                                                             |
+| Live regions | The error band is `aria-live="polite"`. A successful save does not use a toast. The dialog closes and the new row is in the table.              |
+| Motion       | Honors `prefers-reduced-motion`.                                                                                                                |
+| Zoom         | Layout holds at 200% on a 1280px canvas. The record stack from §9.5 is what narrow and zoomed viewports use.                                    |
+| Language     | The document is `lang="en"`.                                                                                                                    |
 
 Hit targets are at least 40px on the primary controls and 36px on compact ones. The condition mark is not a target.
 
 ## 13. Responsive summary
 
-| Width | Shell | Tables | Figures | Charts |
-| --- | --- | --- | --- | --- |
-| ≥ 720px | Left rail, 216px | Rows and columns | One row of four | 280px tall |
-| 480–719px | Top bar, links in a row | Stacked records | 2×2 | 240px tall |
-| < 480px | Top bar, links wrap | Stacked records | 2×2 | 240px tall |
+| Width     | Shell                   | Tables           | Figures         | Charts     |
+| --------- | ----------------------- | ---------------- | --------------- | ---------- |
+| ≥ 720px   | Left rail, 216px        | Rows and columns | One row of four | 280px tall |
+| 480–719px | Top bar, links in a row | Stacked records  | 2×2             | 240px tall |
+| < 480px   | Top bar, links wrap     | Stacked records  | 2×2             | 240px tall |
 
 Breakpoints are 720px and 480px. No other layout changes.
 
@@ -558,16 +558,16 @@ Condition pairs stay as a map next to the patient catalog, not as extra global v
 
 ## 15. Traceability
 
-| Requirement | Where it is satisfied |
-| --- | --- |
-| NFR-UX-01 Modern admin layout, spacing, type hierarchy, one primary action | §2, §3, §5, §7 |
-| NFR-UX-02 Labels, keyboard, focus | §5.5, §9, §12 |
-| NFR-UX-03 Narrow tables | §9.5, §13 |
-| NFR-UX-04 Chart title, labeling, empty series | §10.2, §8.2 |
-| FR-UI-01 Navigation among Dashboard, Doctors, Patients | §6 |
-| FR-UI-02 Desktop and mobile | §13 |
-| FR-UI-03 Loading, empty, error | §8 |
-| FR-UI-04 Field and server validation | §9.3 |
-| FR-UI-05 Delete confirmation | §9.7 |
-| FR-DASH-01–05 Figures and charts | §10.2 |
-| README visual evidence, desktop and mobile | §13 defines the two widths to capture |
+| Requirement                                                                | Where it is satisfied                 |
+| -------------------------------------------------------------------------- | ------------------------------------- |
+| NFR-UX-01 Modern admin layout, spacing, type hierarchy, one primary action | §2, §3, §5, §7                        |
+| NFR-UX-02 Labels, keyboard, focus                                          | §5.5, §9, §12                         |
+| NFR-UX-03 Narrow tables                                                    | §9.5, §13                             |
+| NFR-UX-04 Chart title, labeling, empty series                              | §10.2, §8.2                           |
+| FR-UI-01 Navigation among Dashboard, Doctors, Patients                     | §6                                    |
+| FR-UI-02 Desktop and mobile                                                | §13                                   |
+| FR-UI-03 Loading, empty, error                                             | §8                                    |
+| FR-UI-04 Field and server validation                                       | §9.3                                  |
+| FR-UI-05 Delete confirmation                                               | §9.7                                  |
+| FR-DASH-01–05 Figures and charts                                           | §10.2                                 |
+| README visual evidence, desktop and mobile                                 | §13 defines the two widths to capture |

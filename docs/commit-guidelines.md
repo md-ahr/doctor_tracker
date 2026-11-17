@@ -14,26 +14,26 @@ Use [Conventional Commits](https://www.conventionalcommits.org/).
 <body>
 ```
 
-| Part | Rule |
-| --- | --- |
-| `type` | One of the types in section 2 |
-| `scope` | Optional. A short area name from section 3. Omit when the change is repo-wide |
-| `subject` | Imperative, present tense, **under 50 characters**, no trailing period |
-| `body` | Optional. Why the change exists. Wrap near 72 characters. Blank line after the subject |
+| Part      | Rule                                                                                   |
+| --------- | -------------------------------------------------------------------------------------- |
+| `type`    | One of the types in section 2                                                          |
+| `scope`   | Optional. A short area name from section 3. Omit when the change is repo-wide          |
+| `subject` | Imperative, present tense, **under 50 characters**, no trailing period                 |
+| `body`    | Optional. Why the change exists. Wrap near 72 characters. Blank line after the subject |
 
 One logical change per commit. A task in the backend or frontend task list is one commit when its unit tests pass.
 
 ## 2. Types
 
-| Type | Use when |
-| --- | --- |
-| `feat` | A new behavior a user or API client can observe |
-| `fix` | A correction to existing behavior |
-| `test` | Tests only, no production code |
-| `refactor` | Structure change with the same behavior |
-| `docs` | README, comments meant for readers, or docs in that repo |
-| `chore` | Tooling, dependencies, config, seed scripts that are not a feature |
-| `style` | Formatting only (web). Do not use for CSS that changes layout — that is `feat` or `fix` |
+| Type       | Use when                                                                                |
+| ---------- | --------------------------------------------------------------------------------------- |
+| `feat`     | A new behavior a user or API client can observe                                         |
+| `fix`      | A correction to existing behavior                                                       |
+| `test`     | Tests only, no production code                                                          |
+| `refactor` | Structure change with the same behavior                                                 |
+| `docs`     | README, comments meant for readers, or docs in that repo                                |
+| `chore`    | Tooling, dependencies, config, seed scripts that are not a feature                      |
+| `style`    | Formatting only (web). Do not use for CSS that changes layout — that is `feat` or `fix` |
 
 Do not use `feat` for a failing stub. The commit that introduces the behavior should already have its unit test green.
 
@@ -43,30 +43,30 @@ Pick the scope that matches the files you touched. Use the same names in both re
 
 ### API (`api/`)
 
-| Scope | Typical paths |
-| --- | --- |
-| `config` | `src/config/` |
-| `lib` | `src/lib/` |
-| `middleware` | `src/middleware/` |
-| `db` | `src/db/` |
-| `auth` | auth schema, service, controller, routes, seed |
-| `doctors` | doctor schema, model, service, controller, routes |
-| `patients` | patient schema, model, service, controller, routes |
-| `dashboard` | dashboard schema, service, controller, routes |
-| `docs` | `src/docs/` (OpenAPI, Swagger) |
-| `health` | health controller, route, and app shell wiring |
+| Scope        | Typical paths                                      |
+| ------------ | -------------------------------------------------- |
+| `config`     | `src/config/`                                      |
+| `lib`        | `src/lib/`                                         |
+| `middleware` | `src/middleware/`                                  |
+| `db`         | `src/db/`                                          |
+| `auth`       | auth schema, service, controller, routes, seed     |
+| `doctors`    | doctor schema, model, service, controller, routes  |
+| `patients`   | patient schema, model, service, controller, routes |
+| `dashboard`  | dashboard schema, service, controller, routes      |
+| `docs`       | `src/docs/` (OpenAPI, Swagger)                     |
+| `health`     | health controller, route, and app shell wiring     |
 
 ### Web (`web/`)
 
-| Scope | Typical paths |
-| --- | --- |
-| `ui` | `src/components/ui/`, global tokens |
-| `lib` | `src/lib/` (http client, token, calendar, query client) |
-| `auth` | `src/features/auth/`, login page, proxy |
-| `doctors` | `src/features/doctors/`, doctor pages |
-| `patients` | `src/features/patients/`, patient pages |
-| `dashboard` | `src/features/dashboard/`, dashboard page |
-| `app` | layouts, providers, route shells with no feature logic |
+| Scope       | Typical paths                                           |
+| ----------- | ------------------------------------------------------- |
+| `ui`        | `src/components/ui/`, global tokens                     |
+| `lib`       | `src/lib/` (http client, token, calendar, query client) |
+| `auth`      | `src/features/auth/`, login page, proxy                 |
+| `doctors`   | `src/features/doctors/`, doctor pages                   |
+| `patients`  | `src/features/patients/`, patient pages                 |
+| `dashboard` | `src/features/dashboard/`, dashboard page               |
+| `app`       | layouts, providers, route shells with no feature logic  |
 
 A commit that only adds tests for one scope still uses that scope: `test(auth): cover dummy-hash login path`.
 
@@ -109,11 +109,11 @@ Do not paste task numbers as the only message. The subject must stand alone in `
 
 ## 6. What one commit contains
 
-| Do | Do not |
-| --- | --- |
-| Include the unit test that proves the task | Commit production code with a known red test |
-| Keep API and web changes in their own repos | Commit both apps in one repository |
-| Stage only files for that task | Mix an unrelated format sweep into a feature commit |
+| Do                                          | Do not                                              |
+| ------------------------------------------- | --------------------------------------------------- |
+| Include the unit test that proves the task  | Commit production code with a known red test        |
+| Keep API and web changes in their own repos | Commit both apps in one repository                  |
+| Stage only files for that task              | Mix an unrelated format sweep into a feature commit |
 
 Suggested cadence while following the task docs:
 
@@ -169,12 +169,12 @@ EOF
 )"
 ```
 
-| Rule | Detail |
-| --- | --- |
-| Hooks | Do not skip with `--no-verify` unless you are fixing the hook itself in a follow-up you were asked to make |
-| Amend | Only amend a commit that has not been pushed, and only to fold in hook auto-fixes or a message typo on that same commit |
-| Push | Push only when you intend to update the remote |
-| Force push | Do not force-push `main` or `master` |
+| Rule       | Detail                                                                                                                  |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Hooks      | Do not skip with `--no-verify` unless you are fixing the hook itself in a follow-up you were asked to make              |
+| Amend      | Only amend a commit that has not been pushed, and only to fold in hook auto-fixes or a message typo on that same commit |
+| Push       | Push only when you intend to update the remote                                                                          |
+| Force push | Do not force-push `main` or `master`                                                                                    |
 
 ## 9. Pull requests
 

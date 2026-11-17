@@ -67,33 +67,33 @@ Patients add `ui/delete-patient-button.tsx`. Dashboard adds chart components ins
 
 ## 3. What each layer owns
 
-| Layer | Owns | Does not own |
-| --- | --- | --- |
-| `proxy.ts` | Redirect when `dt_refresh` is missing | Token validity. The API remains the authority |
-| `app` pages | Route URL and which feature screen to render | `fetch`, query keys, form state |
-| `app/providers.tsx` | The shared `QueryClient` | Feature components |
-| `(portal)/layout.tsx` | Navigation, admin name, logout | Doctor and patient tables |
-| `features/*/model` | Resource types and Zod schemas for the UI | HTTP |
-| `features/*/api` | Calling one client method and returning `data` | Cache keys |
-| `features/*/hooks` | Query keys, stale time, invalidation | Envelope parsing |
-| `features/*/ui` | Rendering and local form state | A sibling feature |
-| `components/ui` | Button, input, dialog, select, table, dropdown | Domain words such as "doctor" |
-| `lib/api` | Envelope, bearer header, one refresh retry | Screen layout |
-| `lib/auth` | In-memory access token | `localStorage`, `sessionStorage` |
-| `lib/time` | `YYYY-MM-DD` checks and range labels | `new Date("2026-11-16")` for chart buckets |
-| `lib/query` | `QueryClient` defaults | A feature's query key |
+| Layer                 | Owns                                           | Does not own                                  |
+| --------------------- | ---------------------------------------------- | --------------------------------------------- |
+| `proxy.ts`            | Redirect when `dt_refresh` is missing          | Token validity. The API remains the authority |
+| `app` pages           | Route URL and which feature screen to render   | `fetch`, query keys, form state               |
+| `app/providers.tsx`   | The shared `QueryClient`                       | Feature components                            |
+| `(portal)/layout.tsx` | Navigation, admin name, logout                 | Doctor and patient tables                     |
+| `features/*/model`    | Resource types and Zod schemas for the UI      | HTTP                                          |
+| `features/*/api`      | Calling one client method and returning `data` | Cache keys                                    |
+| `features/*/hooks`    | Query keys, stale time, invalidation           | Envelope parsing                              |
+| `features/*/ui`       | Rendering and local form state                 | A sibling feature                             |
+| `components/ui`       | Button, input, dialog, select, table, dropdown | Domain words such as "doctor"                 |
+| `lib/api`             | Envelope, bearer header, one refresh retry     | Screen layout                                 |
+| `lib/auth`            | In-memory access token                         | `localStorage`, `sessionStorage`              |
+| `lib/time`            | `YYYY-MM-DD` checks and range labels           | `new Date("2026-11-16")` for chart buckets    |
+| `lib/query`           | `QueryClient` defaults                         | A feature's query key                         |
 
 ## 4. Dependency direction
 
-| File | May import | Must not import |
-| --- | --- | --- |
-| `features/doctors` | `lib/api`, `lib/query`, `components/ui` | `features/patients`, `features/dashboard` |
-| `features/patients` | `lib/api`, `lib/query`, `components/ui` | `features/doctors` |
-| `features/dashboard` | `lib/api`, `lib/time`, `components/ui` | Other features |
-| `features/auth` | `lib/api`, `lib/auth` | Other features |
-| `app/(portal)/doctors/[doctorId]/page.tsx` | Doctor feature and patient feature | `fetch` |
-| Feature UI | Its own hooks | `HttpDoctorTrackerApi`, `fetch` |
-| Hooks | Their feature `api` module | A sibling feature |
+| File                                       | May import                              | Must not import                           |
+| ------------------------------------------ | --------------------------------------- | ----------------------------------------- |
+| `features/doctors`                         | `lib/api`, `lib/query`, `components/ui` | `features/patients`, `features/dashboard` |
+| `features/patients`                        | `lib/api`, `lib/query`, `components/ui` | `features/doctors`                        |
+| `features/dashboard`                       | `lib/api`, `lib/time`, `components/ui`  | Other features                            |
+| `features/auth`                            | `lib/api`, `lib/auth`                   | Other features                            |
+| `app/(portal)/doctors/[doctorId]/page.tsx` | Doctor feature and patient feature      | `fetch`                                   |
+| Feature UI                                 | Its own hooks                           | `HttpDoctorTrackerApi`, `fetch`           |
+| Hooks                                      | Their feature `api` module              | A sibling feature                         |
 
 `DoctorTrackerApi` is the client contract. `HttpDoctorTrackerApi` implements it. Hooks call the feature `api` functions. Components do not import `HttpDoctorTrackerApi`.
 
@@ -101,24 +101,24 @@ Patients add `ui/delete-patient-button.tsx`. Dashboard adds chart components ins
 
 TanStack Query caches server data a screen shows more than once. One `QueryClient` wraps the app. A screen adds a query only when leaving and coming back should reuse the last result.
 
-| Cached read | Key | Why it is cached |
-| --- | --- | --- |
-| Doctor page | `["doctors", query]` | The table is revisited and refreshed after a doctor write |
-| Doctor filter values | `["doctors", "facets"]` | The same specialization and hospital lists feed the filter bar |
-| Doctor summary | `["doctors", id]` | The detail adds `activePatientCount`, which the list row does not have |
-| Patient page | `["patients", query]` | The same list is the global page and the doctor page when `query` includes `doctorId` |
-| Dashboard | `["dashboard", from, to]` | One response feeds every tile and chart |
-| Admin name | `["auth", "me"]` | The portal header reads it on each portal page |
+| Cached read          | Key                       | Why it is cached                                                                      |
+| -------------------- | ------------------------- | ------------------------------------------------------------------------------------- |
+| Doctor page          | `["doctors", query]`      | The table is revisited and refreshed after a doctor write                             |
+| Doctor filter values | `["doctors", "facets"]`   | The same specialization and hospital lists feed the filter bar                        |
+| Doctor summary       | `["doctors", id]`         | The detail adds `activePatientCount`, which the list row does not have                |
+| Patient page         | `["patients", query]`     | The same list is the global page and the doctor page when `query` includes `doctorId` |
+| Dashboard            | `["dashboard", from, to]` | One response feeds every tile and chart                                               |
+| Admin name           | `["auth", "me"]`          | The portal header reads it on each portal page                                        |
 
-| Item | Rule |
-| --- | --- |
-| Default stale time | 30 seconds, set once on the `QueryClient` |
-| Dashboard stale time | 60 seconds on that query only |
-| After a doctor write | Invalidate `["doctors"]` |
-| After a patient write or delete | Invalidate `["patients"]`, `["doctors", doctorId]`, and `["dashboard"]` |
-| Dates on charts | Print the `YYYY-MM-DD` string from the API. Do not pass it through `new Date()` |
-| Forms | React Hook Form and Zod. Field state stays in the form |
-| Charts | Recharts, rendered from the dashboard query result. An all-zero series shows "Nothing registered in this range" |
+| Item                            | Rule                                                                                                            |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Default stale time              | 30 seconds, set once on the `QueryClient`                                                                       |
+| Dashboard stale time            | 60 seconds on that query only                                                                                   |
+| After a doctor write            | Invalidate `["doctors"]`                                                                                        |
+| After a patient write or delete | Invalidate `["patients"]`, `["doctors", doctorId]`, and `["dashboard"]`                                         |
+| Dates on charts                 | Print the `YYYY-MM-DD` string from the API. Do not pass it through `new Date()`                                 |
+| Forms                           | React Hook Form and Zod. Field state stays in the form                                                          |
+| Charts                          | Recharts, rendered from the dashboard query result. An all-zero series shows "Nothing registered in this range" |
 
 Do not cache these:
 
@@ -133,13 +133,13 @@ The client reads `success`, `message`, `data`, and `meta`. It does not invent a 
 
 ## 6. Screens
 
-| Route | Renders | Primary action |
-| --- | --- | --- |
-| `/login` | Email and password form | Sign in |
-| `/dashboard` | Four figures, patients-per-doctor bar, condition bar, two daily lines, date range | Change the range |
-| `/doctors` | Filters, table, pagination | Add doctor |
-| `/doctors/[doctorId]` | Doctor summary and that doctor's patient table | Add patient |
-| `/patients` | Filters, including doctor and condition, table, pagination | Edit or delete |
+| Route                 | Renders                                                                           | Primary action   |
+| --------------------- | --------------------------------------------------------------------------------- | ---------------- |
+| `/login`              | Email and password form                                                           | Sign in          |
+| `/dashboard`          | Four figures, patients-per-doctor bar, condition bar, two daily lines, date range | Change the range |
+| `/doctors`            | Filters, table, pagination                                                        | Add doctor       |
+| `/doctors/[doctorId]` | Doctor summary and that doctor's patient table                                    | Add patient      |
+| `/patients`           | Filters, including doctor and condition, table, pagination                        | Edit or delete   |
 
 Add and edit open a dialog. Delete opens a confirm dialog that names the patient. The portal layout links to Dashboard, Doctors, and Patients.
 
@@ -262,7 +262,11 @@ async function refreshSession(): Promise<boolean> {
   return refreshPromise;
 }
 
-export async function apiRequest<T>(path: string, init: RequestInit = {}, retry = true): Promise<ApiSuccess<T>> {
+export async function apiRequest<T>(
+  path: string,
+  init: RequestInit = {},
+  retry = true,
+): Promise<ApiSuccess<T>> {
   const headers = new Headers(init.headers);
   headers.set("Content-Type", "application/json");
   const token = getAccessToken();

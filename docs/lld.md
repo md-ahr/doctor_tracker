@@ -64,14 +64,14 @@ src/
     dashboard.routes.ts
 ```
 
-| Layer | Responsibility |
-| --- | --- |
-| `routes` | Path and middleware. Hand off to one controller |
-| `controllers` | Read the validated request, call one service function, write the HTTP response |
-| `services` | Business rules in section 5.2. Throw `DomainError`. No `req` or `res` |
-| `models` | Mongoose schema, indexes, and queries. Return plain objects. No HTTP status and no role checks |
-| `schemas` | Zod input for each route |
-| `lib` | Calendar, errors, password hashing, JWTs |
+| Layer         | Responsibility                                                                                 |
+| ------------- | ---------------------------------------------------------------------------------------------- |
+| `routes`      | Path and middleware. Hand off to one controller                                                |
+| `controllers` | Read the validated request, call one service function, write the HTTP response                 |
+| `services`    | Business rules in section 5.2. Throw `DomainError`. No `req` or `res`                          |
+| `models`      | Mongoose schema, indexes, and queries. Return plain objects. No HTTP status and no role checks |
+| `schemas`     | Zod input for each route                                                                       |
+| `lib`         | Calendar, errors, password hashing, JWTs                                                       |
 
 `dashboard` has no model. `dashboard.service.ts` calls count and aggregation functions on `doctor.model` and `patient.model`. `doctor.service.ts` may call patient count functions on `patient.model`. `patient.service.ts` may call `doctor.model.findById` and `findByIds`. Services do not import each other. `GET /doctors/:doctorId/patients` is declared on the doctor router. The doctor controller calls `patient.service`. Health has no service; its controller calls `pingDatabase`.
 
@@ -120,19 +120,19 @@ features/patients/
 
 ### 2.1 Conventions
 
-| Item | Rule |
-| --- | --- |
-| Base URL | `{API_ORIGIN}/api/v1` |
-| Success body | `{ "success": true, "message": "<string>", "data": <payload> }` |
-| List success | Same as success body, plus `"meta": { "page", "limit", "total", "totalPages" }` at the top level next to `data` |
-| Error body | `{ "success": false, "message": "<string>", "data": null, "error": { "code", "details": [{ "path", "message" }] } }` |
-| Ids | 24-character hex strings |
-| Timestamps | ISO-8601 UTC, for example `2026-11-17T08:30:00.000Z` |
-| Calendar inputs | `YYYY-MM-DD` |
-| Auth header | `Authorization: Bearer <accessToken>` |
-| Content type | `application/json` |
-| Unknown fields | Stripped by Zod, then ignored |
-| Delete and logout success | `200` with `data: null` and an operation-specific `message` (no `meta`) |
+| Item                      | Rule                                                                                                                 |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Base URL                  | `{API_ORIGIN}/api/v1`                                                                                                |
+| Success body              | `{ "success": true, "message": "<string>", "data": <payload> }`                                                      |
+| List success              | Same as success body, plus `"meta": { "page", "limit", "total", "totalPages" }` at the top level next to `data`      |
+| Error body                | `{ "success": false, "message": "<string>", "data": null, "error": { "code", "details": [{ "path", "message" }] } }` |
+| Ids                       | 24-character hex strings                                                                                             |
+| Timestamps                | ISO-8601 UTC, for example `2026-11-17T08:30:00.000Z`                                                                 |
+| Calendar inputs           | `YYYY-MM-DD`                                                                                                         |
+| Auth header               | `Authorization: Bearer <accessToken>`                                                                                |
+| Content type              | `application/json`                                                                                                   |
+| Unknown fields            | Stripped by Zod, then ignored                                                                                        |
+| Delete and logout success | `200` with `data: null` and an operation-specific `message` (no `meta`)                                              |
 
 `totalPages` is `0` when `total` is `0`, otherwise `ceil(total / limit)`.
 
@@ -186,17 +186,17 @@ Canonical single-resource success:
 
 ### 2.2 Status and error codes
 
-| HTTP | `code` | When |
-| --- | --- | --- |
-| 400 | `VALIDATION_ERROR` | Schema, date order, or id format failed |
-| 401 | `INVALID_CREDENTIALS` | Email or password does not match |
-| 401 | `UNAUTHENTICATED` | Missing, expired, or malformed access token, or a refresh cookie that does not match a live session |
-| 403 | `FORBIDDEN` | Token is valid and the role is not `admin` |
-| 404 | `DOCTOR_NOT_FOUND` | No doctor for that id |
-| 404 | `PATIENT_NOT_FOUND` | No active patient for that id |
-| 409 | `EMAIL_IN_USE` | Another doctor already has that email |
-| 429 | `RATE_LIMITED` | Login rate limit |
-| 500 | `INTERNAL` | Anything else. `details` is empty. |
+| HTTP | `code`                | When                                                                                                |
+| ---- | --------------------- | --------------------------------------------------------------------------------------------------- |
+| 400  | `VALIDATION_ERROR`    | Schema, date order, or id format failed                                                             |
+| 401  | `INVALID_CREDENTIALS` | Email or password does not match                                                                    |
+| 401  | `UNAUTHENTICATED`     | Missing, expired, or malformed access token, or a refresh cookie that does not match a live session |
+| 403  | `FORBIDDEN`           | Token is valid and the role is not `admin`                                                          |
+| 404  | `DOCTOR_NOT_FOUND`    | No doctor for that id                                                                               |
+| 404  | `PATIENT_NOT_FOUND`   | No active patient for that id                                                                       |
+| 409  | `EMAIL_IN_USE`        | Another doctor already has that email                                                               |
+| 429  | `RATE_LIMITED`        | Login rate limit                                                                                    |
+| 500  | `INTERNAL`            | Anything else. `details` is empty.                                                                  |
 
 Example:
 
@@ -214,21 +214,21 @@ Example:
 
 ### 2.3 Shared field limits
 
-| Field | Rule |
-| --- | --- |
-| Admin, doctor, and patient names | Trimmed, 1–120 characters |
-| Specialization | Trimmed, 1–80 characters |
-| Hospital | Trimmed, 1–120 characters |
-| Email | Trimmed, lowercased, valid email, max 254 |
-| Phone | Trimmed, 7–20 characters, digits with an optional leading `+` and interior spaces or dashes |
-| Notes | Trimmed, max 2,000 characters. Empty becomes omitted. |
-| Date of birth | `YYYY-MM-DD`, not in the future, not more than 130 years ago |
-| Sex | `female`, `male`, `other`, `undisclosed` |
-| Condition | `critical`, `serious`, `stable`, `recovering`, `chronic`, `observation` |
-| Search `q` | Trimmed, 1–100 characters when present |
-| `page` | Integer ≥ 1, default 1 |
-| `limit` | Integer 1–50, default 20 |
-| Sort | A whitelist per endpoint. Anything else is `VALIDATION_ERROR`. |
+| Field                            | Rule                                                                                        |
+| -------------------------------- | ------------------------------------------------------------------------------------------- |
+| Admin, doctor, and patient names | Trimmed, 1–120 characters                                                                   |
+| Specialization                   | Trimmed, 1–80 characters                                                                    |
+| Hospital                         | Trimmed, 1–120 characters                                                                   |
+| Email                            | Trimmed, lowercased, valid email, max 254                                                   |
+| Phone                            | Trimmed, 7–20 characters, digits with an optional leading `+` and interior spaces or dashes |
+| Notes                            | Trimmed, max 2,000 characters. Empty becomes omitted.                                       |
+| Date of birth                    | `YYYY-MM-DD`, not in the future, not more than 130 years ago                                |
+| Sex                              | `female`, `male`, `other`, `undisclosed`                                                    |
+| Condition                        | `critical`, `serious`, `stable`, `recovering`, `chronic`, `observation`                     |
+| Search `q`                       | Trimmed, 1–100 characters when present                                                      |
+| `page`                           | Integer ≥ 1, default 1                                                                      |
+| `limit`                          | Integer 1–50, default 20                                                                    |
+| Sort                             | A whitelist per endpoint. Anything else is `VALIDATION_ERROR`.                              |
 
 ### 2.4 Health
 
@@ -384,14 +384,14 @@ Request body is `name`, `specialization`, `hospital`, `phone`, `email`. Response
 
 #### `GET /doctors`
 
-| Query | Meaning |
-| --- | --- |
-| `q` | Case-insensitive literal match against name, specialization, hospital, email, or phone |
-| `specialization` | Case-insensitive exact match |
-| `hospital` | Case-insensitive exact match |
-| `createdFrom`, `createdTo` | Inclusive creation-date window |
-| `page`, `limit` | Pagination |
-| `sort` | `createdAt` (default, descending) or `name` (ascending) |
+| Query                      | Meaning                                                                                |
+| -------------------------- | -------------------------------------------------------------------------------------- |
+| `q`                        | Case-insensitive literal match against name, specialization, hospital, email, or phone |
+| `specialization`           | Case-insensitive exact match                                                           |
+| `hospital`                 | Case-insensitive exact match                                                           |
+| `createdFrom`, `createdTo` | Inclusive creation-date window                                                         |
+| `page`, `limit`            | Pagination                                                                             |
+| `sort`                     | `createdAt` (default, descending) or `name` (ascending)                                |
 
 Response `200` is the list envelope. `data` is an array of doctor resources without `activePatientCount`. `message`: `"Doctors retrieved successfully"`.
 
@@ -469,14 +469,14 @@ Patient resource:
 
 #### `GET /patients`
 
-| Query | Meaning |
-| --- | --- |
-| `q` | Literal match against full name, email, or phone |
-| `condition` | Exact catalog value |
-| `doctorId` | Only that doctor's patients. Unknown doctor is an empty page, not a 404, because the global page is a filter. The nested doctor route is the one that 404s. |
-| `registeredFrom`, `registeredTo` | Inclusive registration window |
-| `page`, `limit` | Pagination |
-| `sort` | `registeredAt` (default, descending) or `fullName` (ascending) |
+| Query                            | Meaning                                                                                                                                                     |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `q`                              | Literal match against full name, email, or phone                                                                                                            |
+| `condition`                      | Exact catalog value                                                                                                                                         |
+| `doctorId`                       | Only that doctor's patients. Unknown doctor is an empty page, not a 404, because the global page is a filter. The nested doctor route is the one that 404s. |
+| `registeredFrom`, `registeredTo` | Inclusive registration window                                                                                                                               |
+| `page`, `limit`                  | Pagination                                                                                                                                                  |
+| `sort`                           | `registeredAt` (default, descending) or `fullName` (ascending)                                                                                              |
 
 Response `200` is the list envelope. `message`: `"Patients retrieved successfully"`.
 
@@ -527,9 +527,7 @@ Response `200`:
         "patientCount": 20
       }
     ],
-    "patientsByCondition": [
-      { "condition": "stable", "patientCount": 80 }
-    ],
+    "patientsByCondition": [{ "condition": "stable", "patientCount": 80 }],
     "patientsRegisteredByDay": [
       { "date": "2026-11-16", "count": 4 },
       { "date": "2026-11-17", "count": 0 }
@@ -548,9 +546,9 @@ Response `200`:
 
 Public. Not under the admin guard.
 
-| URL | Body |
-| --- | --- |
-| `GET /api/docs` | Swagger UI |
+| URL                          | Body               |
+| ---------------------------- | ------------------ |
+| `GET /api/docs`              | Swagger UI         |
 | `GET /api/docs/openapi.json` | OpenAPI 3 document |
 
 The document is built in `src/docs/openapi.ts` from the Zod schemas (`@asteasolutions/zod-to-openapi`). `swagger-ui-express` serves the UI. Do not keep a second hand-written YAML.
@@ -565,12 +563,7 @@ The spec defines the success envelope, the list envelope with `meta`, and the er
 type Role = "admin";
 
 type PatientCondition =
-  | "critical"
-  | "serious"
-  | "stable"
-  | "recovering"
-  | "chronic"
-  | "observation";
+  "critical" | "serious" | "stable" | "recovering" | "chronic" | "observation";
 
 type Sex = "female" | "male" | "other" | "undisclosed";
 
@@ -664,21 +657,15 @@ interface Clock {
 interface AdminRepository {
   findByEmail(email: string): Promise<(Admin & { passwordHash: string }) | null>;
   findById(id: string): Promise<Admin | null>;
-  create(input: {
-    name: string;
-    email: string;
-    passwordHash: string;
-    role: Role;
-  }): Promise<Admin>;
+  create(input: { name: string; email: string; passwordHash: string; role: Role }): Promise<Admin>;
 }
 
 interface SessionRepository {
-  create(input: {
-    adminId: string;
-    tokenHash: string;
-    expiresAt: Date;
-  }): Promise<void>;
-  findLiveByHash(tokenHash: string, now: Date): Promise<{
+  create(input: { adminId: string; tokenHash: string; expiresAt: Date }): Promise<void>;
+  findLiveByHash(
+    tokenHash: string,
+    now: Date,
+  ): Promise<{
     id: string;
     adminId: string;
   } | null>;
@@ -761,14 +748,14 @@ The repository interfaces above are the functions each model file exports. Servi
 
 Query keys:
 
-| Key | Data |
-| --- | --- |
-| `["auth", "me"]` | Current admin |
-| `["doctors", query]` | Doctor page |
-| `["doctors", "facets"]` | Filter values |
-| `["doctors", id]` | Doctor detail |
-| `["patients", query]` | Patient page, including `{ doctorId }` on the doctor screen |
-| `["dashboard", from, to]` | Dashboard |
+| Key                       | Data                                                        |
+| ------------------------- | ----------------------------------------------------------- |
+| `["auth", "me"]`          | Current admin                                               |
+| `["doctors", query]`      | Doctor page                                                 |
+| `["doctors", "facets"]`   | Filter values                                               |
+| `["doctors", id]`         | Doctor detail                                               |
+| `["patients", query]`     | Patient page, including `{ doctorId }` on the doctor screen |
+| `["dashboard", from, to]` | Dashboard                                                   |
 
 These are the only TanStack Query keys. Login, logout, refresh, and form state are not cached. After a doctor write, invalidate `["doctors"]`. After a patient write or delete, invalidate `["patients"]`, `["doctors", doctorId]`, and `["dashboard"]`. Stale time is 30 seconds, except the dashboard, which is 60 seconds. Edit a patient from the row already in the list. Do not add a patient-detail query to open the dialog.
 
@@ -778,24 +765,24 @@ These are the only TanStack Query keys. Login, logout, refresh, and form state a
 
 ### 4.1 Runtime libraries
 
-| Package | Where | Used for |
-| --- | --- | --- |
-| `express` | API | HTTP |
-| `mongoose` | API repositories | Schema, indexes, queries |
-| `zod` | Both | Input schemas |
-| `@asteasolutions/zod-to-openapi` | API | OpenAPI document generated from those Zod schemas |
-| `swagger-ui-express` | API | Swagger UI at `GET /api/docs` |
-| `argon2` | API | Password hashing |
-| `jsonwebtoken` | API | Access tokens |
-| `helmet`, `cors`, `express-rate-limit` | API | Security edge |
-| `pino`, `pino-http` | API | Logs |
-| Native `Temporal` API | Both | Calendar-day bounds, range iteration, list filter dates, dashboard zero-fill (`lib/calendar.ts` on the API, `lib/time/calendar.ts` on the web) |
-| `next`, `react`, `react-dom` | Web | UI shell |
-| `@tanstack/react-query` | Web | Server-state cache |
-| `react-hook-form`, `@hookform/resolvers` | Web | Forms |
-| `recharts` | Web | Charts |
-| `tailwindcss` | Web | Layout and visual design |
-| shadcn/ui | Web | Accessible controls copied into `components/ui` (button, input, dialog, select, table, dropdown). Styled with Tailwind. |
+| Package                                  | Where            | Used for                                                                                                                                       |
+| ---------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `express`                                | API              | HTTP                                                                                                                                           |
+| `mongoose`                               | API repositories | Schema, indexes, queries                                                                                                                       |
+| `zod`                                    | Both             | Input schemas                                                                                                                                  |
+| `@asteasolutions/zod-to-openapi`         | API              | OpenAPI document generated from those Zod schemas                                                                                              |
+| `swagger-ui-express`                     | API              | Swagger UI at `GET /api/docs`                                                                                                                  |
+| `argon2`                                 | API              | Password hashing                                                                                                                               |
+| `jsonwebtoken`                           | API              | Access tokens                                                                                                                                  |
+| `helmet`, `cors`, `express-rate-limit`   | API              | Security edge                                                                                                                                  |
+| `pino`, `pino-http`                      | API              | Logs                                                                                                                                           |
+| Native `Temporal` API                    | Both             | Calendar-day bounds, range iteration, list filter dates, dashboard zero-fill (`lib/calendar.ts` on the API, `lib/time/calendar.ts` on the web) |
+| `next`, `react`, `react-dom`             | Web              | UI shell                                                                                                                                       |
+| `@tanstack/react-query`                  | Web              | Server-state cache                                                                                                                             |
+| `react-hook-form`, `@hookform/resolvers` | Web              | Forms                                                                                                                                          |
+| `recharts`                               | Web              | Charts                                                                                                                                         |
+| `tailwindcss`                            | Web              | Layout and visual design                                                                                                                       |
+| shadcn/ui                                | Web              | Accessible controls copied into `components/ui` (button, input, dialog, select, table, dropdown). Styled with Tailwind.                        |
 
 The API does not depend on Next.js. The web app does not depend on Mongoose, `jsonwebtoken`, or `argon2`. Neither app adds a third-party date library (Luxon, date-fns, Day.js, and similar). Calendar logic uses the ECMAScript Temporal API only.
 
@@ -803,45 +790,45 @@ The API does not depend on Next.js. The web app does not depend on Mongoose, `js
 
 ### 4.2 Module dependency matrix
 
-| File | May import | Must not import |
-| --- | --- | --- |
-| `routes/*` | matching controller, schemas, middleware | models, services |
-| `controllers/*` | matching service, `lib/response`, `lib/errors` | models |
-| `auth.service.ts` | `admin.model`, `session.model`, `lib` | doctor, patient, or dashboard files, Express |
-| `doctor.service.ts` | `doctor.model`, `patient.model` count functions, `lib` | `patient.service`, auth, Express |
-| `patient.service.ts` | `patient.model`, `doctor.model.findById` and `findByIds`, `lib` | `doctor.service`, auth, Express |
-| `dashboard.service.ts` | doctor and patient model query functions, `lib` | other services, Express |
-| `models/*` | `mongoose` | services, controllers, routes, Express |
-| `features/doctors` | `lib/api`, `lib/query`, `components/ui` | `features/patients`, `features/dashboard` |
-| `features/patients` | `lib/api`, `lib/query`, `components/ui` | `features/doctors` |
-| `features/dashboard` | `lib/api`, `lib/time`, `components/ui` | other features |
-| `features/auth` | `lib/api`, `lib/auth` | other features |
-| `app/(portal)/doctors/[doctorId]` | doctor feature and patient feature | `fetch` |
-| feature UI | its own hooks | `HttpDoctorTrackerApi`, `fetch` |
-| hooks | their feature `api` module | a sibling feature |
+| File                              | May import                                                      | Must not import                              |
+| --------------------------------- | --------------------------------------------------------------- | -------------------------------------------- |
+| `routes/*`                        | matching controller, schemas, middleware                        | models, services                             |
+| `controllers/*`                   | matching service, `lib/response`, `lib/errors`                  | models                                       |
+| `auth.service.ts`                 | `admin.model`, `session.model`, `lib`                           | doctor, patient, or dashboard files, Express |
+| `doctor.service.ts`               | `doctor.model`, `patient.model` count functions, `lib`          | `patient.service`, auth, Express             |
+| `patient.service.ts`              | `patient.model`, `doctor.model.findById` and `findByIds`, `lib` | `doctor.service`, auth, Express              |
+| `dashboard.service.ts`            | doctor and patient model query functions, `lib`                 | other services, Express                      |
+| `models/*`                        | `mongoose`                                                      | services, controllers, routes, Express       |
+| `features/doctors`                | `lib/api`, `lib/query`, `components/ui`                         | `features/patients`, `features/dashboard`    |
+| `features/patients`               | `lib/api`, `lib/query`, `components/ui`                         | `features/doctors`                           |
+| `features/dashboard`              | `lib/api`, `lib/time`, `components/ui`                          | other features                               |
+| `features/auth`                   | `lib/api`, `lib/auth`                                           | other features                               |
+| `app/(portal)/doctors/[doctorId]` | doctor feature and patient feature                              | `fetch`                                      |
+| feature UI                        | its own hooks                                                   | `HttpDoctorTrackerApi`, `fetch`              |
+| hooks                             | their feature `api` module                                      | a sibling feature                            |
 
 ### 4.3 Environment
 
 API:
 
-| Variable | Required | Rule |
-| --- | --- | --- |
-| `MONGODB_URI` | yes | Mongo connection string |
-| `JWT_ACCESS_SECRET` | yes | At least 32 characters |
-| `FRONTEND_ORIGIN` | yes | Exact origin, no trailing slash |
-| `PORT` | no | Default `4000` |
-| `NODE_ENV` | no | `development` or `production` |
-| `APP_TIMEZONE` | no | IANA name, default `UTC` |
-| `LOG_LEVEL` | no | pino level, default `info` |
-| `ADMIN_NAME` | seed | Seed only |
-| `ADMIN_EMAIL` | seed | Seed only |
-| `ADMIN_PASSWORD` | seed | At least 8 characters |
+| Variable            | Required | Rule                            |
+| ------------------- | -------- | ------------------------------- |
+| `MONGODB_URI`       | yes      | Mongo connection string         |
+| `JWT_ACCESS_SECRET` | yes      | At least 32 characters          |
+| `FRONTEND_ORIGIN`   | yes      | Exact origin, no trailing slash |
+| `PORT`              | no       | Default `4000`                  |
+| `NODE_ENV`          | no       | `development` or `production`   |
+| `APP_TIMEZONE`      | no       | IANA name, default `UTC`        |
+| `LOG_LEVEL`         | no       | pino level, default `info`      |
+| `ADMIN_NAME`        | seed     | Seed only                       |
+| `ADMIN_EMAIL`       | seed     | Seed only                       |
+| `ADMIN_PASSWORD`    | seed     | At least 8 characters           |
 
 Web:
 
-| Variable | Required | Rule |
-| --- | --- | --- |
-| `NEXT_PUBLIC_API_URL` | yes | API origin, no trailing slash |
+| Variable              | Required | Rule                          |
+| --------------------- | -------- | ----------------------------- |
+| `NEXT_PUBLIC_API_URL` | yes      | API origin, no trailing slash |
 
 Each repository ships `.env.example` with these keys and empty secrets.
 
@@ -1005,25 +992,21 @@ The repository issues `find(filter).sort(sort).skip((page - 1) * limit).limit(li
 Active patient match:
 
 ```javascript
-{ deletedAt: null }
+{
+  deletedAt: null;
+}
 ```
 
 Patients per doctor:
 
 ```javascript
-[
-  { $match: { deletedAt: null } },
-  { $group: { _id: "$doctorId", patientCount: { $sum: 1 } } }
-]
+[{ $match: { deletedAt: null } }, { $group: { _id: "$doctorId", patientCount: { $sum: 1 } } }];
 ```
 
 Patients per condition:
 
 ```javascript
-[
-  { $match: { deletedAt: null } },
-  { $group: { _id: "$condition", patientCount: { $sum: 1 } } }
-]
+[{ $match: { deletedAt: null } }, { $group: { _id: "$condition", patientCount: { $sum: 1 } } }];
 ```
 
 Registrations per day:
@@ -1034,13 +1017,13 @@ Registrations per day:
   {
     $group: {
       _id: {
-        $dateToString: { format: "%Y-%m-%d", date: "$registeredAt", timezone }
+        $dateToString: { format: "%Y-%m-%d", date: "$registeredAt", timezone },
       },
-      count: { $sum: 1 }
-    }
+      count: { $sum: 1 },
+    },
   },
-  { $sort: { _id: 1 } }
-]
+  { $sort: { _id: 1 } },
+];
 ```
 
 Doctors created per day uses the same date grouping on `doctors.createdAt` and the window. There is no `deletedAt` on doctors.
@@ -1063,10 +1046,7 @@ function parsePlainDate(date: string): Temporal.PlainDate {
 function dayBounds(date: string, timezone: string): { start: Date; end: Date } {
   const plain = parsePlainDate(date);
   const start = plain.toZonedDateTime(timezone);
-  const end = plain
-    .add({ days: 1 })
-    .toZonedDateTime(timezone)
-    .subtract({ milliseconds: 1 });
+  const end = plain.add({ days: 1 }).toZonedDateTime(timezone).subtract({ milliseconds: 1 });
   return {
     start: new Date(start.epochMilliseconds),
     end: new Date(end.epochMilliseconds),
@@ -1127,9 +1107,9 @@ List mapping loads the distinct doctor ids on the page with `findByIds` once. It
 }
 ```
 
-| Index | Options |
-| --- | --- |
-| `{ email: 1 }` | unique |
+| Index          | Options |
+| -------------- | ------- |
+| `{ email: 1 }` | unique  |
 
 ### 6.2 `sessions`
 
@@ -1144,11 +1124,11 @@ List mapping loads the distinct doctor ids on the page with `findByIds` once. It
 }
 ```
 
-| Index | Options |
-| --- | --- |
-| `{ tokenHash: 1 }` | unique |
+| Index              | Options                      |
+| ------------------ | ---------------------------- |
+| `{ tokenHash: 1 }` | unique                       |
 | `{ expiresAt: 1 }` | TTL, `expireAfterSeconds: 0` |
-| `{ adminId: 1 }` | none |
+| `{ adminId: 1 }`   | none                         |
 
 The TTL removes expired documents. Logout does not wait for it. Logout sets `revokedAt`.
 
@@ -1167,12 +1147,12 @@ The TTL removes expired documents. Logout does not wait for it. Logout sets `rev
 }
 ```
 
-| Index | Options |
-| --- | --- |
-| `{ email: 1 }` | unique |
-| `{ createdAt: -1, _id: -1 }` | default list |
+| Index                                  | Options                                   |
+| -------------------------------------- | ----------------------------------------- |
+| `{ email: 1 }`                         | unique                                    |
+| `{ createdAt: -1, _id: -1 }`           | default list                              |
 | `{ specialization: 1, createdAt: -1 }` | collation `{ locale: "en", strength: 2 }` |
-| `{ hospital: 1, createdAt: -1 }` | same collation |
+| `{ hospital: 1, createdAt: -1 }`       | same collation                            |
 
 Queries that filter specialization or hospital pass that collation. Queries that do not filter them use the default-list index and do not pass a collation.
 
@@ -1196,21 +1176,21 @@ Queries that filter specialization or hospital pass that collation. Queries that
 }
 ```
 
-| Index | Options |
-| --- | --- |
+| Index                                        | Options                       |
+| -------------------------------------------- | ----------------------------- |
 | `{ doctorId: 1, registeredAt: -1, _id: -1 }` | partial `{ deletedAt: null }` |
-| `{ registeredAt: -1, _id: -1 }` | partial `{ deletedAt: null }` |
-| `{ condition: 1, registeredAt: -1 }` | partial `{ deletedAt: null }` |
+| `{ registeredAt: -1, _id: -1 }`              | partial `{ deletedAt: null }` |
+| `{ condition: 1, registeredAt: -1 }`         | partial `{ deletedAt: null }` |
 
 Index selection:
 
-| Query shape | Index |
-| --- | --- |
-| A doctor's patients, optional date window | `doctorId, registeredAt, _id` |
-| Registration window, no doctor and no condition | `registeredAt, _id` |
-| Condition, with or without a registration window | `condition, registeredAt` |
-| Doctor and condition together | `doctorId` index. Condition is a residual predicate. A doctor's patient list is the selective side. |
-| Search text only | The active date index limits the sort, and the regex is residual. This is the known scan-prone shape. Page size stays ≤ 50. |
+| Query shape                                      | Index                                                                                                                       |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| A doctor's patients, optional date window        | `doctorId, registeredAt, _id`                                                                                               |
+| Registration window, no doctor and no condition  | `registeredAt, _id`                                                                                                         |
+| Condition, with or without a registration window | `condition, registeredAt`                                                                                                   |
+| Doctor and condition together                    | `doctorId` index. Condition is a residual predicate. A doctor's patient list is the selective side.                         |
+| Search text only                                 | The active date index limits the sort, and the regex is residual. This is the known scan-prone shape. Page size stays ≤ 50. |
 
 No index is declared for `fullName`. An unanchored regex would not use it.
 
@@ -1224,36 +1204,36 @@ On startup the API calls `createIndexes()` for the four models. It does not call
 
 ## 7. Web screens
 
-| Route | Composition | Primary action |
-| --- | --- | --- |
-| `/login` | Email and password form | Sign in |
-| `/dashboard` | Four summary figures, patients-per-doctor bar chart, condition bar chart, two daily line charts, date-range control | Change the date range |
-| `/doctors` | Filter bar, table, pagination | Add doctor |
-| `/doctors/[doctorId]` | Doctor summary, that doctor's patient table | Add patient |
-| `/patients` | Filter bar including doctor and condition, table, pagination | Edit or delete from the row |
+| Route                 | Composition                                                                                                         | Primary action              |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `/login`              | Email and password form                                                                                             | Sign in                     |
+| `/dashboard`          | Four summary figures, patients-per-doctor bar chart, condition bar chart, two daily line charts, date-range control | Change the date range       |
+| `/doctors`            | Filter bar, table, pagination                                                                                       | Add doctor                  |
+| `/doctors/[doctorId]` | Doctor summary, that doctor's patient table                                                                         | Add patient                 |
+| `/patients`           | Filter bar including doctor and condition, table, pagination                                                        | Edit or delete from the row |
 
 Add and edit open a dialog. Delete opens a confirm dialog that names the patient. The portal layout shows the admin name and a logout control, and links to Dashboard, Doctors, and Patients.
 
 Chart mapping:
 
-| Figure | Source field | Chart |
-| --- | --- | --- |
-| Total doctors, total patients | `totals` | Statistic tiles |
-| Patients per doctor | `patientsPerDoctor` | Horizontal bar |
-| Patients by condition | `patientsByCondition` | Bar |
-| Registrations and doctors created | the two daily arrays | Lines, sharing the date axis |
+| Figure                            | Source field          | Chart                        |
+| --------------------------------- | --------------------- | ---------------------------- |
+| Total doctors, total patients     | `totals`              | Statistic tiles              |
+| Patients per doctor               | `patientsPerDoctor`   | Horizontal bar               |
+| Patients by condition             | `patientsByCondition` | Bar                          |
+| Registrations and doctors created | the two daily arrays  | Lines, sharing the date axis |
 
 An all-zero series renders the empty copy "Nothing registered in this range" instead of a blank chart.
 
 ## 8. Verification
 
-| Check | What it proves |
-| --- | --- |
-| Service tests with mocked models | Duplicate email, unknown doctor, soft delete, zero-filled days, dummy-hash login path |
-| API tests against MongoDB | Status codes, cookie rotation, pagination bounds, validation |
-| `explain()` on the three indexed patient shapes | `IXSCAN` and no `COLLSCAN` for doctor scope, condition, and registration date |
-| Web tests | Login redirect, form errors, delete confirm, dashboard empty series |
-| Manual pass | Desktop and mobile screenshots of Dashboard, Doctors, and Patients |
+| Check                                           | What it proves                                                                        |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Service tests with mocked models                | Duplicate email, unknown doctor, soft delete, zero-filled days, dummy-hash login path |
+| API tests against MongoDB                       | Status codes, cookie rotation, pagination bounds, validation                          |
+| `explain()` on the three indexed patient shapes | `IXSCAN` and no `COLLSCAN` for doctor scope, condition, and registration date         |
+| Web tests                                       | Login redirect, form errors, delete confirm, dashboard empty series                   |
+| Manual pass                                     | Desktop and mobile screenshots of Dashboard, Doctors, and Patients                    |
 
 The explain assertion is part of the patient repository test, using a few hundred seeded patients so the planner has statistics.
 

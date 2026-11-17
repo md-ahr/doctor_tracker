@@ -23,24 +23,24 @@
 
 ## How to use this document
 
-| Step | Action |
-| --- | --- |
-| 1 | Pick the **lowest-numbered open task** (first `- [ ]`). |
-| 2 | Create or change only the files listed for that task. |
-| 3 | Prefer **test first** when the task lists concrete cases. |
-| 4 | Run the **verify command**; all tests for that task must pass. |
-| 5 | Check the task box, commit using `docs/commit-guidelines.md`, then start the next task. |
+| Step | Action                                                                                  |
+| ---- | --------------------------------------------------------------------------------------- |
+| 1    | Pick the **lowest-numbered open task** (first `- [ ]`).                                 |
+| 2    | Create or change only the files listed for that task.                                   |
+| 3    | Prefer **test first** when the task lists concrete cases.                               |
+| 4    | Run the **verify command**; all tests for that task must pass.                          |
+| 5    | Check the task box, commit using `docs/commit-guidelines.md`, then start the next task. |
 
 ### What counts as a unit test here
 
-| Layer | Unit test style |
-| --- | --- |
-| `lib/*` (no React) | Vitest, mock `global.fetch` or MSW |
-| `features/*/model` | Zod `safeParse` fixtures |
-| `features/*/api`, `lib/api` | MSW or mocked `apiRequest` |
-| Hooks | `renderHook` + `QueryClientProvider` + MSW |
-| UI components | React Testing Library; mock hooks or MSW |
-| `proxy.ts` | Pure function tests with stub `NextRequest` / cookies |
+| Layer                       | Unit test style                                       |
+| --------------------------- | ----------------------------------------------------- |
+| `lib/*` (no React)          | Vitest, mock `global.fetch` or MSW                    |
+| `features/*/model`          | Zod `safeParse` fixtures                              |
+| `features/*/api`, `lib/api` | MSW or mocked `apiRequest`                            |
+| Hooks                       | `renderHook` + `QueryClientProvider` + MSW            |
+| UI components               | React Testing Library; mock hooks or MSW              |
+| `proxy.ts`                  | Pure function tests with stub `NextRequest` / cookies |
 
 **E2E tests** (Playwright) are in [Phase 12](#phase-12-e2e-polish-and-readme). LLD §8 expects: login redirect, form errors, delete confirm, dashboard empty series.
 
@@ -86,7 +86,7 @@ Do these four tasks in order. Each one is config and a verify command. No featur
 
 ### Task 0.2 — ESLint and Prettier
 
-- [ ] **Deliverable:** Lint fails on `console.*`. Format is checked in one command. Prettier does not fight ESLint.
+- [x] **Deliverable:** Lint fails on `console.*`. Format is checked in one command. Prettier does not fight ESLint.
 
 **Files:**
 
@@ -119,11 +119,11 @@ Do these four tasks in order. Each one is config and a verify command. No featur
 
 **Hooks:**
 
-| Hook | What it runs |
-| --- | --- |
-| `pre-commit` | Prettier write and ESLint `--fix` on staged files, in parallel. Lefthook `stage_fixed: true` so the fixed files are part of the commit. |
+| Hook         | What it runs                                                                                                                                                                                                       |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pre-commit` | Prettier write and ESLint `--fix` on staged files, in parallel. Lefthook `stage_fixed: true` so the fixed files are part of the commit.                                                                            |
 | `commit-msg` | `commitlint --edit`. Extends `@commitlint/config-conventional`. `subject-max-length` 50. `header-max-length` 72. Turn `subject-case` off so names like `API` are allowed. Rules match `docs/commit-guidelines.md`. |
-| `pre-push` | `npm run typecheck`, then `npm test`. Not parallel. |
+| `pre-push`   | `npm run typecheck`, then `npm test`. Not parallel.                                                                                                                                                                |
 
 Prettier glob: `*.{js,cjs,mjs,ts,tsx,json,yml,yaml,md,css}`. ESLint glob: `*.{js,cjs,mjs,ts,tsx}`.
 
@@ -158,16 +158,16 @@ This job is CI only. It does not deploy.
 
 These are useful and **not** part of Phase 0. Add them when the note says.
 
-| Item | When |
-| --- | --- |
-| Tailwind, `components.json`, shadcn primitives | Phase 1. Do not add them in the scaffold. |
-| Vercel or Netlify deploy | After Task 0.4, when `next build` is green in CI. The host is Vercel or Netlify (HLD). Do not add a deploy job that has no project to attach to. |
-| Playwright in CI | Phase 12, when `test:e2e` runs real browser tests. Install the browser in that workflow, not in Task 0.4. |
-| Coverage threshold | After Phase 2, once there is more than the smoke test. Report in CI; do not fail the build on a number picked too early. |
-| Dependabot or Renovate | After the lockfile exists and the repo is on GitHub. Group minor npm updates weekly. |
-| EditorConfig | Optional. Prettier already owns formatting. Add `.editorconfig` only if editors disagree before Prettier runs. |
-| Secret scan (gitleaks) on `pre-commit` | Optional. `.gitignore` already blocks `.env`. A scanner catches a secret pasted into a source file. |
-| `npm audit` in CI | Optional and noisy on transitive issues. Run on a schedule, not as a required check on every pull request. |
+| Item                                           | When                                                                                                                                             |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Tailwind, `components.json`, shadcn primitives | Phase 1. Do not add them in the scaffold.                                                                                                        |
+| Vercel or Netlify deploy                       | After Task 0.4, when `next build` is green in CI. The host is Vercel or Netlify (HLD). Do not add a deploy job that has no project to attach to. |
+| Playwright in CI                               | Phase 12, when `test:e2e` runs real browser tests. Install the browser in that workflow, not in Task 0.4.                                        |
+| Coverage threshold                             | After Phase 2, once there is more than the smoke test. Report in CI; do not fail the build on a number picked too early.                         |
+| Dependabot or Renovate                         | After the lockfile exists and the repo is on GitHub. Group minor npm updates weekly.                                                             |
+| EditorConfig                                   | Optional. Prettier already owns formatting. Add `.editorconfig` only if editors disagree before Prettier runs.                                   |
+| Secret scan (gitleaks) on `pre-commit`         | Optional. `.gitignore` already blocks `.env`. A scanner catches a secret pasted into a source file.                                              |
+| `npm audit` in CI                              | Optional and noisy on transitive issues. Run on a schedule, not as a required check on every pull request.                                       |
 
 ---
 
@@ -1067,42 +1067,42 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ## Task count summary
 
-| Phase | Tasks | Focus |
-| --- | ---: | --- |
-| 0 | 4 | Scaffold, lint, hooks, CI |
-| 1 | 6 | Design tokens + shadcn |
-| 2 | 7 | `lib` + providers |
-| 3 | 1 | Proxy |
-| 4 | 4 | API client |
-| 5 | 6 | Auth |
-| 6 | 2 | Portal shell |
-| 7 | 9 | Doctors |
-| 8 | 9 | Patients |
-| 9 | 7 | Dashboard |
-| 10 | 2 | UX states + responsive |
-| 11 | 1 | MSW harness |
-| 12 | 5 | E2E + README + screenshots |
-| **Total** | **63** | |
+| Phase     |  Tasks | Focus                      |
+| --------- | -----: | -------------------------- |
+| 0         |      4 | Scaffold, lint, hooks, CI  |
+| 1         |      6 | Design tokens + shadcn     |
+| 2         |      7 | `lib` + providers          |
+| 3         |      1 | Proxy                      |
+| 4         |      4 | API client                 |
+| 5         |      6 | Auth                       |
+| 6         |      2 | Portal shell               |
+| 7         |      9 | Doctors                    |
+| 8         |      9 | Patients                   |
+| 9         |      7 | Dashboard                  |
+| 10        |      2 | UX states + responsive     |
+| 11        |      1 | MSW harness                |
+| 12        |      5 | E2E + README + screenshots |
+| **Total** | **63** |                            |
 
 ## Mapping to LLD §9 implementation order
 
-| LLD order | This document | Backend doc |
-| --- | --- | --- |
-| 1–5. API features | — | `docs/backend-tasks.md` Phases 0–11 |
-| 6. Web shell | Phases 0–3, 5–6 | API auth + refresh running |
-| 7. Doctor and patient screens | Phases 7–8 | API doctors + patients |
-| 8. Dashboard charts | Phase 9 | API dashboard |
-| 9. Explain + README | Backend 12.3–12.4 | API only |
-| Web verification | Phase 12 | LLD §8 web tests |
+| LLD order                     | This document     | Backend doc                         |
+| ----------------------------- | ----------------- | ----------------------------------- |
+| 1–5. API features             | —                 | `docs/backend-tasks.md` Phases 0–11 |
+| 6. Web shell                  | Phases 0–3, 5–6   | API auth + refresh running          |
+| 7. Doctor and patient screens | Phases 7–8        | API doctors + patients              |
+| 8. Dashboard charts           | Phase 9           | API dashboard                       |
+| 9. Explain + README           | Backend 12.3–12.4 | API only                            |
+| Web verification              | Phase 12          | LLD §8 web tests                    |
 
 ## Cross-document index
 
-| Document | Purpose |
-| --- | --- |
-| `docs/backend-tasks.md` | API sequential tasks |
-| `docs/frontend-tasks.md` | This file |
-| `docs/design.md` | Visual tokens and screen behavior |
-| `docs/frontend-structure.md` | Layer rules and query keys |
+| Document                     | Purpose                           |
+| ---------------------------- | --------------------------------- |
+| `docs/backend-tasks.md`      | API sequential tasks              |
+| `docs/frontend-tasks.md`     | This file                         |
+| `docs/design.md`             | Visual tokens and screen behavior |
+| `docs/frontend-structure.md` | Layer rules and query keys        |
 
 ---
 

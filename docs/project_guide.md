@@ -6,13 +6,13 @@ Doctor Tracker is a secure administrative web application. Authenticated users m
 
 The project must be implemented as two separate applications that talk over REST.
 
-| Layer | Requirement |
-| --- | --- |
-| Frontend | Next.js, as a separate client application |
-| Backend | Node.js and Express, as a separate standalone server |
-| Database | MongoDB |
-| API | RESTful endpoints. The frontend communicates with the backend only over REST |
-| Client data | Proper state management and data fetching |
+| Layer       | Requirement                                                                  |
+| ----------- | ---------------------------------------------------------------------------- |
+| Frontend    | Next.js, as a separate client application                                    |
+| Backend     | Node.js and Express, as a separate standalone server                         |
+| Database    | MongoDB                                                                      |
+| API         | RESTful endpoints. The frontend communicates with the backend only over REST |
+| Client data | Proper state management and data fetching                                    |
 
 ## 2. Core features
 
@@ -120,13 +120,13 @@ The project is evaluated on:
 
 `README.md` is the primary technical documentation. It must include every section below.
 
-| Section | Requirement |
-| --- | --- |
-| Description | A one-paragraph elevator pitch for the app's purpose. |
-| Setup Guide | Step-by-step local installation. Must include an `.env.example` file. |
-| System Architecture | A high-level overview of the data flow and how the services interact. |
+| Section             | Requirement                                                                                |
+| ------------------- | ------------------------------------------------------------------------------------------ |
+| Description         | A one-paragraph elevator pitch for the app's purpose.                                      |
+| Setup Guide         | Step-by-step local installation. Must include an `.env.example` file.                      |
+| System Architecture | A high-level overview of the data flow and how the services interact.                      |
 | Technical Decisions | A deep dive into 2 specific decisions. Example: why Redux was chosen over the Context API. |
-| Visual Evidence | High-quality screenshots of the UI, for both desktop and mobile. |
+| Visual Evidence     | High-quality screenshots of the UI, for both desktop and mobile.                           |
 
 ## 8. Submission
 
