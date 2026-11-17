@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { displayFont, uiFont } from "@/lib/fonts";
+
 import "./globals.css";
 
 type RootLayoutProps = {
@@ -8,7 +10,7 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
+    <html className={`${displayFont.variable} ${uiFont.variable}`} lang="en">
       <body>
         <main className="content-column">{children}</main>
       </body>

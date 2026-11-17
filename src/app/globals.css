@@ -30,8 +30,9 @@
   --danger-fg: var(--paper-0);
   --danger-text: var(--brick-700);
 
-  --font-display: "Newsreader", "Iowan Old Style", Palatino, "Palatino Linotype", serif;
-  --font-ui: "Atkinson Hyperlegible", "Avenir Next", "Segoe UI", sans-serif;
+  --font-display:
+    var(--font-display-loaded), "Iowan Old Style", Palatino, "Palatino Linotype", serif;
+  --font-ui: var(--font-ui-loaded), "Avenir Next", "Segoe UI", sans-serif;
 
   --space-1: 4px;
   --space-2: 8px;
@@ -59,6 +60,17 @@ body {
   margin: 0;
   background: var(--bg-page);
   color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
 }
 
 .content-column {

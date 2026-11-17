@@ -190,7 +190,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 1.2 — Typography (font loading)
 
-- [ ] **Deliverable:** Newsreader + Atkinson Hyperlegible via `next/font` (or equivalent), `--font-display` / `--font-ui`.
+- [x] **Deliverable:** Newsreader + Atkinson Hyperlegible via `next/font` (or equivalent), `--font-display` / `--font-ui`.
 
 **Files:**
 
