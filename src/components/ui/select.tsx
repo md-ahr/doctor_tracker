@@ -1,0 +1,108 @@
+"use client";
+
+import { Select as SelectPrimitive } from "radix-ui";
+import type { ComponentProps } from "react";
+
+import { cn } from "@/lib/utils";
+
+function Select({ ...props }: ComponentProps<typeof SelectPrimitive.Root>) {
+  return <SelectPrimitive.Root {...props} />;
+}
+
+function SelectGroup({ ...props }: ComponentProps<typeof SelectPrimitive.Group>) {
+  return <SelectPrimitive.Group {...props} />;
+}
+
+function SelectValue({ ...props }: ComponentProps<typeof SelectPrimitive.Value>) {
+  return <SelectPrimitive.Value {...props} />;
+}
+
+function SelectTrigger({
+  className,
+  size = "field",
+  children,
+  ...props
+}: ComponentProps<typeof SelectPrimitive.Trigger> & {
+  size?: "field" | "compact";
+}) {
+  return (
+    <SelectPrimitive.Trigger
+      data-size={size}
+      className={cn(
+        "flex w-full items-center justify-between gap-2 rounded-[var(--radius-control)] border border-control bg-sheet px-3 font-sans text-[15px] text-ink outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:pointer-events-none disabled:bg-inset disabled:text-ink-secondary data-[placeholder]:text-ink-tertiary data-[size=compact]:h-[var(--control-height-compact)] data-[size=field]:h-[var(--control-height)]",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </SelectPrimitive.Trigger>
+  );
+}
+
+function SelectContent({
+  className,
+  children,
+  position = "popper",
+  ...props
+}: ComponentProps<typeof SelectPrimitive.Content>) {
+  return (
+    <SelectPrimitive.Portal>
+      <SelectPrimitive.Content
+        className={cn(
+          "z-50 max-h-80 min-w-[8rem] overflow-y-auto rounded-[var(--radius-sheet)] bg-sheet text-ink shadow-[var(--shadow-overlay)]",
+          position === "popper" && "w-[var(--radix-select-trigger-width)]",
+          className,
+        )}
+        position={position}
+        {...props}
+      >
+        <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
+      </SelectPrimitive.Content>
+    </SelectPrimitive.Portal>
+  );
+}
+
+function SelectLabel({ className, ...props }: ComponentProps<typeof SelectPrimitive.Label>) {
+  return (
+    <SelectPrimitive.Label
+      className={cn("px-3 py-1 text-xs font-semibold text-ink-secondary", className)}
+      {...props}
+    />
+  );
+}
+
+function SelectItem({
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof SelectPrimitive.Item>) {
+  return (
+    <SelectPrimitive.Item
+      className={cn(
+        "flex h-9 items-center px-3 text-[15px] outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-inset data-[state=checked]:bg-selected",
+        className,
+      )}
+      {...props}
+    >
+      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+    </SelectPrimitive.Item>
+  );
+}
+
+function SelectSeparator({
+  className,
+  ...props
+}: ComponentProps<typeof SelectPrimitive.Separator>) {
+  return <SelectPrimitive.Separator className={cn("h-px bg-line", className)} {...props} />;
+}
+
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+};

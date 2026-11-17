@@ -250,7 +250,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 1.6 — Select and Dropdown (filters)
 
-- [ ] **Deliverable:** Select 36px compact for filter bar per design.
+- [x] **Deliverable:** Select 36px compact for filter bar per design.
 
 **Files:**
 
