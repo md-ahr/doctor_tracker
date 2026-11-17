@@ -222,7 +222,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 1.4 — Form primitives (Input, Label)
 
-- [ ] **Deliverable:** Input 40px height; Label sentence case.
+- [x] **Deliverable:** Input 40px height; Label sentence case.
 
 **Files:**
 
