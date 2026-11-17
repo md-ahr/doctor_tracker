@@ -236,7 +236,7 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 
 ### Task 1.5 — Dialog and Table shells
 
-- [ ] **Deliverable:** Dialog 4px radius; Table for dense lists.
+- [x] **Deliverable:** Dialog 4px radius; Table for dense lists.
 
 **Files:**
 
