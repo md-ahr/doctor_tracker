@@ -135,7 +135,7 @@ Prettier glob: `*.{js,cjs,mjs,ts,tsx,json,yml,yaml,md,css}`. ESLint glob: `*.{js
 
 ### Task 0.4 — CI pipeline
 
-- [ ] **Deliverable:** GitHub Actions runs the same checks as the hooks, plus the production build, on every push and pull request.
+- [x] **Deliverable:** GitHub Actions runs the same checks as the hooks, plus the production build, on every push and pull request.
 
 **Files:**
 
