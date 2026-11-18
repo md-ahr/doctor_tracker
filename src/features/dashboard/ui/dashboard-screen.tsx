@@ -24,7 +24,6 @@ export function DashboardScreen() {
     <div className="dashboard-stack">
       <header className="page-header">
         <div>
-          <p className="page-eyebrow">Overview</p>
           <h1>Dashboard</h1>
           <p className="page-context">
             Counts are all active records. The charts below follow the range.

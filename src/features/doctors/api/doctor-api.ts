@@ -1,6 +1,8 @@
+import type { Dashboard } from "@/lib/api/dashboard-types";
 import {
   createDoctor,
   doctorFacets,
+  getDashboard,
   getDoctor,
   listDoctors,
   updateDoctor,
@@ -14,4 +16,12 @@ export const doctorApi = {
   facets: doctorFacets,
   get: getDoctor,
   update: (id: string, patch: DoctorPatch) => updateDoctor(id, patch),
+  /** The list resource has no counts, so read them from the dashboard aggregate. */
+  patientCounts: () => getDashboard().then(toPatientCounts),
 };
+
+function toPatientCounts(dashboard: Dashboard): Record<string, number> {
+  return Object.fromEntries(
+    dashboard.patientsPerDoctor.map(({ doctorId, patientCount }) => [doctorId, patientCount]),
+  );
+}

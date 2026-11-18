@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { Suspense, use } from "react";
 
 import { useDoctor } from "@/features/doctors/hooks/use-doctor";
 import { DoctorSummary } from "@/features/doctors/ui/doctor-summary";
@@ -17,7 +17,9 @@ export default function DoctorDetailPage({ params }: DoctorDetailPageProps) {
   return (
     <div className="flex flex-col gap-6">
       <DoctorSummary doctorId={doctorId} />
-      <PatientScreen doctorId={doctorId} doctorName={doctor.data?.name} />
+      <Suspense fallback={null}>
+        <PatientScreen doctorId={doctorId} doctorName={doctor.data?.name} />
+      </Suspense>
     </div>
   );
 }

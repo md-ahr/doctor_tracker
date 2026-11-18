@@ -15,6 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { PlusIcon } from "@/components/ui/icons";
 import { Label } from "@/components/ui/label";
 import { useCreateDoctor, useUpdateDoctor } from "@/features/doctors/hooks/use-doctor-mutations";
 import { doctorFormSchema, type DoctorFormValues } from "@/features/doctors/model/doctor-schema";
@@ -113,7 +114,8 @@ export function DoctorFormDialog({ doctor, open, onOpenChange }: DoctorFormDialo
 
   return (
     <Dialog onOpenChange={setDialogOpen} open={dialogOpen}>
-      <DialogTrigger className={buttonVariants({ variant: doctor ? "quiet" : "primary" })}>
+      <DialogTrigger className={buttonVariants({ variant: doctor ? "secondary" : "primary" })}>
+        {doctor ? null : <PlusIcon />}
         {title}
       </DialogTrigger>
       <DialogContent>

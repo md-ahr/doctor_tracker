@@ -9,66 +9,86 @@ import {
   DataLoading,
   directoryErrorMessage,
 } from "@/components/ui/data-state";
+import { PlusIcon } from "@/components/ui/icons";
+import type { PageSize } from "@/components/ui/pagination";
+import {
+  EMPTY_DOCTOR_FILTERS,
+  doctorFilterSchema,
+} from "@/features/doctors/model/doctor-filter-schema";
+import {
+  readDoctorListParams,
+  writeDoctorListParams,
+  type DoctorListParams,
+} from "@/features/doctors/model/doctor-list-params";
 import { useDoctorFacets } from "@/features/doctors/hooks/use-doctor-facets";
 import { useDoctorList } from "@/features/doctors/hooks/use-doctor-list";
+import { useDoctorPatientCounts } from "@/features/doctors/hooks/use-doctor-patient-counts";
 import { DoctorFilters, type DoctorFilterValue } from "@/features/doctors/ui/doctor-filters";
 import { DoctorFormDialog } from "@/features/doctors/ui/doctor-form";
 import { DoctorTable } from "@/features/doctors/ui/doctor-table";
-import { isDateOrderValid } from "@/lib/time/calendar";
-
-const emptyFilters: DoctorFilterValue = {
-  q: "",
-  specialization: "",
-  hospital: "",
-  createdFrom: "",
-  createdTo: "",
-};
+import { FIRST_PAGE } from "@/lib/paging";
+import { useClampPage } from "@/lib/url-state/use-clamp-page";
+import { useListSearchParams, type HistoryMode } from "@/lib/url-state/use-list-search-params";
 
 export function DoctorScreen() {
-  const [page, setPage] = useState(1);
   const [creating, setCreating] = useState(false);
-  const [filters, setFilters] = useState<DoctorFilterValue>(emptyFilters);
-  const [appliedDates, setAppliedDates] = useState({ from: "", to: "" });
+  const { searchParams, navigate } = useListSearchParams();
+  const { filters, page, limit } = useMemo(
+    () => readDoctorListParams(searchParams),
+    [searchParams],
+  );
   const facets = useDoctorFacets();
 
-  const datesInvalid =
-    filters.createdFrom.length > 0 &&
-    filters.createdTo.length > 0 &&
-    !isDateOrderValid(filters.createdFrom, filters.createdTo);
+  function commit(next: Partial<DoctorListParams>, mode: HistoryMode = "replace") {
+    navigate(writeDoctorListParams({ filters, page, limit, ...next }), mode);
+  }
 
-  function onFiltersChange(next: DoctorFilterValue) {
-    setFilters(next);
-    setPage(1);
-    const reversed =
-      next.createdFrom.length > 0 &&
-      next.createdTo.length > 0 &&
-      !isDateOrderValid(next.createdFrom, next.createdTo);
-    if (!reversed) {
-      setAppliedDates({ from: next.createdFrom, to: next.createdTo });
-    }
+  function onApply(next: DoctorFilterValue) {
+    const parsed = doctorFilterSchema.safeParse(next);
+    if (!parsed.success) return;
+    commit({ filters: parsed.data, page: FIRST_PAGE });
+  }
+
+  function onReset() {
+    commit({ filters: EMPTY_DOCTOR_FILTERS, page: FIRST_PAGE });
+  }
+
+  function onPageChange(next: number) {
+    commit({ page: next }, "push");
+  }
+
+  function onPageSizeChange(next: PageSize) {
+    commit({ limit: next, page: FIRST_PAGE });
   }
 
   const query = useMemo(
     () => ({
-      q: filters.q.trim() || undefined,
+      q: filters.q || undefined,
       specialization: filters.specialization || undefined,
       hospital: filters.hospital || undefined,
-      createdFrom: appliedDates.from || undefined,
-      createdTo: appliedDates.to || undefined,
+      createdFrom: filters.createdFrom || undefined,
+      createdTo: filters.createdTo || undefined,
       page,
-      limit: 20 as const,
+      limit,
       sort: "createdAt" as const,
     }),
-    [appliedDates.from, appliedDates.to, filters.hospital, filters.q, filters.specialization, page],
+    [filters, limit, page],
   );
 
   const list = useDoctorList(query);
+  const patientCounts = useDoctorPatientCounts();
+  useClampPage({
+    page,
+    totalPages: list.data?.meta.totalPages ?? 0,
+    onOutOfRange: (next) => commit({ page: next }),
+  });
+
   const filtered =
-    filters.q.trim().length > 0 ||
+    filters.q.length > 0 ||
     filters.specialization.length > 0 ||
     filters.hospital.length > 0 ||
-    appliedDates.from.length > 0 ||
-    appliedDates.to.length > 0;
+    filters.createdFrom.length > 0 ||
+    filters.createdTo.length > 0;
   const total = list.data?.meta.total ?? 0;
   const showEmptyDirectory = list.isSuccess && total === 0 && !filtered;
   const showFilteredEmpty = list.isSuccess && total === 0 && filtered;
@@ -77,7 +97,6 @@ export function DoctorScreen() {
     <div className="flex flex-col gap-6">
       <header className="page-header">
         <div>
-          <p className="page-eyebrow">Directory</p>
           <h1>Doctors</h1>
           <p className="page-context">
             Directory of doctors. Date filter uses the day the record was created.
@@ -91,14 +110,16 @@ export function DoctorScreen() {
       <section className="portal-card portal-card-flush">
         <div className="portal-card-pad flex flex-wrap items-start justify-between gap-3 border-b border-line">
           <div>
-            <h2 className="text-[18px] leading-tight">Directory</h2>
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-[18px] leading-tight">Directory</h2>
+              <span className="card-count">
+                {list.isLoading ? "Loading" : `${total} ${total === 1 ? "doctor" : "doctors"}`}
+              </span>
+            </div>
             <p className="mt-1 text-xs text-ink-secondary">
               Search, filter, and open a doctor to manage their patients.
             </p>
           </div>
-          <span className="card-count">
-            {list.isLoading ? "Loading" : `${total} ${total === 1 ? "doctor" : "doctors"}`}
-          </span>
         </div>
 
         {list.isError ? (
@@ -119,13 +140,13 @@ export function DoctorScreen() {
         {!list.isLoading && !showEmptyDirectory ? (
           <div className="portal-card-pad border-b border-line">
             <DoctorFilters
-              dateError={datesInvalid}
+              applied={filters}
               facets={{
                 specializations: facets.data?.specializations ?? [],
                 hospitals: facets.data?.hospitals ?? [],
               }}
-              onChange={onFiltersChange}
-              value={filters}
+              onApply={onApply}
+              onReset={onReset}
             />
           </div>
         ) : null}
@@ -134,6 +155,7 @@ export function DoctorScreen() {
           <DataEmpty
             action={
               <Button onClick={() => setCreating(true)} type="button">
+                <PlusIcon />
                 Add doctor
               </Button>
             }
@@ -143,12 +165,22 @@ export function DoctorScreen() {
         ) : null}
 
         {showFilteredEmpty ? (
-          <DataEmpty guidance="Clear the search or widen the dates." title="No doctors match" />
+          <DataEmpty
+            guidance="Use Reset to clear the filters, or widen the dates."
+            title="No doctors match"
+          />
         ) : null}
 
         {list.isSuccess && total > 0 ? (
           <div className="portal-card-pad">
-            <DoctorTable items={list.data.items} meta={list.data.meta} onPageChange={setPage} />
+            <DoctorTable
+              items={list.data.items}
+              limit={limit}
+              meta={list.data.meta}
+              onPageChange={onPageChange}
+              onPageSizeChange={onPageSizeChange}
+              patientCounts={patientCounts.data}
+            />
           </div>
         ) : null}
       </section>

@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { PlusIcon } from "@/components/ui/icons";
 import { useCreatePatient } from "@/features/patients/hooks/use-patient-mutations";
 import {
   patientFormSchema,
@@ -84,7 +85,10 @@ export function PatientCreateDialog({
 
   return (
     <Dialog onOpenChange={setDialogOpen} open={dialogOpen}>
-      <DialogTrigger className={buttonVariants()}>Add patient</DialogTrigger>
+      <DialogTrigger className={buttonVariants()}>
+        <PlusIcon />
+        Add patient
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add patient</DialogTitle>

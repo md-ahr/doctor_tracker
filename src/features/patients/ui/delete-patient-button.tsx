@@ -12,9 +12,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { TrashIcon } from "@/components/ui/icons";
 import { useDeletePatient } from "@/features/patients/hooks/use-patient-mutations";
 import type { Patient } from "@/features/patients/model/patient";
 import { ApiError } from "@/lib/api/types";
+import { cn } from "@/lib/utils";
 
 type DeletePatientButtonProps = {
   patient: Pick<Patient, "id" | "doctorId" | "fullName">;
@@ -43,7 +45,12 @@ export function DeletePatientButton({ patient }: DeletePatientButtonProps) {
 
   return (
     <Dialog onOpenChange={setDialogOpen} open={open}>
-      <DialogTrigger className={buttonVariants({ variant: "dangerQuiet" })}>Delete</DialogTrigger>
+      <DialogTrigger
+        aria-label={`Delete ${patient.fullName}`}
+        className={cn(buttonVariants({ variant: "dangerQuiet" }), "size-(--control-height) px-0")}
+      >
+        <TrashIcon />
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete {patient.fullName}?</DialogTitle>

@@ -9,25 +9,28 @@ import {
   DataLoading,
   directoryErrorMessage,
 } from "@/components/ui/data-state";
+import { PlusIcon } from "@/components/ui/icons";
+import type { PageSize } from "@/components/ui/pagination";
 import { useDoctorDirectory, usePatientList } from "@/features/patients/hooks/use-patient-list";
 import type { Patient } from "@/features/patients/model/patient";
 import {
+  EMPTY_PATIENT_FILTERS,
+  hasPatientFilters,
   patientFilterSchema,
   type PatientFilterValues,
 } from "@/features/patients/model/patient-filter-schema";
+import {
+  readPatientListParams,
+  writePatientListParams,
+  type PatientListParams,
+} from "@/features/patients/model/patient-list-params";
 import { PatientCreateDialog } from "@/features/patients/ui/patient-create-dialog";
 import { PatientFilters } from "@/features/patients/ui/patient-filters";
 import { PatientFormDialog } from "@/features/patients/ui/patient-form";
 import { PatientTable } from "@/features/patients/ui/patient-table";
-import { isDateOrderValid } from "@/lib/time/calendar";
-
-const emptyFilters: PatientFilterValues = {
-  q: "",
-  condition: "",
-  doctorId: "",
-  registeredFrom: "",
-  registeredTo: "",
-};
+import { FIRST_PAGE } from "@/lib/paging";
+import { useClampPage } from "@/lib/url-state/use-clamp-page";
+import { useListSearchParams, type HistoryMode } from "@/lib/url-state/use-list-search-params";
 
 type PatientScreenProps = {
   doctorId?: string;
@@ -35,48 +38,63 @@ type PatientScreenProps = {
 };
 
 export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
-  const [page, setPage] = useState(1);
+  const scoped = doctorId !== undefined;
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState<Patient | null>(null);
-  const [filters, setFilters] = useState<PatientFilterValues>(emptyFilters);
-  const [applied, setApplied] = useState<PatientFilterValues>(emptyFilters);
-  const directory = useDoctorDirectory(doctorId === undefined);
+  const { searchParams, navigate } = useListSearchParams();
+  const { filters, page, limit } = useMemo(
+    () => readPatientListParams(searchParams, { doctorScoped: scoped }),
+    [scoped, searchParams],
+  );
+  const directory = useDoctorDirectory(!scoped);
 
-  const datesInvalid =
-    filters.registeredFrom.length > 0 &&
-    filters.registeredTo.length > 0 &&
-    !isDateOrderValid(filters.registeredFrom, filters.registeredTo);
+  function commit(next: Partial<PatientListParams>, mode: HistoryMode = "replace") {
+    navigate(
+      writePatientListParams({ filters, page, limit, ...next }, { doctorScoped: scoped }),
+      mode,
+    );
+  }
 
-  function onFiltersChange(next: PatientFilterValues) {
-    setFilters(next);
-    setPage(1);
+  function onApply(next: PatientFilterValues) {
     const parsed = patientFilterSchema.safeParse(next);
-    if (parsed.success) setApplied(parsed.data);
+    if (!parsed.success) return;
+    commit({ filters: parsed.data, page: FIRST_PAGE });
+  }
+
+  function onReset() {
+    commit({ filters: EMPTY_PATIENT_FILTERS, page: FIRST_PAGE });
+  }
+
+  function onPageChange(next: number) {
+    commit({ page: next }, "push");
+  }
+
+  function onPageSizeChange(next: PageSize) {
+    commit({ limit: next, page: FIRST_PAGE });
   }
 
   const query = useMemo(
     () => ({
-      q: applied.q || undefined,
-      condition: doctorId ? undefined : applied.condition || undefined,
-      doctorId: doctorId ?? (applied.doctorId || undefined),
-      registeredFrom: doctorId ? undefined : applied.registeredFrom || undefined,
-      registeredTo: doctorId ? undefined : applied.registeredTo || undefined,
+      q: filters.q || undefined,
+      condition: filters.condition || undefined,
+      doctorId: doctorId ?? (filters.doctorId || undefined),
+      registeredFrom: filters.registeredFrom || undefined,
+      registeredTo: filters.registeredTo || undefined,
       page,
-      limit: 20 as const,
+      limit,
       sort: "registeredAt" as const,
     }),
-    [applied, doctorId, page],
+    [doctorId, filters, limit, page],
   );
 
   const list = usePatientList(query);
-  const scoped = doctorId !== undefined;
-  const filtered = scoped
-    ? applied.q.length > 0
-    : applied.q.length > 0 ||
-      applied.condition.length > 0 ||
-      applied.doctorId.length > 0 ||
-      applied.registeredFrom.length > 0 ||
-      applied.registeredTo.length > 0;
+  useClampPage({
+    page,
+    totalPages: list.data?.meta.totalPages ?? 0,
+    onOutOfRange: (next) => commit({ page: next }),
+  });
+
+  const filtered = hasPatientFilters(filters);
   const total = list.data?.meta.total ?? 0;
   const showEmptyDirectory = list.isSuccess && total === 0 && !filtered;
   const showFilteredEmpty = list.isSuccess && total === 0 && filtered;
@@ -101,11 +119,11 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
       {!list.isLoading && !showEmptyDirectory ? (
         <div className="portal-card-pad border-b border-line">
           <PatientFilters
-            dateError={datesInvalid}
+            applied={filters}
             doctors={directory.data ?? []}
-            onChange={onFiltersChange}
-            showDirectoryFilters={!scoped}
-            value={filters}
+            onApply={onApply}
+            onReset={onReset}
+            showDoctorFilter={!scoped}
           />
         </div>
       ) : null}
@@ -115,6 +133,7 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
           action={
             scoped ? (
               <Button onClick={() => setCreating(true)} type="button">
+                <PlusIcon />
                 Add patient
               </Button>
             ) : undefined
@@ -129,7 +148,9 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
       {showFilteredEmpty ? (
         <DataEmpty
           guidance={
-            scoped ? "Clear the search." : "Clear the search or choose a different condition."
+            scoped
+              ? "Use Reset to clear the search and filters."
+              : "Use Reset to clear the filters, or choose a different condition."
           }
           title="No patients match"
         />
@@ -139,9 +160,11 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
         <div className="portal-card-pad">
           <PatientTable
             items={list.data.items}
+            limit={limit}
             meta={list.data.meta}
             onEdit={setEditing}
-            onPageChange={setPage}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
             showDoctor={!scoped}
           />
         </div>
@@ -165,26 +188,30 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
     <section className="portal-card portal-card-flush">
       <div className="portal-card-pad flex flex-wrap items-start justify-between gap-3 border-b border-line">
         <div>
-          <h2 className="text-[18px] leading-tight">{scoped ? "Patients" : "Patient registry"}</h2>
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="text-[18px] leading-tight">
+              {scoped ? "Patients" : "Patient registry"}
+            </h2>
+            <span className="card-count">
+              {list.isLoading ? "Loading" : `${total} ${total === 1 ? "patient" : "patients"}`}
+            </span>
+          </div>
           <p className="mt-1 text-xs text-ink-secondary">
             {scoped
-              ? "Search this doctor's list, then edit or remove a record."
+              ? "Filter this doctor's list by condition or registration date, then edit or remove a record."
               : "Active patients across every doctor, with condition and registration filters."}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="card-count">
-            {list.isLoading ? "Loading" : `${total} ${total === 1 ? "patient" : "patients"}`}
-          </span>
-          {scoped ? (
+        {scoped ? (
+          <div className="flex flex-wrap items-center gap-2">
             <PatientCreateDialog
               doctorId={doctorId}
               doctorName={doctorName}
               onOpenChange={setCreating}
               open={creating}
             />
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </div>
       {body}
     </section>
@@ -196,7 +223,6 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
     <div className="flex flex-col gap-6">
       <header className="page-header">
         <div>
-          <p className="page-eyebrow">Registry</p>
           <h1>Patients</h1>
           <p className="page-context">Active patients across every doctor.</p>
         </div>

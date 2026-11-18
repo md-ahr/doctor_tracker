@@ -30,7 +30,7 @@ test("names the patient before the destructive action", async () => {
   );
 
   expect(screen.queryByText("Delete Noah Khan?")).toBeNull();
-  await user.click(screen.getByRole("button", { name: "Delete" }));
+  await user.click(screen.getByRole("button", { name: "Delete Noah Khan" }));
 
   expect(screen.getByText("Delete Noah Khan?")).toBeDefined();
   expect(mutateAsync).not.toHaveBeenCalled();

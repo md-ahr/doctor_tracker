@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, test } from "vitest";
 
 import type { Patient } from "@/features/patients/model/patient";
@@ -26,21 +26,38 @@ afterEach(() => {
   cleanup();
 });
 
-test("condition mark includes the visible condition word", () => {
+function renderTable() {
   render(
     <QueryClientProvider client={createQueryClient()}>
       <PatientTable
         items={[patient]}
-        meta={{ page: 1, limit: 20, total: 1, totalPages: 1 }}
+        limit={15}
+        meta={{ page: 1, limit: 15, total: 1, totalPages: 1 }}
         onEdit={() => undefined}
         onPageChange={() => undefined}
+        onPageSizeChange={() => undefined}
         showDoctor
       />
     </QueryClientProvider>,
   );
+}
+
+test("condition mark includes the visible condition word", () => {
+  renderTable();
 
   const mark = screen.getAllByText("Stable")[0];
   expect(mark).toBeDefined();
   expect(mark?.tagName).not.toBe("BUTTON");
   expect(screen.getAllByRole("link", { name: "Amelia Rahman" }).length).toBeGreaterThan(0);
+});
+
+test("pins the row actions and their header to the right edge", () => {
+  renderTable();
+
+  const table = screen.getByRole("table");
+  const header = within(table).getByRole("columnheader", { name: "Actions" });
+  expect(header.className).toContain("text-right");
+
+  const edit = within(table).getByRole("button", { name: "Edit Noah Khan" });
+  expect(edit.parentElement?.className).toContain("justify-end");
 });

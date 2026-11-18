@@ -3,6 +3,8 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { PencilIcon } from "@/components/ui/icons";
+import { Pagination, type PageSize } from "@/components/ui/pagination";
 import {
   Table,
   TableBody,
@@ -18,13 +20,16 @@ import {
   type PatientCondition,
 } from "@/features/patients/model/patient";
 import type { PageMeta } from "@/lib/api/types";
+import { cn } from "@/lib/utils";
 
 type PatientTableProps = {
   items: Patient[];
   meta?: PageMeta;
+  limit: PageSize;
   showDoctor: boolean;
   onEdit: (patient: Patient) => void;
   onPageChange: (page: number) => void;
+  onPageSizeChange: (limit: PageSize) => void;
 };
 
 export function ConditionMark({ condition }: { condition: PatientCondition }) {
@@ -40,14 +45,15 @@ export function ConditionMark({ condition }: { condition: PatientCondition }) {
   );
 }
 
-export function PatientTable({ items, meta, showDoctor, onEdit, onPageChange }: PatientTableProps) {
-  const total = meta?.total ?? items.length;
-  const page = meta?.page ?? 1;
-  const limit = meta?.limit ?? 20;
-  const totalPages = meta?.totalPages ?? 1;
-  const start = total === 0 ? 0 : (page - 1) * limit + 1;
-  const end = Math.min(page * limit, total);
-
+export function PatientTable({
+  items,
+  meta,
+  limit,
+  showDoctor,
+  onEdit,
+  onPageChange,
+  onPageSizeChange,
+}: PatientTableProps) {
   return (
     <div>
       <div className="hidden lg:block">
@@ -59,7 +65,7 @@ export function PatientTable({ items, meta, showDoctor, onEdit, onPageChange }: 
               {showDoctor ? <TableHead>Doctor</TableHead> : null}
               <TableHead>Registered</TableHead>
               <TableHead>Phone</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -82,7 +88,11 @@ export function PatientTable({ items, meta, showDoctor, onEdit, onPageChange }: 
                 <TableCell>{formatRecordDate(patient.registeredAt)}</TableCell>
                 <TableCell>{patient.phone ?? "—"}</TableCell>
                 <TableCell>
-                  <RowActions onEdit={() => onEdit(patient)} patient={patient} />
+                  <RowActions
+                    className="justify-end"
+                    onEdit={() => onEdit(patient)}
+                    patient={patient}
+                  />
                 </TableCell>
               </TableRow>
             ))}
@@ -117,47 +127,36 @@ export function PatientTable({ items, meta, showDoctor, onEdit, onPageChange }: 
           </li>
         ))}
       </ul>
-      {total > 0 ? (
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-ink-secondary">
-          <p>
-            Showing {start}–{end} of {total}
-          </p>
-          {totalPages > 1 ? (
-            <div className="flex items-center gap-2">
-              <Button
-                disabled={page <= 1}
-                onClick={() => onPageChange(page - 1)}
-                size="compact"
-                type="button"
-                variant="secondary"
-              >
-                Previous
-              </Button>
-              <p>
-                Page {page} of {totalPages}
-              </p>
-              <Button
-                disabled={page >= totalPages}
-                onClick={() => onPageChange(page + 1)}
-                size="compact"
-                type="button"
-                variant="secondary"
-              >
-                Next
-              </Button>
-            </div>
-          ) : null}
-        </div>
-      ) : null}
+      <Pagination
+        itemCount={items.length}
+        limit={limit}
+        meta={meta}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+      />
     </div>
   );
 }
 
-function RowActions({ patient, onEdit }: { patient: Patient; onEdit: () => void }) {
+function RowActions({
+  patient,
+  onEdit,
+  className,
+}: {
+  patient: Patient;
+  onEdit: () => void;
+  className?: string;
+}) {
   return (
-    <div className="flex items-center gap-1">
-      <Button onClick={onEdit} type="button" variant="quiet">
-        Edit
+    <div className={cn("flex items-center gap-1", className)}>
+      <Button
+        aria-label={`Edit ${patient.fullName}`}
+        className="size-(--control-height) px-0"
+        onClick={onEdit}
+        type="button"
+        variant="quiet"
+      >
+        <PencilIcon />
       </Button>
       <DeletePatientButton patient={patient} />
     </div>

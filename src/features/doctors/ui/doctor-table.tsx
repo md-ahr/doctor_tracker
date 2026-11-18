@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
+import { Pagination, type PageSize } from "@/components/ui/pagination";
 import {
   Table,
   TableBody,
@@ -17,42 +17,64 @@ import type { PageMeta } from "@/lib/api/types";
 type DoctorTableProps = {
   items: Doctor[];
   meta?: PageMeta;
+  limit: PageSize;
+  /** Active patient counts by doctor id. Absent until the counts load. */
+  patientCounts?: Record<string, number>;
   onPageChange: (page: number) => void;
+  onPageSizeChange: (limit: PageSize) => void;
 };
 
-export function DoctorTable({ items, meta, onPageChange }: DoctorTableProps) {
-  const total = meta?.total ?? items.length;
-  const page = meta?.page ?? 1;
-  const limit = meta?.limit ?? 20;
-  const totalPages = meta?.totalPages ?? 1;
-  const start = total === 0 ? 0 : (page - 1) * limit + 1;
-  const end = Math.min(page * limit, total);
-
+export function DoctorTable({
+  items,
+  meta,
+  limit,
+  patientCounts,
+  onPageChange,
+  onPageSizeChange,
+}: DoctorTableProps) {
   return (
     <div>
       <div className="hidden lg:block">
-        <Table>
+        <Table className="xl:table-fixed">
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Specialization</TableHead>
-              <TableHead>Hospital</TableHead>
-              <TableHead className="text-right">Patients</TableHead>
-              <TableHead>Created</TableHead>
+              <TableHead className="w-[26%]">Name</TableHead>
+              <TableHead className="w-[20%] xl:w-[21%]">Specialization</TableHead>
+              <TableHead className="w-[30%] xl:w-[290px]">Hospital</TableHead>
+              <TableHead className="w-[10%] text-right xl:w-[88px]">Patients</TableHead>
+              <TableHead className="w-[14%] text-right whitespace-nowrap xl:w-auto">
+                Created
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {items.map((doctor) => (
               <TableRow key={doctor.id}>
                 <TableCell>
-                  <Link className="font-semibold" href={`/doctors/${doctor.id}`}>
+                  <Link
+                    className="block font-semibold text-action-hover underline underline-offset-2 xl:truncate"
+                    href={`/doctors/${doctor.id}`}
+                    title={doctor.name}
+                  >
                     {doctor.name}
                   </Link>
                 </TableCell>
-                <TableCell>{doctor.specialization}</TableCell>
-                <TableCell>{doctor.hospital}</TableCell>
-                <TableCell className="text-right">—</TableCell>
-                <TableCell>{formatRecordDate(doctor.createdAt)}</TableCell>
+                <TableCell>
+                  <span className="block xl:truncate" title={doctor.specialization}>
+                    {doctor.specialization}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span className="block xl:truncate" title={doctor.hospital}>
+                    {doctor.hospital}
+                  </span>
+                </TableCell>
+                <TableCell className="text-right tabular-nums">
+                  {countLabel(patientCounts, doctor.id)}
+                </TableCell>
+                <TableCell className="whitespace-nowrap text-right tabular-nums">
+                  {formatRecordDate(doctor.createdAt)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -61,49 +83,30 @@ export function DoctorTable({ items, meta, onPageChange }: DoctorTableProps) {
       <ul className="lg:hidden">
         {items.map((doctor) => (
           <li className="border-b border-line py-4" key={doctor.id}>
-            <Link className="font-semibold" href={`/doctors/${doctor.id}`}>
+            <Link
+              className="font-semibold text-action-hover underline underline-offset-2"
+              href={`/doctors/${doctor.id}`}
+            >
               {doctor.name}
             </Link>
             <p className="text-sm text-ink-secondary">Specialization {doctor.specialization}</p>
             <p className="text-sm text-ink-secondary">Hospital {doctor.hospital}</p>
+            <p className="text-sm text-ink-secondary">
+              Patients {countLabel(patientCounts, doctor.id)}
+            </p>
             <p className="text-sm text-ink-secondary">
               Created {formatRecordDate(doctor.createdAt)}
             </p>
           </li>
         ))}
       </ul>
-      {total > 0 ? (
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-ink-secondary">
-          <p>
-            Showing {start}–{end} of {total}
-          </p>
-          {totalPages > 1 ? (
-            <div className="flex items-center gap-2">
-              <Button
-                disabled={page <= 1}
-                onClick={() => onPageChange(page - 1)}
-                size="compact"
-                type="button"
-                variant="secondary"
-              >
-                Previous
-              </Button>
-              <p>
-                Page {page} of {totalPages}
-              </p>
-              <Button
-                disabled={page >= totalPages}
-                onClick={() => onPageChange(page + 1)}
-                size="compact"
-                type="button"
-                variant="secondary"
-              >
-                Next
-              </Button>
-            </div>
-          ) : null}
-        </div>
-      ) : null}
+      <Pagination
+        itemCount={items.length}
+        limit={limit}
+        meta={meta}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+      />
     </div>
   );
 }
@@ -116,4 +119,13 @@ function formatRecordDate(iso: string): string {
   } catch {
     return iso;
   }
+}
+
+/**
+ * The aggregate lists every doctor, so once it loads a missing id is a zero. Before
+ * it loads there is no honest number to print, and the cell shows an em dash.
+ */
+function countLabel(patientCounts: Record<string, number> | undefined, doctorId: string): string {
+  if (patientCounts === undefined) return "—";
+  return String(patientCounts[doctorId] ?? 0);
 }
