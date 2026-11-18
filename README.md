@@ -11,7 +11,7 @@ npm install
 cp .env.example .env.local
 ```
 
-Set `NEXT_PUBLIC_API_URL` to the API origin plus its prefix, with no trailing slash. The sample value is `http://localhost:9000/api/v1`. Point it at the API you are actually running. The browser keeps the access token in memory and sends the refresh cookie with `credentials: "include"`.
+Set `NEXT_PUBLIC_API_URL` to `/api/v1`. The browser never calls the API host directly: `next.config.ts` rewrites `/api/v1/*` to `API_ORIGIN` in the Next server, which keeps the HttpOnly refresh cookie first-party so it survives a reload. Set `API_ORIGIN` to the API origin with no trailing slash — `http://localhost:9000` for a local API, or the deployed API URL. The browser keeps the access token in memory and sends the refresh cookie with `credentials: "include"`.
 
 ```bash
 npm run dev

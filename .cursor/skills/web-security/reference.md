@@ -16,7 +16,7 @@ Do not build a URL with `javascript:` or assign `element.innerHTML`.
 
 ## CSRF
 
-The refresh cookie is `HttpOnly` and `SameSite=None`. The browser sends it because the client uses `credentials: "include"`. The API rejects the cookie when `Origin` is not `FRONTEND_ORIGIN`. Do not reimplement refresh outside `lib/api/http-client.ts`, and do not add a Next.js route that proxies the cookie.
+The refresh cookie is `HttpOnly` and `SameSite=None`. The browser sends it because the client uses `credentials: "include"`. The API rejects the cookie when `Origin` is not `FRONTEND_ORIGIN`. Do not reimplement refresh outside `lib/api/http-client.ts`. The `/api/v1` rewrite in `next.config.ts` is the only thing that forwards the cookie to the API, and it keeps the cookie first-party; do not add a `src/app/api` route that proxies it.
 
 The access token is attached as `Authorization`. A foreign page cannot read it from memory.
 

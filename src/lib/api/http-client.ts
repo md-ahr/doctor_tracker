@@ -21,8 +21,13 @@ const ERROR_RETRY_DELAYS_MS = [250, 750];
 
 let inflightRefresh: Promise<RefreshOutcome> | null = null;
 
+/**
+ * A path on this origin, not the API origin. `next.config.ts` forwards
+ * `/api/v1/*` to `API_ORIGIN` server-side, so the HttpOnly refresh cookie is
+ * first-party and survives browsers that block third-party cookies.
+ */
 function apiOrigin(): string {
-  return process.env.NEXT_PUBLIC_API_URL ?? "";
+  return process.env.NEXT_PUBLIC_API_URL ?? "/api/v1";
 }
 
 function delay(ms: number): Promise<void> {

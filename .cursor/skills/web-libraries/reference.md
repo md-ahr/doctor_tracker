@@ -21,7 +21,7 @@ Query Context7 for current signatures. Use the shadcn MCP for registry component
 
 ## Environment
 
-`NEXT_PUBLIC_API_URL` is required. No trailing slash. Put it in `.env.example` with an empty or local value. Do not put `MONGODB_URI` or `JWT_ACCESS_SECRET` in the web app.
+`NEXT_PUBLIC_API_URL` is `/api/v1`, the portal's own path. `API_ORIGIN` is the server-side rewrite target. Do not put `MONGODB_URI` or `JWT_ACCESS_SECRET` in the web app.
 
 ## MCP tools
 

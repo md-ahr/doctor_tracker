@@ -10,7 +10,7 @@ The portal is a client of one API. It is not a second backend. Load `web-securit
 | Risk | Required control |
 | --- | --- |
 | XSS | Render names, notes, and errors as React text. No `dangerouslySetInnerHTML`, `innerHTML`, `eval`, or `javascript:` URLs |
-| CSRF | `credentials: "include"` on API calls. Do not add a Next.js route that forwards the cookie |
+| CSRF | `credentials: "include"` on API calls. The `/api/v1` rewrite in `next.config.ts` is the only forwarder; no `src/app/api` route handler |
 | Token theft | Access token stays in memory. No `localStorage` or `sessionStorage`. No `NEXT_PUBLIC_` secret, Mongo URL, or JWT secret |
 | SSRF | Call only `NEXT_PUBLIC_API_URL`. No Route Handler and no fetch of a URL from the query string |
 | Open redirect | Redirects go to `/login` or `/dashboard` only |

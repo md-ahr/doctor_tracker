@@ -15,4 +15,4 @@ Load `implement-web-task` before feature work. Load `stay-on-contract` when a sc
 
 Stack: Next.js App Router, React, TypeScript strict, Tailwind, shadcn/ui on Base UI (`base-nova`), TanStack Query, React Hook Form, Zod, Recharts, Temporal, Vitest, Testing Library, MSW, Playwright. Do not add Radix.
 
-`NEXT_PUBLIC_API_URL` is the API origin with no trailing slash. The app does not connect to MongoDB.
+`NEXT_PUBLIC_API_URL` is `/api/v1`; the browser calls its own origin and `next.config.ts` rewrites it to `API_ORIGIN` server-side. The app does not connect to MongoDB.

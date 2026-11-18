@@ -1,6 +1,6 @@
 import { expect, type Page, type Route } from "@playwright/test";
 
-const apiOrigin = "http://127.0.0.1:4010";
+const apiRoutes = "**/api/v1";
 
 const admin = {
   id: "admin-1",
@@ -144,7 +144,7 @@ async function fulfill(route: Route, mode: DashboardMode) {
 }
 
 export async function mockDirectory(page: Page, mode: DashboardMode = "filled") {
-  await page.route(`${apiOrigin}/**`, (route) => fulfill(route, mode));
+  await page.route(`${apiRoutes}/**`, (route) => fulfill(route, mode));
 }
 
 export async function signIn(page: Page, mode: DashboardMode = "filled") {
@@ -157,7 +157,7 @@ export async function signIn(page: Page, mode: DashboardMode = "filled") {
 }
 
 export async function rejectLogin(page: Page) {
-  await page.route(`${apiOrigin}/auth/login`, (route) =>
+  await page.route(`${apiRoutes}/auth/login`, (route) =>
     route.fulfill({
       status: 401,
       contentType: "application/json",
