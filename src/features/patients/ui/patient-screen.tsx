@@ -3,14 +3,10 @@
 import { useMemo, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DataEmpty,
-  DataError,
-  DataLoading,
-  directoryErrorMessage,
-} from "@/components/ui/data-state";
+import { DataEmpty, DataError, directoryErrorMessage } from "@/components/ui/data-state";
 import { PlusIcon } from "@/components/ui/icons";
 import type { PageSize } from "@/components/ui/pagination";
+import { TableSkeleton, type TableSkeletonColumn } from "@/components/ui/table-skeleton";
 import { useDoctorDirectory, usePatientList } from "@/features/patients/hooks/use-patient-list";
 import type { Patient } from "@/features/patients/model/patient";
 import {
@@ -36,6 +32,39 @@ type PatientScreenProps = {
   doctorId?: string;
   doctorName?: string;
 };
+
+function patientSkeletonColumns(showDoctor: boolean): TableSkeletonColumn[] {
+  if (!showDoctor) {
+    return [
+      { key: "name", className: "col-span-4 xl:col-span-3", headerWidth: "w-14" },
+      { key: "condition", className: "col-span-2", headerWidth: "w-16", variant: "badge" },
+      { key: "registered", className: "col-span-2 xl:col-span-3", headerWidth: "w-20" },
+      { key: "phone", className: "col-span-3", headerWidth: "w-14" },
+      {
+        key: "actions",
+        align: "right",
+        className: "col-span-1",
+        headerWidth: "w-14",
+        variant: "actions",
+      },
+    ];
+  }
+
+  return [
+    { key: "name", className: "col-span-4 xl:col-span-3", headerWidth: "w-14" },
+    { key: "condition", className: "col-span-2", headerWidth: "w-16", variant: "badge" },
+    { key: "doctor", className: "col-span-2 hidden xl:block", headerWidth: "w-16" },
+    { key: "registered", className: "col-span-2", headerWidth: "w-20" },
+    { key: "phone", className: "col-span-3 xl:col-span-2", headerWidth: "w-14" },
+    {
+      key: "actions",
+      align: "right",
+      className: "col-span-1",
+      headerWidth: "w-14",
+      variant: "actions",
+    },
+  ];
+}
 
 export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
   const scoped = doctorId !== undefined;
@@ -111,9 +140,12 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
       ) : null}
 
       {list.isLoading ? (
-        <div className="portal-card-pad">
-          <DataLoading label="Loading patients" />
-        </div>
+        <TableSkeleton
+          columns={patientSkeletonColumns(!scoped)}
+          label="Loading patients"
+          rows={Math.min(limit, 10)}
+          showFilters
+        />
       ) : null}
 
       {!list.isLoading && !showEmptyDirectory ? (

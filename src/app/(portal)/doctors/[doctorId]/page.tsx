@@ -1,25 +1,22 @@
-"use client";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-import { Suspense, use } from "react";
+import { DoctorDetailScreen } from "@/features/doctors/ui/doctor-detail-screen";
+import { isRecordId } from "@/lib/record-id";
 
-import { useDoctor } from "@/features/doctors/hooks/use-doctor";
-import { DoctorSummary } from "@/features/doctors/ui/doctor-summary";
-import { PatientScreen } from "@/features/patients/ui/patient-screen";
+export const metadata: Metadata = {
+  title: "Doctor details",
+  description: "Review a doctor's details and manage the patients assigned to them.",
+};
 
 type DoctorDetailPageProps = {
   params: Promise<{ doctorId: string }>;
 };
 
-export default function DoctorDetailPage({ params }: DoctorDetailPageProps) {
-  const { doctorId } = use(params);
-  const doctor = useDoctor(doctorId);
+export default async function DoctorDetailPage({ params }: DoctorDetailPageProps) {
+  const { doctorId } = await params;
 
-  return (
-    <div className="flex flex-col gap-6">
-      <DoctorSummary doctorId={doctorId} />
-      <Suspense fallback={null}>
-        <PatientScreen doctorId={doctorId} doctorName={doctor.data?.name} />
-      </Suspense>
-    </div>
-  );
+  if (!isRecordId(doctorId)) notFound();
+
+  return <DoctorDetailScreen doctorId={doctorId} />;
 }

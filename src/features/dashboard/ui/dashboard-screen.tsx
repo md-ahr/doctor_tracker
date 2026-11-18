@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 
-import { DataError, DataLoading, directoryErrorMessage } from "@/components/ui/data-state";
+import { DataError, directoryErrorMessage } from "@/components/ui/data-state";
 import { CareMix } from "@/features/dashboard/ui/care-mix";
 import { DashboardRangeControl } from "@/features/dashboard/ui/dashboard-range-control";
+import { DashboardSkeleton } from "@/features/dashboard/ui/dashboard-skeleton";
 import { useDashboard } from "@/features/dashboard/hooks/use-dashboard";
 import { PatientsByConditionChart } from "@/features/dashboard/ui/patients-by-condition-chart";
 import { PatientsPerDoctorChart } from "@/features/dashboard/ui/patients-per-doctor-chart";
@@ -46,7 +47,7 @@ export function DashboardScreen() {
         />
       ) : null}
 
-      {dashboard.isPending ? <DataLoading className="min-h-70" label="Loading dashboard" /> : null}
+      {dashboard.isPending ? <DashboardSkeleton /> : null}
 
       {data ? (
         <>

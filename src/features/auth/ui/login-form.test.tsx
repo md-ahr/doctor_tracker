@@ -8,6 +8,13 @@ import { beforeEach, expect, test, vi } from "vitest";
 import { LoginForm } from "@/features/auth/ui/login-form";
 import { ApiError } from "@/lib/api/types";
 
+const toastSuccess = vi.hoisted(() => vi.fn());
+const toastError = vi.hoisted(() => vi.fn());
+
+vi.mock("sonner", () => ({
+  toast: { success: toastSuccess, error: toastError },
+}));
+
 const push = vi.fn();
 const login = vi.fn();
 
@@ -25,6 +32,8 @@ beforeEach(() => {
   cleanup();
   push.mockReset();
   login.mockReset();
+  toastSuccess.mockReset();
+  toastError.mockReset();
 });
 
 test("shows the API error message when login fails", async () => {
@@ -38,6 +47,9 @@ test("shows the API error message when login fails", async () => {
 
   expect((await screen.findByRole("status")).textContent).toBe("Invalid email or password");
   expect(push).not.toHaveBeenCalled();
+  expect(toastError).toHaveBeenCalledWith("Sign in failed", {
+    description: "Invalid email or password",
+  });
 });
 
 test("opens the dashboard after a successful login", async () => {
@@ -50,6 +62,9 @@ test("opens the dashboard after a successful login", async () => {
   await user.click(screen.getByRole("button", { name: "Sign in" }));
 
   expect(push).toHaveBeenCalledWith("/dashboard");
+  expect(toastSuccess).toHaveBeenCalledWith("Signed in", {
+    description: "Welcome back to Doctor Tracker.",
+  });
 });
 
 test("does not call useQuery for login", () => {

@@ -15,7 +15,7 @@ import {
 import { TrashIcon } from "@/components/ui/icons";
 import { useDeletePatient } from "@/features/patients/hooks/use-patient-mutations";
 import type { Patient } from "@/features/patients/model/patient";
-import { ApiError } from "@/lib/api/types";
+import { errorMessage } from "@/lib/api/error-message";
 import { cn } from "@/lib/utils";
 
 type DeletePatientButtonProps = {
@@ -35,11 +35,15 @@ export function DeletePatientButton({ patient }: DeletePatientButtonProps) {
 
   async function onConfirm() {
     try {
-      await remove.mutateAsync({ id: patient.id, doctorId: patient.doctorId });
+      await remove.mutateAsync({
+        id: patient.id,
+        doctorId: patient.doctorId,
+        fullName: patient.fullName,
+      });
       setMessage(null);
       setOpen(false);
     } catch (error) {
-      setMessage(error instanceof ApiError ? error.message : "The patient could not be deleted.");
+      setMessage(errorMessage(error, "The patient could not be deleted."));
     }
   }
 

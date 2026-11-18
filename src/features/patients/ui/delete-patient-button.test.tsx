@@ -39,5 +39,6 @@ test("names the patient before the destructive action", async () => {
   expect(mutateAsync).toHaveBeenCalledWith({
     id: "pat-1",
     doctorId: "665f1c0a2b3c4d5e6f708193",
+    fullName: "Noah Khan",
   });
 });

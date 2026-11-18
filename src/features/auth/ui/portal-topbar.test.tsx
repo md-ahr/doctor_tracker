@@ -5,6 +5,13 @@ import { afterEach, expect, test, vi } from "vitest";
 import { PortalTopbar } from "@/features/auth/ui/portal-topbar";
 import { clearAccessToken, getAccessToken, setAccessToken } from "@/lib/auth/access-token";
 
+const toastSuccess = vi.hoisted(() => vi.fn());
+const toastError = vi.hoisted(() => vi.fn());
+
+vi.mock("sonner", () => ({
+  toast: { success: toastSuccess, error: toastError },
+}));
+
 const push = vi.fn();
 const logout = vi.fn(async () => undefined);
 
@@ -25,6 +32,8 @@ vi.mock("@/features/auth/api/auth-api", () => ({
 afterEach(() => {
   cleanup();
   clearAccessToken();
+  toastSuccess.mockReset();
+  toastError.mockReset();
 });
 
 test("shows the signed-in admin and forwards the menu action", async () => {
@@ -68,4 +77,7 @@ test("logout calls the API and does not leave a token in memory", async () => {
   expect(logout).toHaveBeenCalled();
   expect(getAccessToken()).toBeNull();
   expect(push).toHaveBeenCalledWith("/login");
+  expect(toastSuccess).toHaveBeenCalledWith("Signed out", {
+    description: "You have been logged out.",
+  });
 });

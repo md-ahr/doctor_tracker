@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 
 import { LoginForm } from "@/features/auth/ui/login-form";
+
+export const metadata: Metadata = {
+  title: "Sign in",
+  description: "Sign in to the Doctor Tracker admin portal to manage doctors and patients.",
+};
 
 const clinicPhoto =
   "https://images.unsplash.com/photo-1512678080530-7760d81faba6?auto=format&fit=crop&w=1400&q=80";

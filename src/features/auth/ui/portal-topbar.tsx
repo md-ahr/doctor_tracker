@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { authApi } from "@/features/auth/api/auth-api";
 import { useSession } from "@/features/auth/hooks/use-session";
 import { clearAccessToken } from "@/lib/auth/access-token";
+import { notifyError, notifySuccess } from "@/lib/toast";
 
 type PortalTopbarProps = {
   onMenuClick: () => void;
@@ -54,9 +55,15 @@ export function PortalTopbar({ onMenuClick }: PortalTopbarProps) {
 
   async function onLogout() {
     setAccountOpen(false);
-    await authApi.logout();
-    clearAccessToken();
-    router.push("/login");
+    try {
+      await authApi.logout();
+      notifySuccess("Signed out", "You have been logged out.");
+    } catch (error) {
+      notifyError("Could not sign out", error, "The session could not be closed on the server.");
+    } finally {
+      clearAccessToken();
+      router.push("/login");
+    }
   }
 
   async function onFullscreen() {

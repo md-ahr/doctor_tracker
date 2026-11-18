@@ -42,11 +42,11 @@ Open [http://localhost:3000](http://localhost:3000). Sign in with the admin seed
 
 Desktop is 1280px wide. Mobile is 390px wide. `npm run test:e2e` refreshes these files.
 
-| Screen    | Desktop                                           | Mobile                                          |
-| --------- | ------------------------------------------------- | ----------------------------------------------- |
-| Dashboard | [desktop](docs/screenshots/dashboard-desktop.png) | [mobile](docs/screenshots/dashboard-mobile.png) |
-| Doctors   | [desktop](docs/screenshots/doctors-desktop.png)   | [mobile](docs/screenshots/doctors-mobile.png)   |
-| Patients  | [desktop](docs/screenshots/patients-desktop.png)  | [mobile](docs/screenshots/patients-mobile.png)  |
+| Screen    | Desktop                                                       | Mobile                                                      |
+| --------- | ------------------------------------------------------------- | ----------------------------------------------------------- |
+| Dashboard | ![Dashboard, desktop](docs/screenshots/dashboard-desktop.png) | ![Dashboard, mobile](docs/screenshots/dashboard-mobile.png) |
+| Doctors   | ![Doctors, desktop](docs/screenshots/doctors-desktop.png)     | ![Doctors, mobile](docs/screenshots/doctors-mobile.png)     |
+| Patients  | ![Patients, desktop](docs/screenshots/patients-desktop.png)   | ![Patients, mobile](docs/screenshots/patients-mobile.png)   |
 
 - [x] Dashboard, desktop and mobile
 - [x] Doctors, desktop and mobile

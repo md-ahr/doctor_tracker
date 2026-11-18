@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ApiError } from "@/lib/api/types";
+import { errorMessage } from "@/lib/api/error-message";
+import { notifyError, notifySuccess } from "@/lib/toast";
 
 export function LoginForm() {
   const router = useRouter();
@@ -23,14 +25,18 @@ export function LoginForm() {
   async function onSubmit(values: LoginValues) {
     try {
       await authApi.login(values);
+      notifySuccess("Signed in", "Welcome back to Doctor Tracker.");
       router.push("/dashboard");
     } catch (error) {
+      notifyError("Sign in failed", error, "The sign-in request could not be completed.");
       if (!(error instanceof ApiError)) return;
       const fieldDetails = error.details.filter(
         (detail) => detail.path === "email" || detail.path === "password",
       );
       if (fieldDetails.length === 0) {
-        form.setError("root", { message: error.message });
+        form.setError("root", {
+          message: errorMessage(error, "The email or password is incorrect."),
+        });
         return;
       }
       for (const detail of fieldDetails) {

@@ -3,14 +3,10 @@
 import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DataEmpty,
-  DataError,
-  DataLoading,
-  directoryErrorMessage,
-} from "@/components/ui/data-state";
+import { DataEmpty, DataError, directoryErrorMessage } from "@/components/ui/data-state";
 import { PlusIcon } from "@/components/ui/icons";
 import type { PageSize } from "@/components/ui/pagination";
+import { TableSkeleton, type TableSkeletonColumn } from "@/components/ui/table-skeleton";
 import {
   EMPTY_DOCTOR_FILTERS,
   doctorFilterSchema,
@@ -29,6 +25,14 @@ import { DoctorTable } from "@/features/doctors/ui/doctor-table";
 import { FIRST_PAGE } from "@/lib/paging";
 import { useClampPage } from "@/lib/url-state/use-clamp-page";
 import { useListSearchParams, type HistoryMode } from "@/lib/url-state/use-list-search-params";
+
+const skeletonColumns: TableSkeletonColumn[] = [
+  { key: "name", className: "col-span-3", headerWidth: "w-12" },
+  { key: "specialization", className: "col-span-3", headerWidth: "w-20" },
+  { key: "hospital", className: "col-span-3", headerWidth: "w-16" },
+  { key: "patients", align: "right", className: "col-span-2", headerWidth: "w-14" },
+  { key: "created", align: "right", className: "col-span-1", headerWidth: "w-14" },
+];
 
 export function DoctorScreen() {
   const [creating, setCreating] = useState(false);
@@ -132,9 +136,12 @@ export function DoctorScreen() {
         ) : null}
 
         {list.isLoading ? (
-          <div className="portal-card-pad">
-            <DataLoading label="Loading doctors" />
-          </div>
+          <TableSkeleton
+            columns={skeletonColumns}
+            label="Loading doctors"
+            rows={Math.min(limit, 10)}
+            showFilters
+          />
         ) : null}
 
         {!list.isLoading && !showEmptyDirectory ? (

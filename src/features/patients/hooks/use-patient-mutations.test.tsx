@@ -11,6 +11,13 @@ import {
 } from "@/features/patients/hooks/use-patient-mutations";
 import { createQueryClient } from "@/lib/query/query-client";
 
+const toastSuccess = vi.hoisted(() => vi.fn());
+const toastError = vi.hoisted(() => vi.fn());
+
+vi.mock("sonner", () => ({
+  toast: { success: toastSuccess, error: toastError },
+}));
+
 const api = "http://api.test";
 const server = setupServer();
 const doctorId = "665f1c0a2b3c4d5e6f708193";
@@ -36,7 +43,11 @@ beforeAll(() => {
   server.listen({ onUnhandledFrame: "error" });
 });
 
-afterEach(() => server.resetHandlers());
+afterEach(() => {
+  server.resetHandlers();
+  toastSuccess.mockReset();
+  toastError.mockReset();
+});
 
 afterAll(() => {
   server.close();
@@ -62,12 +73,15 @@ test("invalidates patients, the doctor, and the dashboard after delete", async (
   }
 
   const { result } = renderHook(() => useDeletePatient(), { wrapper: Wrapper });
-  await result.current.mutateAsync({ id: "pat-1", doctorId });
+  await result.current.mutateAsync({ id: "pat-1", doctorId, fullName: "Noah Khan" });
 
   await waitFor(() => {
     expect(invalidate).toHaveBeenCalledWith({ queryKey: ["patients"] });
     expect(invalidate).toHaveBeenCalledWith({ queryKey: ["doctors", doctorId] });
     expect(invalidate).toHaveBeenCalledWith({ queryKey: ["dashboard"] });
+  });
+  expect(toastSuccess).toHaveBeenCalledWith("Patient deleted", {
+    description: "Noah Khan was removed.",
   });
 });
 
@@ -99,5 +113,39 @@ test("invalidates the same keys after creating a patient under a doctor", async 
     expect(invalidate).toHaveBeenCalledWith({ queryKey: ["patients"] });
     expect(invalidate).toHaveBeenCalledWith({ queryKey: ["doctors", doctorId] });
     expect(invalidate).toHaveBeenCalledWith({ queryKey: ["dashboard"] });
+  });
+  expect(toastSuccess).toHaveBeenCalledWith("Patient added", {
+    description: "Noah Khan was added to the directory.",
+  });
+});
+
+test("reports a failed delete with the server message", async () => {
+  server.use(
+    http.delete(`${api}/patients/pat-1`, () =>
+      HttpResponse.json(
+        {
+          success: false,
+          message: "Patient not found",
+          data: null,
+          error: { code: "NOT_FOUND", details: [] },
+        },
+        { status: 404 },
+      ),
+    ),
+  );
+
+  const client = createQueryClient();
+
+  function Wrapper({ children }: { children: ReactNode }) {
+    return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+  }
+
+  const { result } = renderHook(() => useDeletePatient(), { wrapper: Wrapper });
+
+  await expect(
+    result.current.mutateAsync({ id: "pat-1", doctorId, fullName: "Noah Khan" }),
+  ).rejects.toThrow("Patient not found");
+  expect(toastError).toHaveBeenCalledWith("Could not delete patient", {
+    description: "Patient not found",
   });
 });
