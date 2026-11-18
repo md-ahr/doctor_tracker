@@ -2,6 +2,7 @@
 
 import { Area, CartesianGrid, ComposedChart, Tooltip, XAxis, YAxis } from "recharts";
 
+import { DataEmpty } from "@/components/ui/data-state";
 import {
   CHART_COLORS,
   seriesIsEmpty,
@@ -33,11 +34,11 @@ export function RegistrationChart({ patients, doctors }: RegistrationChartProps)
     >
       {(width) =>
         empty ? (
-          <div className="flex min-h-60 flex-col items-center justify-center px-6 text-center">
-            <p className="text-[15px] text-ink">Nothing registered in this range</p>
-            <p className="mt-2 text-sm text-ink-secondary">
-              Totals above are unchanged. Widen the range to see earlier days.
-            </p>
+          <div className="min-h-60">
+            <DataEmpty
+              guidance="Totals above are unchanged. Widen the range to see earlier days."
+              title="Nothing registered in this range"
+            />
           </div>
         ) : (
           <ComposedChart

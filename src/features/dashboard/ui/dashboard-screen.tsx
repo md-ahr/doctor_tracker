@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { DataError, DataLoading, directoryErrorMessage } from "@/components/ui/data-state";
 import { useDashboard } from "@/features/dashboard/hooks/use-dashboard";
 import { PatientsByConditionChart } from "@/features/dashboard/ui/patients-by-condition-chart";
 import { PatientsPerDoctorChart } from "@/features/dashboard/ui/patients-per-doctor-chart";
@@ -10,7 +10,6 @@ import { RangeMonth } from "@/features/dashboard/ui/range-month";
 import { RegistrationChart } from "@/features/dashboard/ui/registration-chart";
 import { StatTiles } from "@/features/dashboard/ui/stat-tiles";
 import { DashboardRangeControl } from "@/features/dashboard/ui/dashboard-range-control";
-import { ApiError } from "@/lib/api/types";
 import { defaultDashboardRange } from "@/lib/time/calendar";
 
 export function DashboardScreen() {
@@ -37,28 +36,16 @@ export function DashboardScreen() {
       </div>
 
       {dashboard.isError ? (
-        <div
-          className="flex flex-wrap items-center justify-between gap-3 rounded-sm border border-danger-text/40 bg-danger-wash px-4 py-3 text-sm min-[720px]:col-span-2"
-          role="status"
-        >
-          <p>
-            {dashboard.error instanceof ApiError
-              ? dashboard.error.message
-              : "The directory could not be loaded."}
-          </p>
-          <Button onClick={() => void dashboard.refetch()} type="button" variant="quiet">
-            Try again
-          </Button>
+        <div className="min-[720px]:col-span-2">
+          <DataError
+            message={directoryErrorMessage(dashboard.error)}
+            onRetry={() => void dashboard.refetch()}
+          />
         </div>
       ) : null}
 
       {dashboard.isPending ? (
-        <div aria-busy="true" className="flex min-h-70 flex-col gap-3 min-[720px]:col-span-2">
-          <p className="sr-only">Loading dashboard</p>
-          <span className="h-3 rounded-sm bg-inset" />
-          <span className="h-3 rounded-sm bg-inset" />
-          <span className="h-3 rounded-sm bg-inset" />
-        </div>
+        <DataLoading className="min-h-70 min-[720px]:col-span-2" label="Loading dashboard" />
       ) : null}
 
       {data ? (

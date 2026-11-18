@@ -3,12 +3,17 @@
 import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+  DataEmpty,
+  DataError,
+  DataLoading,
+  directoryErrorMessage,
+} from "@/components/ui/data-state";
 import { useDoctorFacets } from "@/features/doctors/hooks/use-doctor-facets";
 import { useDoctorList } from "@/features/doctors/hooks/use-doctor-list";
 import { DoctorFilters, type DoctorFilterValue } from "@/features/doctors/ui/doctor-filters";
 import { DoctorFormDialog } from "@/features/doctors/ui/doctor-form";
 import { DoctorTable } from "@/features/doctors/ui/doctor-table";
-import { ApiError } from "@/lib/api/types";
 import { isDateOrderValid } from "@/lib/time/calendar";
 
 const emptyFilters: DoctorFilterValue = {
@@ -81,29 +86,15 @@ export function DoctorScreen() {
       </header>
 
       {list.isError ? (
-        <div
-          className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-sm border border-danger-text/40 bg-danger-wash px-4 py-3 text-sm"
-          role="status"
-        >
-          <p>
-            {list.error instanceof ApiError
-              ? list.error.message
-              : "The directory could not be loaded."}
-          </p>
-          <Button onClick={() => void list.refetch()} type="button" variant="quiet">
-            Try again
-          </Button>
+        <div className="mb-4">
+          <DataError
+            message={directoryErrorMessage(list.error)}
+            onRetry={() => void list.refetch()}
+          />
         </div>
       ) : null}
 
-      {list.isLoading ? (
-        <div aria-busy="true" aria-live="polite" className="flex flex-col gap-3">
-          <p className="sr-only">Loading doctors</p>
-          <span className="h-3 rounded-sm bg-inset" />
-          <span className="h-3 rounded-sm bg-inset" />
-          <span className="h-3 rounded-sm bg-inset" />
-        </div>
-      ) : null}
+      {list.isLoading ? <DataLoading label="Loading doctors" /> : null}
 
       {!list.isLoading && !showEmptyDirectory ? (
         <div className="mb-6">
@@ -120,22 +111,19 @@ export function DoctorScreen() {
       ) : null}
 
       {showEmptyDirectory ? (
-        <div className="py-16 text-center">
-          <p>No doctors yet</p>
-          <p className="mt-1 text-sm text-ink-secondary">
-            Add the first doctor to start the directory.
-          </p>
-          <Button className="mt-4" onClick={() => setCreating(true)} type="button">
-            Add doctor
-          </Button>
-        </div>
+        <DataEmpty
+          action={
+            <Button onClick={() => setCreating(true)} type="button">
+              Add doctor
+            </Button>
+          }
+          guidance="Add the first doctor to start the directory."
+          title="No doctors yet"
+        />
       ) : null}
 
       {showFilteredEmpty ? (
-        <div className="py-16 text-center">
-          <p>No doctors match</p>
-          <p className="mt-1 text-sm text-ink-secondary">Clear the search or widen the dates.</p>
-        </div>
+        <DataEmpty guidance="Clear the search or widen the dates." title="No doctors match" />
       ) : null}
 
       {list.isSuccess && total > 0 ? (

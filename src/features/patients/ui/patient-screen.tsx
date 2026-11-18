@@ -3,6 +3,12 @@
 import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+  DataEmpty,
+  DataError,
+  DataLoading,
+  directoryErrorMessage,
+} from "@/components/ui/data-state";
 import { useDoctorDirectory, usePatientList } from "@/features/patients/hooks/use-patient-list";
 import type { Patient } from "@/features/patients/model/patient";
 import {
@@ -13,7 +19,6 @@ import { PatientCreateDialog } from "@/features/patients/ui/patient-create-dialo
 import { PatientFilters } from "@/features/patients/ui/patient-filters";
 import { PatientFormDialog } from "@/features/patients/ui/patient-form";
 import { PatientTable } from "@/features/patients/ui/patient-table";
-import { ApiError } from "@/lib/api/types";
 import { isDateOrderValid } from "@/lib/time/calendar";
 
 const emptyFilters: PatientFilterValues = {
@@ -96,29 +101,15 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
       </header>
 
       {list.isError ? (
-        <div
-          className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-sm border border-danger-text/40 bg-danger-wash px-4 py-3 text-sm"
-          role="status"
-        >
-          <p>
-            {list.error instanceof ApiError
-              ? list.error.message
-              : "The directory could not be loaded."}
-          </p>
-          <Button onClick={() => void list.refetch()} type="button" variant="quiet">
-            Try again
-          </Button>
+        <div className="mb-4">
+          <DataError
+            message={directoryErrorMessage(list.error)}
+            onRetry={() => void list.refetch()}
+          />
         </div>
       ) : null}
 
-      {list.isLoading ? (
-        <div aria-busy="true" aria-live="polite" className="flex flex-col gap-3">
-          <p className="sr-only">Loading patients</p>
-          <span className="h-3 rounded-sm bg-inset" />
-          <span className="h-3 rounded-sm bg-inset" />
-          <span className="h-3 rounded-sm bg-inset" />
-        </div>
-      ) : null}
+      {list.isLoading ? <DataLoading label="Loading patients" /> : null}
 
       {!list.isLoading && !showEmptyDirectory ? (
         <div className="mb-6">
@@ -133,26 +124,28 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
       ) : null}
 
       {showEmptyDirectory ? (
-        <div className="py-16 text-center">
-          <p>{scoped ? "No patients for this doctor" : "No patients yet"}</p>
-          <p className="mt-1 text-sm text-ink-secondary">
-            {scoped ? "Add a patient to assign them here." : "Open a doctor and add a patient."}
-          </p>
-          {scoped ? (
-            <Button className="mt-4" onClick={() => setCreating(true)} type="button">
-              Add patient
-            </Button>
-          ) : null}
-        </div>
+        <DataEmpty
+          action={
+            scoped ? (
+              <Button onClick={() => setCreating(true)} type="button">
+                Add patient
+              </Button>
+            ) : undefined
+          }
+          guidance={
+            scoped ? "Add a patient to assign them here." : "Open a doctor and add a patient."
+          }
+          title={scoped ? "No patients for this doctor" : "No patients yet"}
+        />
       ) : null}
 
       {showFilteredEmpty ? (
-        <div className="py-16 text-center">
-          <p>No patients match</p>
-          <p className="mt-1 text-sm text-ink-secondary">
-            {scoped ? "Clear the search." : "Clear the search or choose a different condition."}
-          </p>
-        </div>
+        <DataEmpty
+          guidance={
+            scoped ? "Clear the search." : "Clear the search or choose a different condition."
+          }
+          title="No patients match"
+        />
       ) : null}
 
       {list.isSuccess && total > 0 ? (

@@ -57,12 +57,15 @@ afterEach(() => {
   harness.refetch.mockReset();
 });
 
-test("shows a loading region without the empty copy", () => {
+test("shows a loading region without the empty copy", async () => {
   harness.mode = "loading";
   render(<DoctorScreen />);
 
-  expect(screen.getByText("Loading doctors")).toBeDefined();
   expect(screen.queryByText("No doctors yet")).toBeNull();
+  expect(screen.queryByRole("table")).toBeNull();
+  expect(await screen.findByText("Loading doctors")).toBeDefined();
+  expect(screen.queryByText("No doctors yet")).toBeNull();
+  expect(screen.queryByRole("table")).toBeNull();
 });
 
 test("shows the empty directory copy", () => {
@@ -71,6 +74,7 @@ test("shows the empty directory copy", () => {
 
   expect(screen.getByText("No doctors yet")).toBeDefined();
   expect(screen.getByText("Add the first doctor to start the directory.")).toBeDefined();
+  expect(screen.queryByRole("table")).toBeNull();
 });
 
 test("shows the error band and retries", async () => {

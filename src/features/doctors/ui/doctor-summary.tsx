@@ -1,5 +1,6 @@
 "use client";
 
+import { DataError, DataLoading, directoryErrorMessage } from "@/components/ui/data-state";
 import { DoctorFormDialog } from "@/features/doctors/ui/doctor-form";
 import { useDoctor } from "@/features/doctors/hooks/use-doctor";
 
@@ -12,8 +13,8 @@ export function DoctorSummary({ doctorId }: DoctorSummaryProps) {
 
   if (doctor.isLoading) {
     return (
-      <section aria-busy="true" className="portal-card">
-        <p className="text-sm text-ink-secondary">Loading doctor</p>
+      <section className="portal-card">
+        <DataLoading label="Loading doctor" />
       </section>
     );
   }
@@ -21,14 +22,10 @@ export function DoctorSummary({ doctorId }: DoctorSummaryProps) {
   if (doctor.isError || !doctor.data) {
     return (
       <section className="portal-card">
-        <p>The directory could not be loaded.</p>
-        <button
-          className="mt-2 text-sm underline"
-          onClick={() => void doctor.refetch()}
-          type="button"
-        >
-          Try again
-        </button>
+        <DataError
+          message={directoryErrorMessage(doctor.error)}
+          onRetry={() => void doctor.refetch()}
+        />
       </section>
     );
   }
