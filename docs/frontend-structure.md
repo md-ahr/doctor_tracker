@@ -143,6 +143,8 @@ The client reads `success`, `message`, `data`, and `meta`. It does not invent a 
 
 Add and edit open a dialog. Delete opens a confirm dialog that names the patient. The portal layout links to Dashboard, Doctors, and Patients.
 
+`/` is not a screen. It is the entry alias: `proxy.ts` sends an anonymous visit to `/login` and a visit with the `dt_refresh` cookie to `/dashboard`.
+
 ## 7. Code examples
 
 Examples use the doctor list and the login flow. Patients and dashboard copy the same files with their own types. The app uses the Next.js App Router and `"use client"` only where there is state, a query, or a form.
@@ -157,12 +159,13 @@ import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
   const hasSession = request.cookies.has("dt_refresh");
   const isLogin = request.nextUrl.pathname === "/login";
+  const isRoot = request.nextUrl.pathname === "/";
 
   if (!hasSession && !isLogin) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  if (hasSession && isLogin) {
+  if (hasSession && (isLogin || isRoot)) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
@@ -170,7 +173,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/dashboard/:path*", "/doctors/:path*", "/patients/:path*"],
+  matcher: ["/", "/login", "/dashboard/:path*", "/doctors/:path*", "/patients/:path*"],
 };
 ```
 

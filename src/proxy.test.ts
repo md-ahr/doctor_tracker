@@ -12,8 +12,8 @@ function request(pathname: string, refreshCookie?: string) {
   return new NextRequest(new URL(pathname, "http://localhost:3000"), { headers });
 }
 
-test("sends a portal path without dt_refresh to login", () => {
-  for (const pathname of ["/dashboard", "/doctors/doc-1", "/patients"]) {
+test("sends a gated path without dt_refresh to login", () => {
+  for (const pathname of ["/", "/dashboard", "/doctors/doc-1", "/patients"]) {
     const response = proxy(request(pathname));
 
     expect(response.headers.get("location")).toBe("http://localhost:3000/login");
@@ -26,6 +26,12 @@ test("sends a logged-in visit to login onward to the dashboard", () => {
   expect(response.headers.get("location")).toBe("http://localhost:3000/dashboard");
 });
 
+test("sends a logged-in visit to the root onward to the dashboard", () => {
+  const response = proxy(request("/", "refresh-token"));
+
+  expect(response.headers.get("location")).toBe("http://localhost:3000/dashboard");
+});
+
 test("allows the login page when the refresh cookie is missing", () => {
   const response = proxy(request("/login"));
 
@@ -33,8 +39,9 @@ test("allows the login page when the refresh cookie is missing", () => {
   expect(response.headers.get("x-middleware-next")).toBe("1");
 });
 
-test("matches login and the portal routes", () => {
+test("matches the root, login, and the portal routes", () => {
   expect(config.matcher).toEqual([
+    "/",
     "/login",
     "/dashboard/:path*",
     "/doctors/:path*",

@@ -395,7 +395,9 @@ These are useful and **not** part of Phase 0. Add them when the note says.
 **Unit test:** `web/src/proxy.test.ts`
 
 - No `dt_refresh` + portal path → redirect `/login`
+- No `dt_refresh` + `/` → redirect `/login`
 - Has cookie + `/login` → redirect `/dashboard`
+- Has cookie + `/` → redirect `/dashboard`
 - Public `/login` allowed without cookie
 
 **Verify:** `npm test -- src/proxy.test.ts`
