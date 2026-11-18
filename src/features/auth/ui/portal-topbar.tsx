@@ -36,7 +36,7 @@ export function PortalTopbar() {
       </form>
 
       <Link
-        className="inline-flex h-10 shrink-0 items-center justify-center rounded-[2px] bg-action px-4 text-[15px] font-semibold text-action-fg hover:bg-action-hover"
+        className="inline-flex h-10 shrink-0 items-center justify-center rounded-xs bg-action px-4 text-[15px] font-semibold text-action-fg hover:bg-action-hover"
         href="/patients"
       >
         + New patient

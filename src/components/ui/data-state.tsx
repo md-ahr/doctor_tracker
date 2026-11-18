@@ -36,9 +36,9 @@ export function DataLoading({ label, className }: DataLoadingProps) {
   return (
     <div aria-busy="true" className={cn("flex flex-col gap-3", className)}>
       <p className="sr-only">{label}</p>
-      <span className="h-3 w-full rounded-[2px] bg-inset" data-loading-line="" />
-      <span className="h-3 w-full rounded-[2px] bg-inset" data-loading-line="" />
-      <span className="h-3 w-full rounded-[2px] bg-inset" data-loading-line="" />
+      <span className="h-3 w-full rounded-xs bg-inset" data-loading-line="" />
+      <span className="h-3 w-full rounded-xs bg-inset" data-loading-line="" />
+      <span className="h-3 w-full rounded-xs bg-inset" data-loading-line="" />
     </div>
   );
 }
@@ -68,7 +68,7 @@ export function DataError({ message, onRetry }: DataErrorProps) {
   return (
     <div
       aria-live="polite"
-      className="flex flex-wrap items-center justify-between gap-3 rounded-[2px] border border-danger-text/40 bg-danger-wash px-4 py-3 text-sm"
+      className="flex flex-wrap items-center justify-between gap-3 rounded-xs border border-danger-text/40 bg-danger-wash px-4 py-3 text-sm"
       role="status"
     >
       <p>{message}</p>
