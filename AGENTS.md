@@ -27,7 +27,7 @@ If this repository is `web/` inside the contract workspace, those files live in 
 - The portal gate reads `dt_session`, a first-party hint with no credential, because `dt_refresh` lives on the API origin. Login and refresh mark it; logout and a failed refresh clear it.
 - Feature UI calls hooks. Hooks call the feature `api` module. That module calls `lib/api`.
 - Query keys are only the ones in frontend-structure section 5.
-- Chart and filter dates stay `YYYY-MM-DD` strings. Calendar math uses Temporal in `lib/time/calendar.ts`.
+- Chart and filter dates stay `YYYY-MM-DD` strings. Calendar math uses Temporal in `lib/time/calendar.ts`; `lib/time/temporal.ts` installs the polyfill where the engine ships no Temporal (Node 22/24, stable Safari).
 - Route gate is `src/proxy.ts` exporting `proxy`. There is no `middleware.ts`.
 - One light theme. Paper `#F7F4EE`, action `#1B6B56`, Newsreader and Atkinson Hyperlegible.
 - If the contract does not state it, stop. No `any`, type ignore, TODO, Inter, blue primary, or default shadcn styling.

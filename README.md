@@ -4,7 +4,7 @@ Admin portal for the doctor directory, the patient registry, and the dashboard. 
 
 ## Setup
 
-Requires Node.js 22 (`nvm use`).
+Requires Node.js 22 (`nvm use`). Node 22 and stable Safari have no native `Temporal`, so the app installs `temporal-polyfill` from `src/lib/time/temporal.ts` before calendar code runs. Do not branch on browser support; keep calendar math in `src/lib/time/calendar.ts`.
 
 ```bash
 npm install

@@ -44,6 +44,7 @@ src/
   lib/api/types.ts               success, list, and error envelopes
   lib/auth/access-token.ts
   lib/time/calendar.ts           Temporal helpers, same rules as the API
+  lib/time/temporal.ts           Installs the Temporal global where the engine lacks it
   lib/query/query-client.ts
   proxy.ts                       cookie presence only. Next.js proxy, not middleware.ts
 ```
@@ -419,6 +420,8 @@ The root layout renders `Providers` around `{children}`. It does not fetch docto
 ### 7.7 Calendar — `src/lib/time/calendar.ts`
 
 Same Temporal rules as the API. Chart labels stay strings.
+
+`src/lib/time/temporal.ts` installs `temporal-polyfill/global` as a side effect so the global exists in every runtime. Temporal is native in Node 26, Chrome/Edge 144+, and Firefox 139+, but not in Node 22/24 (unless started with `--harmony-temporal`) and not in any stable Safari. The polyfill skips installation when the engine already ships Temporal. The module is imported by the root layout and `src/instrumentation-client.ts` (before the first server and client render), by `calendar.ts` (any consumer or test that only imports a helper), and by `src/test/setup.ts` (Vitest).
 
 ```typescript
 export function parsePlainDate(value: string): Temporal.PlainDate {

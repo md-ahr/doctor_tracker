@@ -13,7 +13,7 @@ Query Context7 for current signatures. Use the shadcn MCP for registry component
 | `@hookform/resolvers` | Zod resolver for login, doctor, and patient forms |
 | `zod` | Form and filter schemas in `features/*/model`. Mirror API limits |
 | `recharts` | Dashboard only. One query feeds every chart. Empty series is a sentence, not an empty plot |
-| Temporal | `lib/time/calendar.ts` matches the API day-bound rules. Chart buckets stay `YYYY-MM-DD` strings |
+| Temporal | `lib/time/calendar.ts` matches the API day-bound rules. `lib/time/temporal.ts` installs `temporal-polyfill/global` where the engine lacks it. Chart buckets stay `YYYY-MM-DD` strings |
 | `vitest` | `jsdom` for components. Node-style tests for `lib` |
 | `@testing-library/react` | Query by role and name. `userEvent` for typing and dialogs |
 | `msw` | Handlers in `src/test/msw/`. Used by client, hook, and component tests |

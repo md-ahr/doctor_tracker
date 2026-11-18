@@ -1,3 +1,5 @@
+import "@/lib/time/temporal";
+
 import { afterAll, afterEach, beforeAll } from "vitest";
 
 import { listen, setupServer } from "@/test/msw/server";

@@ -72,7 +72,7 @@ Do these four tasks in order. Each one is config and a verify command. No featur
 **Implement:**
 
 - Next.js App Router, TypeScript `strict`. `"private": true`, `"engines": { "node": ">=22" }`.
-- `.nvmrc` contains `22`. CI reads this file. Vitest runs calendar helpers on Node, and Temporal needs Node 22 with no polyfill (LLD §4.1).
+- `.nvmrc` contains `22`. CI reads this file. Node 22, Node 24, and stable Safari ship no native `Temporal` global, so `src/lib/time/temporal.ts` installs `temporal-polyfill/global` before calendar code runs (LLD §4.1).
 - `tsconfig`: `strict: true`, `jsx: "preserve"`, `moduleResolution: "bundler"`, Next.js plugin. This is not the API's NodeNext config. `typecheck` is `tsc --noEmit`. `build` is `next build`.
 - Scripts: `dev`, `build`, `start`, `test`, `test:watch`, `typecheck`, `test:e2e` (the e2e script may exit 0 with a message until Phase 12 wires Playwright).
 - Dev deps: `typescript`, `vitest`, `@vitejs/plugin-react`, `jsdom`, `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`. `msw` can wait until Phase 1.

@@ -23,7 +23,7 @@ Read [reference.md](reference.md) for the project rule on each package.
 | Forms | React Hook Form plus `@hookform/resolvers/zod` |
 | Charts | Recharts from the dashboard query |
 | Styles | Tailwind utilities mapped to the CSS variables |
-| Calendar | Temporal in `lib/time/calendar.ts` |
+| Calendar | Temporal in `lib/time/calendar.ts`, polyfilled by `lib/time/temporal.ts` |
 | Unit tests | Vitest, Testing Library, MSW |
 | Browser flows | Playwright in Phase 12 |
 

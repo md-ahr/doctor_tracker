@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { Providers } from "@/app/providers";
 import { displayFont, uiFont } from "@/lib/fonts";
+import "@/lib/time/temporal";
 
 import "./globals.css";
 

@@ -1,3 +1,5 @@
+import "@/lib/time/temporal";
+
 export function parsePlainDate(value: string): Temporal.PlainDate {
   return Temporal.PlainDate.from(value);
 }
