@@ -1,6 +1,6 @@
 import { afterEach, expect, test, vi } from "vitest";
 
-import { apiRequest } from "@/lib/api/http-client";
+import { apiRequest, refreshSession } from "@/lib/api/http-client";
 import { ApiError } from "@/lib/api/types";
 import { clearAccessToken, getAccessToken, setAccessToken } from "@/lib/auth/access-token";
 import { clearSessionMarker, markSession } from "@/lib/auth/session-marker";
@@ -65,6 +65,24 @@ test("retries once with the refreshed access token after a 401", async () => {
   expect(fetchMock.mock.calls[1]?.[0]).toBe("http://api.test/auth/refresh");
 });
 
+test("shares a single refresh between concurrent callers", async () => {
+  vi.stubEnv("NEXT_PUBLIC_API_URL", "http://api.test");
+  const fetchMock = vi.fn().mockResolvedValue(
+    jsonResponse({
+      success: true,
+      message: "Refreshed",
+      data: { accessToken: "fresh" },
+    }),
+  );
+  vi.stubGlobal("fetch", fetchMock);
+
+  const [first, second] = await Promise.all([refreshSession(), refreshSession()]);
+
+  expect(fetchMock).toHaveBeenCalledTimes(1);
+  expect(first.status).toBe("refreshed");
+  expect(second.status).toBe("refreshed");
+});
+
 test("does not loop when refresh fails and sends the admin to login", async () => {
   vi.stubEnv("NEXT_PUBLIC_API_URL", "http://api.test");
   setAccessToken("expired");
@@ -89,11 +107,42 @@ test("does not loop when refresh fails and sends the admin to login", async () =
 
   expect(error).toBeInstanceOf(ApiError);
   expect(error).toMatchObject({ status: 401, code: "UNAUTHENTICATED" });
-  expect(fetchMock).toHaveBeenCalledTimes(2);
+  expect(fetchMock).toHaveBeenCalledTimes(3);
   expect(getAccessToken()).toBeNull();
   expect(document.cookie).not.toContain("dt_session");
   expect(assign).toHaveBeenCalledTimes(1);
   expect(assign).toHaveBeenCalledWith("/login");
+});
+
+test("keeps the session hint when the refresh request fails transiently", async () => {
+  vi.stubEnv("NEXT_PUBLIC_API_URL", "http://api.test");
+  setAccessToken("expired");
+  markSession();
+  const assign = vi.fn();
+  vi.stubGlobal("location", { assign });
+
+  const fetchMock = vi
+    .fn()
+    .mockResolvedValueOnce(
+      jsonResponse(
+        {
+          success: false,
+          message: "expired",
+          data: null,
+          error: { code: "UNAUTHENTICATED", details: [] },
+        },
+        401,
+      ),
+    )
+    .mockResolvedValue(jsonResponse({ success: false, message: "starting" }, 500));
+  vi.stubGlobal("fetch", fetchMock);
+
+  const error = await apiRequest("/doctors").catch((caught: unknown) => caught);
+
+  expect(error).toBeInstanceOf(ApiError);
+  expect(error).toMatchObject({ status: 503 });
+  expect(assign).not.toHaveBeenCalled();
+  expect(document.cookie).toContain("dt_session");
 });
 
 test("does not refresh again when the refresh path itself returns 401", async () => {

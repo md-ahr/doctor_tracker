@@ -327,7 +327,7 @@ Lifetime is 15 minutes. The secret is `JWT_ACCESS_SECRET`, algorithm HS256.
 
 Cookie `dt_refresh` required. The `Origin` header must equal `FRONTEND_ORIGIN`. No bearer token.
 
-Response `200` uses the login response envelope (`success`, `message`: `"Session refreshed successfully"`, and the same `data` shape as login). It replaces the cookie. The previous session row is revoked before the new one is written. If the presented token is unknown or already revoked, the response is `401 UNAUTHENTICATED` and the cookie is cleared.
+Response `200` uses the login response envelope (`success`, `message`: `"Session refreshed successfully"`, and the same `data` shape as login). It replaces the cookie. The presented session row is revoked atomically in the same update that consumes it, before the new one is written, so two concurrent refreshes cannot both rotate the same token. If the presented token is unknown, expired, or already revoked, the response is `401 UNAUTHENTICATED` and the cookie is left untouched: a concurrent refresh may have just rotated it, and clearing it here would destroy that browser's new token. The client clears its local session hint instead.
 
 #### `POST /auth/logout`
 

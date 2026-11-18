@@ -2,8 +2,8 @@ import { clearAccessToken, setAccessToken } from "@/lib/auth/access-token";
 import { clearSessionMarker, markSession } from "@/lib/auth/session-marker";
 
 import type { Dashboard } from "./dashboard-types";
-import { apiRequest } from "./http-client";
-import type { PageMeta } from "./types";
+import { apiRequest, refreshSession } from "./http-client";
+import { ApiError, type PageMeta } from "./types";
 
 export interface AdminProfile {
   id: string;
@@ -127,12 +127,14 @@ export async function login(input: { email: string; password: string }) {
 }
 
 export async function refresh() {
-  const body = await apiRequest<AuthSession>("/auth/refresh", {
-    method: "POST",
-  });
-  setAccessToken(body.data.accessToken);
-  markSession();
-  return body.data;
+  const outcome = await refreshSession();
+  if (outcome.status === "refreshed") {
+    return outcome.body.data;
+  }
+  if (outcome.status === "unauthenticated") {
+    throw new ApiError(401, "UNAUTHENTICATED", "Sign in to continue");
+  }
+  throw new ApiError(503, "INTERNAL", "Could not refresh your session");
 }
 
 export async function logout() {

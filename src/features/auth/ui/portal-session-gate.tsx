@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 
+import { Button } from "@/components/ui/button";
 import { useBootstrapSession } from "@/features/auth/hooks/use-bootstrap-session";
 
 type PortalSessionGateProps = {
@@ -9,22 +10,33 @@ type PortalSessionGateProps = {
 };
 
 export function PortalSessionGate({ children }: PortalSessionGateProps) {
-  const { ready } = useBootstrapSession();
+  const { status, retry } = useBootstrapSession();
 
-  if (!ready) {
-    return (
-      <div aria-busy="true" aria-live="polite" className="portal-boot">
-        <div className="portal-boot-inner">
-          <span aria-hidden="true" className="portal-boot-mark">
-            <PulseIcon />
-          </span>
-          <p className="portal-boot-text">Checking your session</p>
-        </div>
-      </div>
-    );
+  if (status === "ready") {
+    return children;
   }
 
-  return children;
+  return (
+    <div aria-busy={status === "checking"} aria-live="polite" className="portal-boot">
+      <div className="portal-boot-inner">
+        <span aria-hidden="true" className="portal-boot-mark">
+          <PulseIcon />
+        </span>
+        {status === "checking" ? (
+          <p className="portal-boot-text">Checking your session</p>
+        ) : (
+          <div className="flex flex-col items-center gap-3">
+            <p className="portal-boot-text" role="alert">
+              We could not reach the server to check your session.
+            </p>
+            <Button onClick={retry} size="compact" type="button" variant="secondary">
+              Try again
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 function PulseIcon() {
