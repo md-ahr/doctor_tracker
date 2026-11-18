@@ -9,7 +9,9 @@ test("shows the invalid login message", async ({ page }) => {
   await page.getByLabel("Password").fill("wrong password");
   await page.getByRole("button", { name: "Sign in" }).click();
 
-  await expect(page.getByRole("status")).toHaveText("Invalid email or password");
+  const errorToast = page.locator("[data-sonner-toast]");
+  await expect(errorToast).toContainText("Sign in failed");
+  await expect(errorToast).toContainText("Invalid email or password");
   await expect(page).toHaveURL(/\/login$/);
 });
 
