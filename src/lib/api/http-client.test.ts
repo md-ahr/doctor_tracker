@@ -37,6 +37,30 @@ test("returns typed data from a success envelope", async () => {
   );
 });
 
+test("returns the login message instead of starting a refresh", async () => {
+  vi.stubEnv("NEXT_PUBLIC_API_URL", "http://api.test");
+  const fetchMock = vi.fn().mockResolvedValue(
+    jsonResponse(
+      {
+        success: false,
+        message: "Invalid email or password",
+        data: null,
+        error: { code: "INVALID_CREDENTIALS", details: [] },
+      },
+      401,
+    ),
+  );
+  vi.stubGlobal("fetch", fetchMock);
+
+  const error = await apiRequest("/auth/login", { method: "POST" }).catch(
+    (caught: unknown) => caught,
+  );
+
+  expect(error).toBeInstanceOf(ApiError);
+  expect(error).toMatchObject({ message: "Invalid email or password" });
+  expect(fetchMock).toHaveBeenCalledOnce();
+});
+
 test("throws ApiError with details when the envelope reports failure", async () => {
   vi.stubEnv("NEXT_PUBLIC_API_URL", "http://api.test");
   vi.stubGlobal(

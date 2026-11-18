@@ -42,7 +42,8 @@ export async function apiRequest<T>(
     credentials: "include",
   });
 
-  if (response.status === 401 && retry && !path.endsWith("/auth/refresh")) {
+  const isCredentialRequest = path.endsWith("/auth/login") || path.endsWith("/auth/refresh");
+  if (response.status === 401 && retry && !isCredentialRequest) {
     const refreshed = await refreshSession();
     if (refreshed) return apiRequest<T>(path, init, false);
     clearAccessToken();
