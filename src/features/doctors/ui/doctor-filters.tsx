@@ -5,14 +5,8 @@ import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { DateField } from "@/components/ui/date-field";
 import { FilterField } from "@/components/ui/filter-field";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { SearchField } from "@/components/ui/search-field";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   EMPTY_DOCTOR_FILTERS,
   type DoctorFilterValue,
@@ -25,8 +19,6 @@ type DoctorFiltersProps = {
   onApply: (next: DoctorFilterValue) => void;
   onReset: () => void;
 };
-
-const ANY_VALUE = "__any__";
 
 export type { DoctorFilterValue };
 
@@ -79,47 +71,32 @@ export function DoctorFilters({ applied, facets, onApply, onReset }: DoctorFilte
           htmlFor="doctor-specialization"
           label="Specialization"
         >
-          <Select
-            onValueChange={(value) =>
-              update({
-                specialization: value === null || value === ANY_VALUE ? "" : value,
-              })
-            }
-            value={draft.specialization || ANY_VALUE}
-          >
-            <SelectTrigger id="doctor-specialization" size="compact">
-              <SelectValue>{() => draft.specialization || "Any"}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={ANY_VALUE}>Any</SelectItem>
-              {facets.specializations.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SearchableSelect
+            anyLabel="Any"
+            emptyLabel="No specializations match"
+            id="doctor-specialization"
+            onValueChange={(specialization) => update({ specialization })}
+            options={facets.specializations.map((specialization) => ({
+              label: specialization,
+              value: specialization,
+            }))}
+            searchLabel="Search specializations"
+            searchPlaceholder="Search specializations"
+            value={draft.specialization}
+          />
         </FilterField>
 
         <FilterField className="xl:col-span-2" htmlFor="doctor-hospital" label="Hospital">
-          <Select
-            onValueChange={(value) =>
-              update({ hospital: value === null || value === ANY_VALUE ? "" : value })
-            }
-            value={draft.hospital || ANY_VALUE}
-          >
-            <SelectTrigger id="doctor-hospital" size="compact">
-              <SelectValue>{() => draft.hospital || "Any"}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={ANY_VALUE}>Any</SelectItem>
-              {facets.hospitals.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SearchableSelect
+            anyLabel="Any"
+            emptyLabel="No hospitals match"
+            id="doctor-hospital"
+            onValueChange={(hospital) => update({ hospital })}
+            options={facets.hospitals.map((hospital) => ({ label: hospital, value: hospital }))}
+            searchLabel="Search hospitals"
+            searchPlaceholder="Search hospitals"
+            value={draft.hospital}
+          />
         </FilterField>
 
         <FilterField className="xl:col-span-2" htmlFor="doctor-from" label="From">

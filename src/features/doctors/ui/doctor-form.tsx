@@ -21,6 +21,7 @@ import { useCreateDoctor, useUpdateDoctor } from "@/features/doctors/hooks/use-d
 import { doctorFormSchema, type DoctorFormValues } from "@/features/doctors/model/doctor-schema";
 import type { Doctor } from "@/features/doctors/model/doctor";
 import { ApiError } from "@/lib/api/types";
+import { cn } from "@/lib/utils";
 
 const emptyValues: DoctorFormValues = {
   name: "",
@@ -126,7 +127,7 @@ export function DoctorFormDialog({ doctor, open, onOpenChange }: DoctorFormDialo
           </DialogDescription>
         </DialogHeader>
         <form
-          className="mt-5 flex flex-col gap-4"
+          className="mt-5 grid gap-4 sm:grid-cols-2"
           noValidate
           onSubmit={form.handleSubmit(onSubmit)}
         >
@@ -134,14 +135,20 @@ export function DoctorFormDialog({ doctor, open, onOpenChange }: DoctorFormDialo
             const error = form.formState.errors[field.name];
             const errorId = `${field.name}-error`;
             return (
-              <div className="flex flex-col gap-1" key={field.name}>
-                <div className="flex items-baseline justify-between">
-                  <Label htmlFor={field.name}>{field.label}</Label>
-                  <span className="text-xs text-ink-tertiary">Required</span>
-                </div>
+              <div
+                className={cn(
+                  "flex min-w-0 flex-col gap-1.5",
+                  field.name === "name" && "sm:col-span-2",
+                )}
+                key={field.name}
+              >
+                <Label htmlFor={field.name} required>
+                  {field.label}
+                </Label>
                 <Input
                   aria-describedby={error ? errorId : undefined}
                   aria-invalid={error ? true : undefined}
+                  aria-required="true"
                   autoFocus={field.name === "name" ? true : undefined}
                   id={field.name}
                   placeholder={field.placeholder}

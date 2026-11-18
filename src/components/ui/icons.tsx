@@ -53,6 +53,37 @@ export function ChevronDownIcon({ size = 14, ...props }: IconProps) {
   );
 }
 
+export function CheckIcon({ size = 14, ...props }: IconProps) {
+  return (
+    <svg aria-hidden="true" fill="none" height={size} viewBox="0 0 24 24" width={size} {...props}>
+      <path
+        d="m5 12.5 4.5 4.5L19 6.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.2"
+      />
+    </svg>
+  );
+}
+
+export function SearchIcon({ size = 15, ...props }: IconProps) {
+  return (
+    <svg aria-hidden="true" fill="none" height={size} viewBox="0 0 24 24" width={size} {...props}>
+      <circle cx="11" cy="11" r="6.4" stroke="currentColor" strokeWidth="1.8" />
+      <path d="m16 16 4 4" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
+export function CloseIcon({ size = 13, ...props }: IconProps) {
+  return (
+    <svg aria-hidden="true" fill="none" height={size} viewBox="0 0 24 24" width={size} {...props}>
+      <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeLinecap="round" strokeWidth="2" />
+    </svg>
+  );
+}
+
 export function TrashIcon({ size = 16, ...props }: IconProps) {
   return (
     <svg aria-hidden="true" fill="none" height={size} viewBox="0 0 24 24" width={size} {...props}>

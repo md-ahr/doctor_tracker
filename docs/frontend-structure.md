@@ -437,7 +437,7 @@ export function formatChartDate(value: string): string {
 }
 ```
 
-A dashboard range default is the last 30 inclusive days in the timezone the API returns. Build it with `Temporal.PlainDate`, not `new Date(isoDate)`.
+A dashboard range default is the last 30 inclusive days in the timezone the API returns. Build it with `Temporal.PlainDate`, not `new Date(isoDate)`. `dashboardRangeBounds` returns the oldest and newest day a window may use (`today - 365` through `today`), so the calendar and the API agree on the 366-inclusive-day cap.
 
 ### 7.8 Feature model — `features/doctors/model`
 
@@ -687,7 +687,12 @@ export function RegistrationChart({ points }: { points: { date: string; count: n
 }
 ```
 
-The date-range control validates `from` and `to` with `isDateOrderValid` before it changes the query key.
+The date-range control keeps a local draft and only changes the query key when
+`dashboardRangeIssue` returns `null` — the API's 366-inclusive-day cap and the
+`from <= to` order. Its two date fields are `DateField` popovers bounded by
+`dashboardRangeBounds`, so the calendar itself cannot offer a day outside the
+window, and an invalid pair is reported inside the control instead of costing a
+request.
 
 ### 7.15 Login
 

@@ -4,14 +4,14 @@ import { useState } from "react";
 
 import { DataError, DataLoading, directoryErrorMessage } from "@/components/ui/data-state";
 import { CareMix } from "@/features/dashboard/ui/care-mix";
-import { DailyRegistrationsChart } from "@/features/dashboard/ui/daily-registrations-chart";
 import { DashboardRangeControl } from "@/features/dashboard/ui/dashboard-range-control";
 import { useDashboard } from "@/features/dashboard/hooks/use-dashboard";
 import { PatientsByConditionChart } from "@/features/dashboard/ui/patients-by-condition-chart";
 import { PatientsPerDoctorChart } from "@/features/dashboard/ui/patients-per-doctor-chart";
+import { RangeHighlights } from "@/features/dashboard/ui/range-highlights";
 import { RangeMonth } from "@/features/dashboard/ui/range-month";
-import { RecentActivity } from "@/features/dashboard/ui/recent-activity";
 import { RegistrationChart } from "@/features/dashboard/ui/registration-chart";
+import { RegistrationTrendChart } from "@/features/dashboard/ui/registration-trend-chart";
 import { StatTiles } from "@/features/dashboard/ui/stat-tiles";
 import { defaultDashboardRange } from "@/lib/time/calendar";
 
@@ -64,16 +64,17 @@ export function DashboardScreen() {
 
             <PatientsPerDoctorChart doctors={data.patientsPerDoctor} />
 
-            <DailyRegistrationsChart patients={data.patientsRegisteredByDay} />
+            <div className="dashboard-card-wide">
+              <RegistrationTrendChart patients={data.patientsRegisteredByDay} />
+            </div>
+
             <PatientsByConditionChart conditions={data.patientsByCondition} />
             <CareMix conditions={data.patientsByCondition} />
-
-            <div className="dashboard-card-wide">
-              <RecentActivity
-                doctors={data.doctorsCreatedByDay}
-                patients={data.patientsRegisteredByDay}
-              />
-            </div>
+            <RangeHighlights
+              conditions={data.patientsByCondition}
+              doctors={data.patientsPerDoctor}
+              patients={data.patientsRegisteredByDay}
+            />
             <div className="dashboard-card-month">
               <RangeMonth from={data.range.from} to={data.range.to} />
             </div>

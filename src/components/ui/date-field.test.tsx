@@ -4,6 +4,7 @@ import type { ComponentProps } from "react";
 import { afterEach, expect, test, vi } from "vitest";
 
 import { DateField } from "@/components/ui/date-field";
+import { fromCalendarDate, todayCalendarDate } from "@/lib/time/date-picker";
 import { currentMonthDay, pickDay } from "@/test/date-picker";
 
 afterEach(() => {
@@ -78,4 +79,33 @@ test("marks the field as invalid when the range is reversed", () => {
 
   expect(trigger.getAttribute("aria-invalid")).toBe("true");
   expect(trigger.getAttribute("aria-describedby")).toBe("patient-date-error");
+});
+
+test("disables days outside the allowed window", async () => {
+  const user = userEvent.setup();
+  renderField({ maxDate: "2026-01-20", minDate: "2026-01-10", value: "2026-01-15" });
+
+  await user.click(screen.getByRole("button", { name: "From date" }));
+
+  expect(document.querySelector('[data-day="2026-01-09"]')?.getAttribute("data-disabled")).toBe(
+    "true",
+  );
+  expect(document.querySelector('[data-day="2026-01-21"]')?.getAttribute("data-disabled")).toBe(
+    "true",
+  );
+  expect(
+    document.querySelector('[data-day="2026-01-15"]')?.getAttribute("data-disabled"),
+  ).toBeNull();
+});
+
+test("hides the today shortcut when today is outside the allowed window", async () => {
+  const user = userEvent.setup();
+  const today = todayCalendarDate();
+  const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+
+  renderField({ maxDate: fromCalendarDate(yesterday), value: fromCalendarDate(today) });
+
+  await user.click(screen.getByRole("button", { name: "From date" }));
+
+  expect(screen.queryByRole("button", { name: "Today" })).toBeNull();
 });

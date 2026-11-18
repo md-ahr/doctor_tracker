@@ -42,7 +42,7 @@ Wide column, top to bottom:
 
 Narrow column, top to bottom:
 
-1. The month of the range's end date. The title is the month and year in the section-title style. The caption is the window, such as "20 Oct 2026 – 18 Nov 2026". Weekday letters are Mo, Tu, We, Th, Fr, Sa, Su, 12px, ink-500, not uppercase. Day numbers are 14px, tabular. Days inside the window use `green-100`. From and To, when they fall in that month, use `green-600` with `paper-0` text. Days are not buttons. From and To fields remain the control. The grid is `aria-hidden="true"`.
+1. The month of the range's end date. The title is the month and year in the section-title style. The caption is the window, such as "20 Oct 2026 – 18 Nov 2026". Weekday letters are Mo, Tu, We, Th, Fr, Sa, Su, 12px, ink-500, not uppercase. Day numbers are 14px, tabular. Days inside the window use `green-100`. From and To, when they fall in that month, use `green-600` with `paper-0` text. Days are not buttons. The range dropdown remains the control. The grid is `aria-hidden="true"`.
 2. "By condition".
 3. "Care mix". A donut derived from the same condition counts: stable and recovering versus critical and watch, with the total in the centre and a two-row legend.
 
@@ -422,7 +422,7 @@ There is no "forgot password" and no registration link. Those flows do not exist
 
 ### 10.2 Dashboard
 
-The regions and their order are §1.2. From, To, and a quiet "Last 30 days" button restore or set the window. The default window is the last 30 days inclusive in the API timezone. They sit in the range control at the right of the page header and wrap under the title on narrow screens. The caption under the title already explains that totals ignore the range.
+The regions and their order are §1.2. One range dropdown in the header sets the window: Last 7 days, Last 30 days, Last 1 year, or Custom range. Custom range reveals From and To calendar fields. Both calendars are bounded to `today - 365` through today in the API timezone, so the widest pickable window is the 366 days the API accepts. A reversed or over-long pair is reported inside the control and is never queried. The default window is the last 30 days inclusive in the API timezone. The control sits at the right of the page header and wraps under the title on narrow screens. The caption under the title already explains that totals ignore the range.
 
 Each figure is a sheet with an icon badge in the top-right. The four figures are a 2×2 grid until 1280px, then one row. Each figure is:
 

@@ -2,6 +2,14 @@ import type { ComponentProps } from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Horizontal safety net for dense tables. Keeps a wide grid scrollable instead
+ * of letting it push the card layout out of shape.
+ */
+function TableFrame({ className, ...props }: ComponentProps<"div">) {
+  return <div className={cn("w-full overflow-x-auto", className)} {...props} />;
+}
+
 function Table({ className, ...props }: ComponentProps<"table">) {
   return (
     <table
@@ -39,7 +47,7 @@ function TableHead({ className, ...props }: ComponentProps<"th">) {
   return (
     <th
       className={cn(
-        "bg-inset px-3 text-left align-middle text-[10.5px] font-semibold tracking-wider text-ink-secondary uppercase",
+        "bg-inset px-3 text-left align-middle text-[10.5px] font-semibold tracking-wider whitespace-nowrap text-ink-secondary uppercase",
         className,
       )}
       {...props}
@@ -48,7 +56,7 @@ function TableHead({ className, ...props }: ComponentProps<"th">) {
 }
 
 function TableCell({ className, ...props }: ComponentProps<"td">) {
-  return <td className={cn("px-3 align-middle", className)} {...props} />;
+  return <td className={cn("px-3 py-2 align-middle", className)} {...props} />;
 }
 
 function TableCaption({ className, ...props }: ComponentProps<"caption">) {
@@ -57,4 +65,14 @@ function TableCaption({ className, ...props }: ComponentProps<"caption">) {
   );
 }
 
-export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableFrame,
+  TableHead,
+  TableHeader,
+  TableRow,
+};

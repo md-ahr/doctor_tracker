@@ -28,5 +28,14 @@ async function listDoctorOptions(): Promise<DoctorOption[]> {
     items.push(...next.items);
   }
 
-  return items.map((doctor) => ({ id: doctor.id, name: doctor.name }));
+  // Name-sorted pages can overlap when the directory changes between requests; keep one row per id.
+  const byId = new Map(items.map((doctor) => [doctor.id, doctor]));
+
+  return Array.from(byId.values(), (doctor) => ({
+    id: doctor.id,
+    name: doctor.name,
+    specialization: doctor.specialization,
+    hospital: doctor.hospital,
+    email: doctor.email,
+  }));
 }

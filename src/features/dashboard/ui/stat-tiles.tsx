@@ -1,7 +1,7 @@
 "use client";
 
 import type { Dashboard, DashboardDayPoint } from "@/features/dashboard/model/dashboard";
-import { CHART_COLORS, sumCounts } from "@/features/dashboard/model/dashboard";
+import { CHART_COLORS, formatCount, sumCounts } from "@/features/dashboard/model/dashboard";
 
 export type StatKey = "doctors" | "patients" | "registered" | "added";
 
@@ -69,7 +69,7 @@ export function StatTiles({ data, keys = order }: StatTilesProps) {
               <span className="stat-card-badge">{figure.badge}</span>
             </div>
             <p className="stat-card-label">{figure.eyebrow}</p>
-            <p className="stat-card-value text-[34px] tabular-nums">{figure.value}</p>
+            <p className="stat-card-value text-[34px] tabular-nums">{formatCount(figure.value)}</p>
             <div className="stat-card-foot">
               <p className="stat-card-caption">{figure.caption}</p>
               {"spark" in figure ? <Sparkline color={figure.color} points={figure.spark} /> : null}

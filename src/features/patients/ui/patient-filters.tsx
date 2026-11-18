@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
 import { DateField } from "@/components/ui/date-field";
 import { FilterField } from "@/components/ui/filter-field";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { SearchField } from "@/components/ui/search-field";
 import {
   Select,
@@ -13,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toDoctorSelectOptions } from "@/features/patients/model/doctor-options";
 import {
   CONDITION_MARKS,
   PATIENT_CONDITIONS,
@@ -58,6 +60,7 @@ export function PatientFilters({
   const dirty = !isSameFilters(draft, applied);
   const canReset = hasPatientFilters(draft) || hasPatientFilters(applied);
   const appliedCount = countPatientFilters(applied);
+  const doctorPickerOptions = useMemo(() => toDoctorSelectOptions(doctors), [doctors]);
 
   function update(partial: Partial<PatientFilterValues>) {
     setDraft((current) => ({ ...current, ...partial }));
@@ -122,24 +125,16 @@ export function PatientFilters({
 
         {showDoctorFilter ? (
           <FilterField className="xl:col-span-2" htmlFor="patient-doctor" label="Doctor">
-            <Select
-              onValueChange={(value) =>
-                update({ doctorId: value === null || value === ANY_VALUE ? "" : value })
-              }
-              value={draft.doctorId || ANY_VALUE}
-            >
-              <SelectTrigger id="patient-doctor" size="compact">
-                <SelectValue>{() => doctorLabel(draft.doctorId, doctors)}</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={ANY_VALUE}>Any</SelectItem>
-                {doctors.map((doctor) => (
-                  <SelectItem key={doctor.id} value={doctor.id}>
-                    {doctor.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <SearchableSelect
+              anyLabel="Any"
+              emptyLabel="No doctors match"
+              id="patient-doctor"
+              onValueChange={(doctorId) => update({ doctorId })}
+              options={doctorPickerOptions}
+              searchLabel="Search doctors"
+              searchPlaceholder="Search by name"
+              value={draft.doctorId}
+            />
           </FilterField>
         ) : null}
 
@@ -221,10 +216,6 @@ export function PatientFilters({
 
 function conditionLabel(condition: PatientFilterValues["condition"]): string {
   return condition === "" ? "Any" : CONDITION_MARKS[condition].label;
-}
-
-function doctorLabel(doctorId: string, doctors: DoctorOption[]): string {
-  return doctors.find((doctor) => doctor.id === doctorId)?.name ?? "Any";
 }
 
 function isSameFilters(a: PatientFilterValues, b: PatientFilterValues): boolean {

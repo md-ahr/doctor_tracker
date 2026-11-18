@@ -1,5 +1,6 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { cleanup, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, expect, test, vi } from "vitest";
@@ -59,6 +60,39 @@ test("seeds the dialog from the row and does not fetch the patient by id", async
     }),
   );
 
+  renderDialog();
+
+  expect(screen.getByRole("textbox", { name: /Full name/ })).toHaveProperty("value", "Noah Khan");
+  expect(screen.getByRole("combobox", { name: /Condition/ }).textContent).toBe("Stable");
+  expect(screen.getByRole("combobox", { name: /Sex/ }).textContent).toBe("Male");
+  expect(screen.getByRole("button", { name: /Registered date/ }).textContent).toContain(
+    "16 Nov 2026",
+  );
+  expect(patientGets).toEqual([]);
+});
+
+test("marks required fields with an asterisk instead of helper copy", () => {
+  renderDialog();
+
+  expect(screen.queryByText("Required")).toBeNull();
+  expect(screen.queryByText("Optional")).toBeNull();
+  expect(screen.getByRole("textbox", { name: /Full name/ }).getAttribute("aria-required")).toBe(
+    "true",
+  );
+  expect(document.querySelectorAll('label > span[aria-hidden="true"]')).toHaveLength(3);
+});
+
+test("changes the condition through the select popup", async () => {
+  const user = userEvent.setup();
+  renderDialog();
+
+  await user.click(screen.getByRole("combobox", { name: /Condition/ }));
+  await user.click(screen.getByRole("option", { name: "Recovering" }));
+
+  expect(screen.getByRole("combobox", { name: /Condition/ }).textContent).toBe("Recovering");
+});
+
+function renderDialog() {
   render(
     <QueryClientProvider client={createQueryClient()}>
       <PatientFormDialog
@@ -70,8 +104,4 @@ test("seeds the dialog from the row and does not fetch the patient by id", async
       />
     </QueryClientProvider>,
   );
-
-  expect(screen.getByRole("textbox", { name: /Full name/ })).toHaveProperty("value", "Noah Khan");
-  expect(screen.getByRole("combobox", { name: /Condition/ })).toHaveProperty("value", "stable");
-  expect(patientGets).toEqual([]);
-});
+}

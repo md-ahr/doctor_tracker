@@ -2,6 +2,7 @@
 
 import {
   conditionsInChartOrder,
+  formatCount,
   sharePercent,
   type DashboardConditionCount,
 } from "@/features/dashboard/model/dashboard";
@@ -21,7 +22,7 @@ export function PatientsByConditionChart({ conditions }: PatientsByConditionChar
           <h2>By condition</h2>
           <p>All active patients, in fixed condition order.</p>
         </div>
-        <span className="card-count">{total} patients</span>
+        <span className="card-count">{formatCount(total)} patients</span>
       </div>
 
       <div className="condition-list">
@@ -40,13 +41,17 @@ export function PatientsByConditionChart({ conditions }: PatientsByConditionChar
                   {row.label}
                 </span>
                 <span className="condition-count">
-                  {row.patientCount} <span>· {share}%</span>
+                  {formatCount(row.patientCount)} <span>· {share}%</span>
                 </span>
               </div>
               <div className="condition-track">
                 <span
                   className="condition-fill"
-                  style={{ backgroundColor: row.ink, width: `${share}%` }}
+                  style={{
+                    backgroundColor: row.ink,
+                    width: `${share}%`,
+                    opacity: row.patientCount === 0 ? 0 : 1,
+                  }}
                 />
               </div>
             </div>

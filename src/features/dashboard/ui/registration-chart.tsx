@@ -1,10 +1,11 @@
 "use client";
 
-import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from "recharts";
+import { Area, CartesianGrid, ComposedChart, Line, Tooltip, XAxis, YAxis } from "recharts";
 
 import { DataEmpty } from "@/components/ui/data-state";
 import {
   CHART_COLORS,
+  formatCount,
   seriesIsEmpty,
   type DashboardDayPoint,
 } from "@/features/dashboard/model/dashboard";
@@ -15,6 +16,8 @@ type RegistrationChartProps = {
   patients: DashboardDayPoint[];
   doctors: DashboardDayPoint[];
 };
+
+const patientWash = "registration-chart-patients-wash";
 
 export function RegistrationChart({ patients, doctors }: RegistrationChartProps) {
   const empty = seriesIsEmpty(patients) && seriesIsEmpty(doctors);
@@ -27,7 +30,7 @@ export function RegistrationChart({ patients, doctors }: RegistrationChartProps)
 
   return (
     <ChartBlock
-      actions={<SeriesLegend />}
+      actions={empty ? undefined : <SeriesLegend />}
       caption="Patients registered and doctors created, including days with zero."
       title="Over this range"
     >
@@ -40,12 +43,18 @@ export function RegistrationChart({ patients, doctors }: RegistrationChartProps)
             />
           </div>
         ) : (
-          <LineChart
+          <ComposedChart
             data={rows}
-            height={252}
-            margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
+            height={280}
+            margin={{ top: 12, right: 8, left: 0, bottom: 0 }}
             width={Math.max(width, 1)}
           >
+            <defs>
+              <linearGradient id={patientWash} x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stopColor={CHART_COLORS.patientsRegistered} stopOpacity="0.26" />
+                <stop offset="100%" stopColor={CHART_COLORS.patientsRegistered} stopOpacity="0" />
+              </linearGradient>
+            </defs>
             <CartesianGrid stroke={CHART_COLORS.grid} strokeDasharray="4 8" vertical={false} />
             <XAxis
               axisLine={false}
@@ -55,14 +64,24 @@ export function RegistrationChart({ patients, doctors }: RegistrationChartProps)
               tickFormatter={formatChartDate}
               tickLine={false}
             />
+            <YAxis
+              allowDecimals={false}
+              axisLine={false}
+              tick={chartAxisTick}
+              tickFormatter={(value) => formatCount(Number(value))}
+              tickLine={false}
+              width={34}
+            />
             <Tooltip
               contentStyle={chartTooltipStyle}
+              formatter={(value, name) => [formatCount(Number(value)), name]}
               labelFormatter={(label) => formatChartDate(String(label))}
             />
-            <Line
+            <Area
               activeDot={{ r: 4, stroke: "#ffffff", strokeWidth: 2 }}
               dataKey="patients"
               dot={false}
+              fill={`url(#${patientWash})`}
               name="Patients registered"
               stroke={CHART_COLORS.patientsRegistered}
               strokeLinecap="round"
@@ -79,7 +98,7 @@ export function RegistrationChart({ patients, doctors }: RegistrationChartProps)
               strokeWidth={2.6}
               type="monotone"
             />
-          </LineChart>
+          </ComposedChart>
         )
       }
     </ChartBlock>
@@ -88,21 +107,13 @@ export function RegistrationChart({ patients, doctors }: RegistrationChartProps)
 
 function SeriesLegend() {
   return (
-    <p className="flex flex-wrap gap-3 text-[10.5px] font-semibold text-ink-secondary">
-      <span className="inline-flex items-center gap-1.5">
-        <span
-          aria-hidden="true"
-          className="inline-block size-2 rounded-full"
-          style={{ backgroundColor: CHART_COLORS.patientsRegistered }}
-        />
+    <p className="chart-legend">
+      <span>
+        <i aria-hidden="true" style={{ backgroundColor: CHART_COLORS.patientsRegistered }} />
         Patients
       </span>
-      <span className="inline-flex items-center gap-1.5">
-        <span
-          aria-hidden="true"
-          className="inline-block size-2 rounded-full"
-          style={{ backgroundColor: CHART_COLORS.doctorsCreated }}
-        />
+      <span>
+        <i aria-hidden="true" style={{ backgroundColor: CHART_COLORS.doctorsCreated }} />
         Doctors
       </span>
     </p>

@@ -1,10 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMemo, type ComponentProps } from "react";
-import { useForm, type UseFormReturn } from "react-hook-form";
+import { useMemo, type ComponentProps, type ReactNode } from "react";
+import { Controller, useForm, type UseFormReturn } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
+import { DateField } from "@/components/ui/date-field";
 import {
   Dialog,
   DialogContent,
@@ -15,12 +16,21 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useUpdatePatient } from "@/features/patients/hooks/use-patient-mutations";
+import { toDoctorSelectOptions } from "@/features/patients/model/doctor-options";
 import {
   CONDITION_MARKS,
   PATIENT_CONDITIONS,
   type DoctorOption,
   type Patient,
+  type PatientCondition,
 } from "@/features/patients/model/patient";
 import {
   assignedPatientFormSchema,
@@ -30,17 +40,26 @@ import {
 import type { NewPatientInput, PatientPatch } from "@/lib/api/doctor-tracker-api";
 import { ApiError } from "@/lib/api/types";
 import { toPlainDate } from "@/lib/time/calendar";
+import { cn } from "@/lib/utils";
 
-const fieldClass =
-  "h-(--control-height) w-full rounded-(--radius-control) border border-control bg-sheet px-3 font-sans text-[13px] text-ink outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus aria-invalid:border-danger aria-invalid:bg-danger-wash";
+const conditionItems = PATIENT_CONDITIONS.map((condition) => ({
+  label: CONDITION_MARKS[condition].label,
+  value: condition,
+}));
 
-const sexOptions = [
-  { value: "", label: "Not recorded" },
+/** Select values are always strings, so "no choice" needs a sentinel. */
+const SEX_UNSET = "unset";
+
+const sexItems = [
+  { value: SEX_UNSET, label: "Not recorded" },
   { value: "female", label: "Female" },
   { value: "male", label: "Male" },
   { value: "other", label: "Other" },
   { value: "undisclosed", label: "Unknown" },
 ] as const;
+
+const textareaClass =
+  "max-h-[200px] min-h-24 w-full rounded-(--radius-control) border border-control bg-sheet px-3 py-3 font-sans text-[13px] text-ink transition-colors duration-150 outline-none placeholder:text-ink-tertiary focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus aria-invalid:border-danger aria-invalid:bg-danger-wash";
 
 const formFields = [
   "fullName",
@@ -66,111 +85,212 @@ export function PatientFields({ form, includeDoctor, doctors, currentDoctor }: P
     currentDoctor && !doctors.some((doctor) => doctor.id === currentDoctor.id)
       ? [currentDoctor, ...doctors]
       : doctors;
+  const doctorItems = toDoctorSelectOptions(doctorOptions);
   const errors = form.formState.errors;
 
   return (
-    <div className="mt-5 flex flex-col gap-4">
+    <div className="mt-5 grid gap-4 sm:grid-cols-2">
       <TextField
         autoFocus
+        className="sm:col-span-2"
         error={errors.fullName?.message}
+        id="patient-full-name"
         label="Full name"
         placeholder="Noah Khan"
         required
         {...form.register("fullName")}
       />
-      <div className="flex flex-col gap-1">
-        <FieldLabel htmlFor="patient-condition" optional={false}>
-          Condition
-        </FieldLabel>
-        <select
-          aria-describedby={errors.condition ? "patient-condition-error" : undefined}
-          aria-invalid={errors.condition ? true : undefined}
-          className={fieldClass}
-          id="patient-condition"
-          {...form.register("condition")}
-        >
-          <option value="">Choose a condition</option>
-          {PATIENT_CONDITIONS.map((condition) => (
-            <option key={condition} value={condition}>
-              {CONDITION_MARKS[condition].label}
-            </option>
-          ))}
-        </select>
-        <FieldMessage id="patient-condition-error" message={errors.condition?.message} />
-      </div>
-      {includeDoctor ? (
-        <div className="flex flex-col gap-1">
-          <FieldLabel htmlFor="patient-doctor" optional={false}>
-            Doctor
-          </FieldLabel>
-          <select
-            aria-describedby={errors.doctorId ? "patient-doctor-error" : undefined}
-            aria-invalid={errors.doctorId ? true : undefined}
-            className={fieldClass}
-            id="patient-doctor"
-            {...form.register("doctorId")}
+
+      <Controller
+        control={form.control}
+        name="condition"
+        render={({ field, fieldState }) => (
+          <Field
+            error={fieldState.error?.message}
+            htmlFor="patient-condition"
+            label="Condition"
+            required
           >
-            <option value="">Choose a doctor</option>
-            {doctorOptions.map((doctor) => (
-              <option key={doctor.id} value={doctor.id}>
-                {doctor.name}
-              </option>
-            ))}
-          </select>
-          <FieldMessage id="patient-doctor-error" message={errors.doctorId?.message} />
-        </div>
+            <Select<PatientCondition>
+              items={conditionItems}
+              modal={false}
+              onValueChange={(value) => field.onChange(value ?? "")}
+              value={field.value || null}
+            >
+              <SelectTrigger
+                aria-describedby={fieldErrorId("patient-condition", fieldState.invalid)}
+                aria-invalid={fieldState.invalid || undefined}
+                id="patient-condition"
+              >
+                <SelectValue placeholder="Choose a condition" />
+              </SelectTrigger>
+              <SelectContent>
+                {conditionItems.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        )}
+      />
+
+      {includeDoctor ? (
+        <Controller
+          control={form.control}
+          name="doctorId"
+          render={({ field, fieldState }) => (
+            <Field
+              error={fieldState.error?.message}
+              htmlFor="patient-doctor"
+              label="Doctor"
+              required
+            >
+              <Select
+                items={doctorItems}
+                modal={false}
+                onValueChange={(value) => field.onChange(value ?? "")}
+                value={field.value || null}
+              >
+                <SelectTrigger
+                  aria-describedby={fieldErrorId("patient-doctor", fieldState.invalid)}
+                  aria-invalid={fieldState.invalid || undefined}
+                  id="patient-doctor"
+                >
+                  <SelectValue placeholder="Choose a doctor" />
+                </SelectTrigger>
+                <SelectContent>
+                  {doctorItems.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.description ? (
+                        <span className="flex min-w-0 flex-col leading-tight">
+                          <span className="truncate">{item.label}</span>
+                          <span className="truncate text-[11px] text-ink-tertiary">
+                            {item.description}
+                          </span>
+                        </span>
+                      ) : (
+                        item.label
+                      )}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+          )}
+        />
       ) : null}
-      <TextField
-        error={errors.registeredAt?.message}
-        label="Registered"
-        required
-        type="date"
-        {...form.register("registeredAt")}
+
+      <Controller
+        control={form.control}
+        name="registeredAt"
+        render={({ field, fieldState }) => (
+          <Field
+            error={fieldState.error?.message}
+            htmlFor="patient-registered"
+            label="Registered"
+            required
+          >
+            <DateField
+              describedBy={fieldErrorId("patient-registered", fieldState.invalid)}
+              id="patient-registered"
+              invalid={fieldState.invalid}
+              label="Registered"
+              onChange={field.onChange}
+              required
+              size="field"
+              value={field.value}
+            />
+          </Field>
+        )}
       />
-      <TextField
-        error={errors.dateOfBirth?.message}
-        label="Date of birth"
-        type="date"
-        {...form.register("dateOfBirth")}
+
+      <Controller
+        control={form.control}
+        name="dateOfBirth"
+        render={({ field, fieldState }) => (
+          <Field
+            error={fieldState.error?.message}
+            htmlFor="patient-date-of-birth"
+            label="Date of birth"
+          >
+            <DateField
+              describedBy={fieldErrorId("patient-date-of-birth", fieldState.invalid)}
+              id="patient-date-of-birth"
+              invalid={fieldState.invalid}
+              label="Date of birth"
+              onChange={field.onChange}
+              size="field"
+              value={field.value}
+            />
+          </Field>
+        )}
       />
-      <div className="flex flex-col gap-1">
-        <FieldLabel htmlFor="patient-sex" optional>
-          Sex
-        </FieldLabel>
-        <select className={fieldClass} id="patient-sex" {...form.register("sex")}>
-          {sexOptions.map((option) => (
-            <option key={option.value || "none"} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+
+      <Controller
+        control={form.control}
+        name="sex"
+        render={({ field, fieldState }) => (
+          <Field error={fieldState.error?.message} htmlFor="patient-sex" label="Sex">
+            <Select
+              items={sexItems}
+              modal={false}
+              onValueChange={(value) => field.onChange(value && value !== SEX_UNSET ? value : "")}
+              value={field.value || SEX_UNSET}
+            >
+              <SelectTrigger
+                aria-describedby={fieldErrorId("patient-sex", fieldState.invalid)}
+                aria-invalid={fieldState.invalid || undefined}
+                id="patient-sex"
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {sexItems.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        )}
+      />
+
       <TextField
         error={errors.phone?.message}
+        id="patient-phone"
+        inputMode="tel"
         label="Phone"
         placeholder="+1 202 555 0199"
         {...form.register("phone")}
       />
+
       <TextField
+        className={includeDoctor ? "sm:col-span-2" : undefined}
         error={errors.email?.message}
+        id="patient-email"
         label="Email"
         placeholder="noah@example.com"
         type="email"
         {...form.register("email")}
       />
-      <div className="flex flex-col gap-1">
-        <FieldLabel htmlFor="patient-notes" optional>
-          Notes
-        </FieldLabel>
+
+      <Field
+        className="sm:col-span-2"
+        error={errors.notes?.message}
+        htmlFor="patient-notes"
+        label="Notes"
+      >
         <textarea
-          aria-describedby={errors.notes ? "patient-notes-error" : undefined}
+          aria-describedby={fieldErrorId("patient-notes", Boolean(errors.notes))}
           aria-invalid={errors.notes ? true : undefined}
-          className="max-h-[200px] min-h-24 w-full rounded-(--radius-control) border border-control bg-sheet px-3 py-3 font-sans text-[13px] text-ink outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus aria-invalid:border-danger aria-invalid:bg-danger-wash"
+          className={textareaClass}
           id="patient-notes"
           {...form.register("notes")}
         />
-        <FieldMessage id="patient-notes-error" message={errors.notes?.message} />
-      </div>
+      </Field>
     </div>
   );
 }
@@ -329,57 +449,53 @@ function assignOptional<Key extends "dateOfBirth" | "sex" | "phone" | "email" | 
   patch[key] = (next === "" ? null : next) as PatientPatch[Key];
 }
 
-function FieldLabel({
-  htmlFor,
-  optional = true,
-  children,
-}: {
+type FieldProps = {
+  children: ReactNode;
+  className?: string;
+  error?: string;
   htmlFor: string;
-  optional?: boolean;
-  children: string;
-}) {
+  label: string;
+  required?: boolean;
+};
+
+function Field({ children, className, error, htmlFor, label, required = false }: FieldProps) {
   return (
-    <div className="flex items-baseline justify-between">
-      <Label htmlFor={htmlFor}>{children}</Label>
-      <span className="text-xs text-ink-tertiary">{optional ? "Optional" : "Required"}</span>
+    <div className={cn("flex min-w-0 flex-col gap-1.5", className)}>
+      <Label htmlFor={htmlFor} required={required}>
+        {label}
+      </Label>
+      {children}
+      {error ? (
+        <p className="text-xs text-danger-text" id={fieldErrorId(htmlFor, true)}>
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }
 
-function FieldMessage({ id, message }: { id: string; message?: string }) {
-  if (!message) return null;
-  return (
-    <p className="text-xs text-danger-text" id={id}>
-      {message}
-    </p>
-  );
+function fieldErrorId(id: string, hasError: boolean) {
+  return hasError ? `${id}-error` : undefined;
 }
 
-function TextField({
-  label,
-  error,
-  required = false,
-  ...props
-}: {
+type TextFieldProps = {
+  id: string;
   label: string;
   error?: string;
   required?: boolean;
-} & Omit<ComponentProps<typeof Input>, "required">) {
-  const id = props.id ?? `patient-${label.toLowerCase().replaceAll(" ", "-")}`;
-  const errorId = `${id}-error`;
+  className?: string;
+} & Omit<ComponentProps<typeof Input>, "id" | "required">;
 
+function TextField({ id, label, error, required = false, className, ...props }: TextFieldProps) {
   return (
-    <div className="flex flex-col gap-1">
-      <FieldLabel htmlFor={id} optional={!required}>
-        {label}
-      </FieldLabel>
+    <Field className={className} error={error} htmlFor={id} label={label} required={required}>
       <Input
-        aria-describedby={error ? errorId : undefined}
+        aria-describedby={fieldErrorId(id, Boolean(error))}
         aria-invalid={error ? true : undefined}
+        aria-required={required || undefined}
         id={id}
         {...props}
       />
-      <FieldMessage id={errorId} message={error} />
-    </div>
+    </Field>
   );
 }

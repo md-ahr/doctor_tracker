@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS, type PageSize } from "@/lib/paging";
 import type { PageMeta } from "@/lib/api/types";
+import { cn } from "@/lib/utils";
 
 export { PAGE_SIZE_OPTIONS };
 export type { PageSize };
@@ -67,6 +68,11 @@ type PaginationProps = {
   onPageSizeChange: (limit: PageSize) => void;
 };
 
+/**
+ * Footer pager. Everything sits on one line from tablet width up; on phones the
+ * numbered slots collapse so only the step controls and the page position stay
+ * reachable without wrapping.
+ */
 export function Pagination({
   meta,
   limit,
@@ -82,27 +88,25 @@ export function Pagination({
   const start = total === 0 ? 0 : (currentPage - 1) * limit + 1;
   const end = Math.min(currentPage * limit, total);
   const pageItems = getPageItems(page, totalPages);
+  const atStart = currentPage <= 1;
+  const atEnd = currentPage >= totalPages;
 
   // Everything already fits on one screen, so the pager earns no space.
   if (total <= DEFAULT_PAGE_SIZE) return null;
 
   return (
-    <div className="mt-4 flex flex-col gap-3 border-t border-line pt-4 text-sm text-ink-secondary sm:flex-row sm:items-center sm:justify-between">
-      <p className="tabular-nums">
+    <div className="pagination">
+      <p className="pagination-summary">
         Showing{" "}
-        <span className="font-semibold text-ink">
+        <span className="pagination-strong">
           {start}–{end}
         </span>{" "}
-        of <span className="font-semibold text-ink">{total.toLocaleString("en-GB")}</span>
+        of <span className="pagination-strong">{total.toLocaleString("en-GB")}</span>
       </p>
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-        <div className="flex items-center gap-2">
-          <label
-            className="text-xs font-medium whitespace-nowrap text-ink-secondary"
-            htmlFor={sizeId}
-          >
-            Rows per page
-          </label>
+
+      <div className="pagination-controls">
+        <div className="pagination-size">
+          <label htmlFor={sizeId}>Rows per page</label>
           <Select
             onValueChange={(value) => {
               const next = Number(value ?? 0);
@@ -110,7 +114,7 @@ export function Pagination({
             }}
             value={String(limit)}
           >
-            <SelectTrigger className="w-20 justify-between px-2.5" id={sizeId} size="compact">
+            <SelectTrigger className="h-9 w-18 justify-between px-2.5" id={sizeId} size="compact">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -122,60 +126,73 @@ export function Pagination({
             </SelectContent>
           </Select>
         </div>
-        <nav aria-label="Pagination" className="flex flex-wrap items-center gap-1.5">
+
+        <nav aria-label="Pagination" className="pagination-nav">
           <span className="sr-only">
-            Page {page} of {totalPages}
+            Page {currentPage} of {totalPages}
           </span>
-          <PagerButton disabled={page <= 1} label="First page" onClick={() => onPageChange(1)}>
-            <DoubleChevronIcon direction="left" />
-          </PagerButton>
-          <PagerButton
-            disabled={page <= 1}
-            label="Previous page"
-            onClick={() => onPageChange(page - 1)}
-          >
-            <ChevronIcon direction="left" />
-          </PagerButton>
-          {pageItems.map((item, index) =>
-            item === "ellipsis" ? (
-              <span
-                className="w-6 text-center text-xs font-semibold text-ink-secondary select-none"
-                key={`ellipsis-${index}`}
-              >
-                …<span className="sr-only">More pages</span>
-              </span>
-            ) : (
-              <Button
-                aria-current={item === page ? "page" : undefined}
-                aria-label={`Page ${item}`}
-                className="w-(--control-height-compact) px-0 tabular-nums"
-                key={item}
-                onClick={() => {
-                  if (item !== page) onPageChange(item);
-                }}
-                size="compact"
-                title={`Page ${item}`}
-                type="button"
-                variant={item === page ? "primary" : "secondary"}
-              >
-                {item}
-              </Button>
-            ),
-          )}
-          <PagerButton
-            disabled={page >= totalPages}
-            label="Next page"
-            onClick={() => onPageChange(page + 1)}
-          >
-            <ChevronIcon direction="right" />
-          </PagerButton>
-          <PagerButton
-            disabled={page >= totalPages}
-            label="Last page"
-            onClick={() => onPageChange(totalPages)}
-          >
-            <DoubleChevronIcon direction="right" />
-          </PagerButton>
+
+          <div className="pagination-steps">
+            <PagerButton disabled={atStart} label="First page" onClick={() => onPageChange(1)}>
+              <DoubleChevronIcon direction="left" />
+            </PagerButton>
+            <PagerButton
+              disabled={atStart}
+              label="Previous page"
+              onClick={() => onPageChange(currentPage - 1)}
+            >
+              <ChevronIcon direction="left" />
+            </PagerButton>
+          </div>
+
+          <span aria-hidden="true" className="pagination-position sm:hidden">
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <div className="pagination-pages hidden sm:flex">
+            {pageItems.map((item, index) =>
+              item === "ellipsis" ? (
+                <span className="pagination-gap" key={`ellipsis-${index}`}>
+                  …<span className="sr-only">More pages</span>
+                </span>
+              ) : (
+                <Button
+                  aria-current={item === currentPage ? "page" : undefined}
+                  aria-label={`Page ${item}`}
+                  className={cn(
+                    "pagination-page",
+                    item === currentPage && "pagination-page-active",
+                  )}
+                  key={item}
+                  onClick={() => {
+                    if (item !== currentPage) onPageChange(item);
+                  }}
+                  title={`Page ${item}`}
+                  type="button"
+                  variant={item === currentPage ? "primary" : "quiet"}
+                >
+                  {item}
+                </Button>
+              ),
+            )}
+          </div>
+
+          <div className="pagination-steps">
+            <PagerButton
+              disabled={atEnd}
+              label="Next page"
+              onClick={() => onPageChange(currentPage + 1)}
+            >
+              <ChevronIcon direction="right" />
+            </PagerButton>
+            <PagerButton
+              disabled={atEnd}
+              label="Last page"
+              onClick={() => onPageChange(totalPages)}
+            >
+              <DoubleChevronIcon direction="right" />
+            </PagerButton>
+          </div>
         </nav>
       </div>
     </div>
@@ -196,13 +213,12 @@ function PagerButton({
   return (
     <Button
       aria-label={label}
-      className="w-(--control-height-compact) px-0"
+      className="h-9 w-9 rounded-[9px] px-0 text-ink-secondary hover:bg-inset hover:text-ink disabled:bg-transparent disabled:text-ink-tertiary disabled:opacity-50"
       disabled={disabled}
       onClick={onClick}
-      size="compact"
       title={label}
       type="button"
-      variant="secondary"
+      variant="quiet"
     >
       {children}
     </Button>

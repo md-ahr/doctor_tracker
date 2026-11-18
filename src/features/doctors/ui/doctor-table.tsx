@@ -2,17 +2,20 @@
 
 import Link from "next/link";
 
+import { buttonVariants } from "@/components/ui/button";
 import { Pagination, type PageSize } from "@/components/ui/pagination";
 import {
   Table,
   TableBody,
   TableCell,
+  TableFrame,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import type { Doctor } from "@/features/doctors/model/doctor";
 import type { PageMeta } from "@/lib/api/types";
+import { cn, initials } from "@/lib/utils";
 
 type DoctorTableProps = {
   items: Doctor[];
@@ -34,72 +37,95 @@ export function DoctorTable({
 }: DoctorTableProps) {
   return (
     <div>
-      <div className="hidden lg:block">
-        <Table className="xl:table-fixed">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[26%]">Name</TableHead>
-              <TableHead className="w-[20%] xl:w-[21%]">Specialization</TableHead>
-              <TableHead className="w-[30%] xl:w-[290px]">Hospital</TableHead>
-              <TableHead className="w-[10%] text-right xl:w-[88px]">Patients</TableHead>
-              <TableHead className="w-[14%] text-right whitespace-nowrap xl:w-auto">
-                Created
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {items.map((doctor) => (
-              <TableRow key={doctor.id}>
-                <TableCell>
-                  <Link
-                    className="block font-semibold text-action-hover underline underline-offset-2 xl:truncate"
-                    href={`/doctors/${doctor.id}`}
-                    title={doctor.name}
-                  >
-                    {doctor.name}
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <span className="block xl:truncate" title={doctor.specialization}>
-                    {doctor.specialization}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <span className="block xl:truncate" title={doctor.hospital}>
-                    {doctor.hospital}
-                  </span>
-                </TableCell>
-                <TableCell className="text-right tabular-nums">
-                  {countLabel(patientCounts, doctor.id)}
-                </TableCell>
-                <TableCell className="whitespace-nowrap text-right tabular-nums">
-                  {formatRecordDate(doctor.createdAt)}
-                </TableCell>
+      <div className="hidden md:block">
+        <TableFrame>
+          <Table className="table-fixed">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[25%]">Name</TableHead>
+                <TableHead className="w-[20%]">Specialization</TableHead>
+                <TableHead className="w-[27%]">Hospital</TableHead>
+                <TableHead className="w-[13%] text-right">Patients</TableHead>
+                <TableHead className="w-[15%] text-right">Created</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {items.map((doctor) => (
+                <TableRow key={doctor.id}>
+                  <TableCell>
+                    <Link
+                      className="block truncate font-semibold text-action-hover underline underline-offset-2"
+                      href={`/doctors/${doctor.id}`}
+                      title={doctor.name}
+                    >
+                      {doctor.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <span className="block truncate" title={doctor.specialization}>
+                      {doctor.specialization}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="block truncate" title={doctor.hospital}>
+                      {doctor.hospital}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    {countLabel(patientCounts, doctor.id)}
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums whitespace-nowrap">
+                    {formatRecordDate(doctor.createdAt)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableFrame>
       </div>
-      <ul className="lg:hidden">
+
+      <ul className="record-grid grid md:hidden">
         {items.map((doctor) => (
-          <li className="border-b border-line py-4" key={doctor.id}>
-            <Link
-              className="font-semibold text-action-hover underline underline-offset-2"
-              href={`/doctors/${doctor.id}`}
-            >
-              {doctor.name}
-            </Link>
-            <p className="text-sm text-ink-secondary">Specialization {doctor.specialization}</p>
-            <p className="text-sm text-ink-secondary">Hospital {doctor.hospital}</p>
-            <p className="text-sm text-ink-secondary">
-              Patients {countLabel(patientCounts, doctor.id)}
-            </p>
-            <p className="text-sm text-ink-secondary">
-              Created {formatRecordDate(doctor.createdAt)}
-            </p>
+          <li className="record-card" key={doctor.id}>
+            <div className="record-card-head">
+              <span aria-hidden="true" className="record-avatar">
+                {initials(doctor.name)}
+              </span>
+              <div className="record-identity">
+                <Link className="record-title" href={`/doctors/${doctor.id}`} title={doctor.name}>
+                  {doctor.name}
+                </Link>
+                <p className="record-sub">{doctor.specialization}</p>
+              </div>
+              <span className="record-badge">
+                {countLabel(patientCounts, doctor.id)}
+                <span className="sr-only"> active patients</span>
+              </span>
+            </div>
+
+            <dl className="record-facts">
+              <div className="record-fact">
+                <dt>Hospital</dt>
+                <dd data-wrap="true">{doctor.hospital}</dd>
+              </div>
+              <div className="record-fact">
+                <dt>Created</dt>
+                <dd data-numeric="true">{formatRecordDate(doctor.createdAt)}</dd>
+              </div>
+            </dl>
+
+            <div className="record-actions">
+              <Link
+                className={cn(buttonVariants({ variant: "secondary" }), "w-full justify-center")}
+                href={`/doctors/${doctor.id}`}
+              >
+                View patients
+              </Link>
+            </div>
           </li>
         ))}
       </ul>
+
       <Pagination
         itemCount={items.length}
         limit={limit}

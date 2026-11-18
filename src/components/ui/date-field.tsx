@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import type { Matcher } from "react-day-picker";
 
 import { Calendar } from "@/components/ui/calendar";
 import { ChevronDownIcon } from "@/components/ui/icons";
@@ -21,10 +22,16 @@ type DateFieldProps = {
   invalid?: boolean;
   describedBy?: string;
   className?: string;
+  size?: "compact" | "field";
+  required?: boolean;
+  /** Oldest canonical plain date the calendar offers. */
+  minDate?: string;
+  /** Newest canonical plain date the calendar offers. */
+  maxDate?: string;
 };
 
 /**
- * Filter date input: a compact field that opens a calendar popover.
+ * Date input: a formatted field that opens a calendar popover.
  * Values are canonical plain dates (`YYYY-MM-DD`) so they stay URL-safe.
  */
 export function DateField({
@@ -35,15 +42,33 @@ export function DateField({
   invalid = false,
   describedBy,
   className,
+  size = "compact",
+  required = false,
+  minDate,
+  maxDate,
 }: DateFieldProps) {
   const [open, setOpen] = useState(false);
+
+  const min = toCalendarDate(minDate ?? "");
+  const max = toCalendarDate(maxDate ?? "");
+  const disabledDays: Matcher[] = [
+    ...(min ? [{ before: min }] : []),
+    ...(max ? [{ after: max }] : []),
+  ];
+
   const selected = toCalendarDate(value);
-  const [month, setMonth] = useState<Date>(() => selected ?? todayCalendarDate());
+  const [month, setMonth] = useState<Date>(() =>
+    clampToBounds(selected ?? todayCalendarDate(), min, max),
+  );
 
   const display = formatCalendarDate(value);
+  const today = todayCalendarDate();
+  const todayAllowed = isWithinBounds(today, min, max);
 
   function handleOpenChange(nextOpen: boolean) {
-    if (nextOpen) setMonth(toCalendarDate(value) ?? todayCalendarDate());
+    if (nextOpen) {
+      setMonth(clampToBounds(toCalendarDate(value) ?? today, min, max));
+    }
     setOpen(nextOpen);
   }
 
@@ -58,7 +83,6 @@ export function DateField({
   }
 
   function selectToday() {
-    const today = todayCalendarDate();
     setMonth(today);
     select(today);
   }
@@ -70,8 +94,10 @@ export function DateField({
           aria-describedby={describedBy}
           aria-invalid={invalid || undefined}
           aria-label={`${label} date`}
+          aria-required={required || undefined}
           className={cn(
-            "group flex h-(--control-height-compact) w-full min-w-0 cursor-pointer items-center gap-2 rounded-(--radius-control) border border-control bg-sheet px-3 text-left font-sans text-[13px] transition-colors duration-150 outline-none hover:border-[#cfd9e8] focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus aria-invalid:border-danger aria-invalid:bg-danger-wash data-[popup-open]:border-focus",
+            "group flex w-full min-w-0 cursor-pointer items-center gap-2 rounded-(--radius-control) border border-control bg-sheet px-3 text-left font-sans text-[13px] transition-colors duration-150 outline-none hover:border-[#cfd9e8] focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus aria-invalid:border-danger aria-invalid:bg-danger-wash data-popup-open:border-focus",
+            size === "field" ? "h-(--control-height)" : "h-(--control-height-compact)",
           )}
           id={id}
         >
@@ -79,7 +105,7 @@ export function DateField({
           <span
             className={cn(
               "min-w-0 flex-1 truncate tabular-nums",
-              display.length > 0 ? "text-ink" : "text-ink-tertiary",
+              display.length > 0 ? "pr-5 text-ink" : "text-ink-tertiary",
             )}
           >
             {display.length > 0 ? display : "Select date"}
@@ -96,17 +122,23 @@ export function DateField({
           <Calendar
             autoFocus
             captionLayout="dropdown"
+            disabled={disabledDays.length > 0 ? disabledDays : undefined}
+            endMonth={max}
             month={month}
             mode="single"
-            onMonthChange={setMonth}
+            onMonthChange={(next) => setMonth(clampToBounds(next, min, max))}
             onSelect={select}
+            required
             selected={selected}
+            startMonth={min}
           />
           <div className="flex items-center justify-between gap-2 border-t border-line px-3 py-1.5">
             <FooterAction onClick={clear}>Clear</FooterAction>
-            <FooterAction onClick={selectToday} tone="action">
-              Today
-            </FooterAction>
+            {todayAllowed ? (
+              <FooterAction onClick={selectToday} tone="action">
+                Today
+              </FooterAction>
+            ) : null}
           </div>
         </PopoverContent>
       </Popover>
@@ -122,6 +154,18 @@ export function DateField({
       ) : null}
     </div>
   );
+}
+
+function isWithinBounds(date: Date, min?: Date, max?: Date): boolean {
+  if (min && date.getTime() < min.getTime()) return false;
+  if (max && date.getTime() > max.getTime()) return false;
+  return true;
+}
+
+function clampToBounds(date: Date, min?: Date, max?: Date): Date {
+  if (min && date.getTime() < min.getTime()) return min;
+  if (max && date.getTime() > max.getTime()) return max;
+  return date;
 }
 
 function FooterAction({

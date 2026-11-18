@@ -26,11 +26,15 @@ function PopoverContent({
 }: PopoverContentProps) {
   return (
     <PopoverPrimitive.Portal>
-      <PopoverPrimitive.Positioner align={align} className="z-50" sideOffset={sideOffset}>
+      <PopoverPrimitive.Positioner
+        align={align}
+        className="z-(--layer-popup)"
+        sideOffset={sideOffset}
+      >
         <PopoverPrimitive.Popup
           data-slot="popover-content"
           className={cn(
-            "origin-[var(--transform-origin)] rounded-(--radius-sheet) border border-line bg-sheet font-sans text-ink shadow-(--shadow-overlay) outline-none transition-[opacity,transform] duration-150 motion-reduce:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0",
+            "origin-(--transform-origin) rounded-(--radius-sheet) border border-line bg-sheet font-sans text-ink shadow-(--shadow-overlay) outline-none transition-[opacity,transform] duration-150 motion-reduce:transition-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0",
             className,
           )}
           {...props}

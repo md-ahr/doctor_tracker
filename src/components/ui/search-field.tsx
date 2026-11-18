@@ -1,5 +1,6 @@
 "use client";
 
+import { CloseIcon, SearchIcon } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
@@ -38,22 +39,5 @@ export function SearchField({ id, value, onChange, placeholder, className }: Sea
         </button>
       ) : null}
     </div>
-  );
-}
-
-function SearchIcon() {
-  return (
-    <svg aria-hidden="true" fill="none" height="15" viewBox="0 0 24 24" width="15">
-      <circle cx="11" cy="11" r="6.4" stroke="currentColor" strokeWidth="1.8" />
-      <path d="m16 16 4 4" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg aria-hidden="true" fill="none" height="13" viewBox="0 0 24 24" width="13">
-      <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" strokeLinecap="round" strokeWidth="2" />
-    </svg>
   );
 }

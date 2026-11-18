@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
+import { CHART_COLORS } from "@/features/dashboard/model/dashboard";
+
 type ChartBlockProps = {
   title: string;
   caption: string;
@@ -28,7 +30,7 @@ export function ChartBlock({ title, caption, legend, actions, children }: ChartB
   }, []);
 
   return (
-    <section className="portal-card">
+    <section className="portal-card chart-card">
       <div className="card-heading">
         <div>
           <h2>{title}</h2>
@@ -45,16 +47,16 @@ export function ChartBlock({ title, caption, legend, actions, children }: ChartB
 }
 
 export const chartTooltipStyle = {
-  background: "#ffffff",
-  border: "1px solid #e9eef6",
-  borderRadius: 12,
-  boxShadow: "0 18px 40px -24px rgba(15, 23, 42, 0.35)",
-  fontSize: 11,
+  background: "#fffcf7",
+  border: "1px solid #e4ddd2",
+  borderRadius: 4,
+  boxShadow: "0 16px 40px rgba(26, 35, 50, 0.12)",
+  fontSize: 12,
   padding: "8px 10px",
 };
 
 export const chartAxisTick = {
-  fill: "#94a3b8",
+  fill: CHART_COLORS.axis,
   fontSize: 10.5,
   fontWeight: 600,
 };

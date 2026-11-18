@@ -42,4 +42,8 @@ export interface Patient {
 export interface DoctorOption {
   id: string;
   name: string;
+  /** Present when the option comes from the doctor directory; used to tell shared names apart. */
+  specialization?: string;
+  hospital?: string;
+  email?: string;
 }
