@@ -1,4 +1,5 @@
 import { clearAccessToken, setAccessToken } from "@/lib/auth/access-token";
+import { clearSessionMarker, markSession } from "@/lib/auth/session-marker";
 
 import type { Dashboard } from "./dashboard-types";
 import { apiRequest } from "./http-client";
@@ -121,6 +122,7 @@ export async function login(input: { email: string; password: string }) {
     body: JSON.stringify(input),
   });
   setAccessToken(body.data.accessToken);
+  markSession();
   return body.data;
 }
 
@@ -129,12 +131,14 @@ export async function refresh() {
     method: "POST",
   });
   setAccessToken(body.data.accessToken);
+  markSession();
   return body.data;
 }
 
 export async function logout() {
   await apiRequest<null>("/auth/logout", { method: "POST" });
   clearAccessToken();
+  clearSessionMarker();
 }
 
 export async function me() {

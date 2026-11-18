@@ -3,6 +3,7 @@ import { afterEach, expect, test, vi } from "vitest";
 import { apiRequest } from "@/lib/api/http-client";
 import { ApiError } from "@/lib/api/types";
 import { clearAccessToken, getAccessToken, setAccessToken } from "@/lib/auth/access-token";
+import { clearSessionMarker, markSession } from "@/lib/auth/session-marker";
 
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -13,6 +14,7 @@ function jsonResponse(body: unknown, status = 200): Response {
 
 afterEach(() => {
   clearAccessToken();
+  clearSessionMarker();
   vi.unstubAllEnvs();
   vi.unstubAllGlobals();
 });
@@ -54,6 +56,7 @@ test("retries once with the refreshed access token after a 401", async () => {
 
   expect(body.data).toEqual([{ id: "doc-1" }]);
   expect(getAccessToken()).toBe("fresh");
+  expect(document.cookie).toContain("dt_session=1");
 
   const retryHeaders = new Headers(
     (fetchMock.mock.calls[2]?.[1] as RequestInit | undefined)?.headers,
@@ -65,6 +68,7 @@ test("retries once with the refreshed access token after a 401", async () => {
 test("does not loop when refresh fails and sends the admin to login", async () => {
   vi.stubEnv("NEXT_PUBLIC_API_URL", "http://api.test");
   setAccessToken("expired");
+  markSession();
   const assign = vi.fn();
   vi.stubGlobal("location", { assign });
 
@@ -87,6 +91,7 @@ test("does not loop when refresh fails and sends the admin to login", async () =
   expect(error).toMatchObject({ status: 401, code: "UNAUTHENTICATED" });
   expect(fetchMock).toHaveBeenCalledTimes(2);
   expect(getAccessToken()).toBeNull();
+  expect(document.cookie).not.toContain("dt_session");
   expect(assign).toHaveBeenCalledTimes(1);
   expect(assign).toHaveBeenCalledWith("/login");
 });

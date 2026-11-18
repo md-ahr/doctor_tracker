@@ -4,6 +4,7 @@ import { afterAll, afterEach, beforeAll, expect, test, vi } from "vitest";
 
 import { login, logout, me, refresh } from "@/lib/api/doctor-tracker-api";
 import { clearAccessToken, getAccessToken, setAccessToken } from "@/lib/auth/access-token";
+import { clearSessionMarker } from "@/lib/auth/session-marker";
 
 const api = "http://api.test";
 const server = setupServer();
@@ -16,6 +17,7 @@ beforeAll(() => {
 afterEach(() => {
   server.resetHandlers();
   clearAccessToken();
+  clearSessionMarker();
 });
 
 afterAll(() => {
@@ -46,6 +48,7 @@ test("login stores the access token from the response body", async () => {
 
   expect(session.accessToken).toBe("jwt-1");
   expect(getAccessToken()).toBe("jwt-1");
+  expect(document.cookie).toContain("dt_session=1");
 });
 
 test("refresh stores the replacement access token", async () => {
@@ -66,6 +69,7 @@ test("refresh stores the replacement access token", async () => {
   await refresh();
 
   expect(getAccessToken()).toBe("jwt-2");
+  expect(document.cookie).toContain("dt_session=1");
 });
 
 test("logout posts with credentials and clears the access token", async () => {
@@ -88,6 +92,7 @@ test("logout posts with credentials and clears the access token", async () => {
     expect.objectContaining({ credentials: "include", method: "POST" }),
   );
   expect(getAccessToken()).toBeNull();
+  expect(document.cookie).not.toContain("dt_session");
   fetchSpy.mockRestore();
 });
 

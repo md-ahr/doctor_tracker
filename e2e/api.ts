@@ -1,7 +1,6 @@
 import { expect, type Page, type Route } from "@playwright/test";
 
 const apiOrigin = "http://127.0.0.1:4010";
-const appOrigin = "http://localhost:3100";
 
 const admin = {
   id: "admin-1",
@@ -75,15 +74,12 @@ function dashboardBody(mode: DashboardMode) {
   };
 }
 
-async function fulfill(page: Page, route: Route, mode: DashboardMode) {
+async function fulfill(route: Route, mode: DashboardMode) {
   const url = new URL(route.request().url());
   const path = url.pathname;
   const method = route.request().method();
 
   if (method === "POST" && path.endsWith("/auth/login")) {
-    await page
-      .context()
-      .addCookies([{ name: "dt_refresh", value: "refresh-token", url: appOrigin }]);
     await route.fulfill(
       envelope("Signed in successfully", {
         accessToken: "jwt-1",
@@ -148,7 +144,7 @@ async function fulfill(page: Page, route: Route, mode: DashboardMode) {
 }
 
 export async function mockDirectory(page: Page, mode: DashboardMode = "filled") {
-  await page.route(`${apiOrigin}/**`, (route) => fulfill(page, route, mode));
+  await page.route(`${apiOrigin}/**`, (route) => fulfill(route, mode));
 }
 
 export async function signIn(page: Page, mode: DashboardMode = "filled") {

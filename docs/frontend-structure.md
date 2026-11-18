@@ -67,21 +67,21 @@ Patients add `ui/delete-patient-button.tsx`. Dashboard adds chart components ins
 
 ## 3. What each layer owns
 
-| Layer                 | Owns                                           | Does not own                                  |
-| --------------------- | ---------------------------------------------- | --------------------------------------------- |
-| `proxy.ts`            | Redirect when `dt_refresh` is missing          | Token validity. The API remains the authority |
-| `app` pages           | Route URL and which feature screen to render   | `fetch`, query keys, form state               |
-| `app/providers.tsx`   | The shared `QueryClient`                       | Feature components                            |
-| `(portal)/layout.tsx` | Navigation, admin name, logout                 | Doctor and patient tables                     |
-| `features/*/model`    | Resource types and Zod schemas for the UI      | HTTP                                          |
-| `features/*/api`      | Calling one client method and returning `data` | Cache keys                                    |
-| `features/*/hooks`    | Query keys, stale time, invalidation           | Envelope parsing                              |
-| `features/*/ui`       | Rendering and local form state                 | A sibling feature                             |
-| `components/ui`       | Button, input, dialog, select, table, dropdown | Domain words such as "doctor"                 |
-| `lib/api`             | Envelope, bearer header, one refresh retry     | Screen layout                                 |
-| `lib/auth`            | In-memory access token                         | `localStorage`, `sessionStorage`              |
-| `lib/time`            | `YYYY-MM-DD` checks and range labels           | `new Date("2026-11-16")` for chart buckets    |
-| `lib/query`           | `QueryClient` defaults                         | A feature's query key                         |
+| Layer                 | Owns                                                  | Does not own                                  |
+| --------------------- | ----------------------------------------------------- | --------------------------------------------- |
+| `proxy.ts`            | Redirect when the first-party session hint is missing | Token validity. The API remains the authority |
+| `app` pages           | Route URL and which feature screen to render          | `fetch`, query keys, form state               |
+| `app/providers.tsx`   | The shared `QueryClient`                              | Feature components                            |
+| `(portal)/layout.tsx` | Navigation, admin name, logout                        | Doctor and patient tables                     |
+| `features/*/model`    | Resource types and Zod schemas for the UI             | HTTP                                          |
+| `features/*/api`      | Calling one client method and returning `data`        | Cache keys                                    |
+| `features/*/hooks`    | Query keys, stale time, invalidation                  | Envelope parsing                              |
+| `features/*/ui`       | Rendering and local form state                        | A sibling feature                             |
+| `components/ui`       | Button, input, dialog, select, table, dropdown        | Domain words such as "doctor"                 |
+| `lib/api`             | Envelope, bearer header, one refresh retry            | Screen layout                                 |
+| `lib/auth`            | In-memory access token and portal session hint        | `localStorage`, `sessionStorage`, credentials |
+| `lib/time`            | `YYYY-MM-DD` checks and range labels                  | `new Date("2026-11-16")` for chart buckets    |
+| `lib/query`           | `QueryClient` defaults                                | A feature's query key                         |
 
 ## 4. Dependency direction
 
@@ -143,7 +143,7 @@ The client reads `success`, `message`, `data`, and `meta`. It does not invent a 
 
 Add and edit open a dialog. Delete opens a confirm dialog that names the patient. The portal layout links to Dashboard, Doctors, and Patients.
 
-`/` is not a screen. It is the entry alias: `proxy.ts` sends an anonymous visit to `/login` and a visit with the `dt_refresh` cookie to `/dashboard`.
+`/` is not a screen. It is the entry alias: `proxy.ts` sends an anonymous visit to `/login` and a visit carrying the session hint to `/dashboard`.
 
 ## 7. Code examples
 
@@ -153,11 +153,16 @@ Examples use the doctor list and the login flow. Patients and dashboard copy the
 
 Next.js runs this file instead of `middleware.ts`. The export is named `proxy`. The cookie check is a gate, not authentication. An expired cookie still fails when the API refresh runs.
 
+The API writes `dt_refresh` on the API origin, scoped to `/api/v1/auth` and `HttpOnly`. A portal request never carries it, so the gate also reads `dt_session`, the first-party hint `lib/auth/session-marker.ts` writes after login or refresh. The hint holds no credential: `lib/auth/session-marker.ts` clears it whenever a refresh fails.
+
 ```typescript
 import { NextResponse, type NextRequest } from "next/server";
 
+import { REFRESH_COOKIE, SESSION_MARKER_COOKIE } from "@/lib/auth/cookies";
+
 export function proxy(request: NextRequest) {
-  const hasSession = request.cookies.has("dt_refresh");
+  const hasSession =
+    request.cookies.has(REFRESH_COOKIE) || request.cookies.has(SESSION_MARKER_COOKIE);
   const isLogin = request.nextUrl.pathname === "/login";
   const isRoot = request.nextUrl.pathname === "/";
 

@@ -22,6 +22,6 @@ page → feature UI → feature hook → feature api → HTTP client → API
 
 `components/ui` has no doctor or patient words. `"use client"` only where there is state, a query, or a form.
 
-The cookie gate is `src/proxy.ts`, export name `proxy`. It checks that `dt_refresh` exists. It does not validate the token. Matcher: `/login`, `/dashboard/:path*`, `/doctors/:path*`, `/patients/:path*`.
+The cookie gate is `src/proxy.ts`, export name `proxy`. It checks for `dt_refresh` or the first-party `dt_session` hint. It does not validate the token. Matcher: `/login`, `/dashboard/:path*`, `/doctors/:path*`, `/patients/:path*`.
 
 Each feature uses `model/`, `api/`, `hooks/`, and `ui/`.

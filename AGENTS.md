@@ -24,6 +24,7 @@ If this repository is `web/` inside the contract workspace, those files live in 
 
 - Access token stays in `lib/auth/access-token.ts` memory. No `localStorage` or `sessionStorage`.
 - Refresh cookie `dt_refresh` is HttpOnly. The HTTP client sends `credentials: "include"` and retries one 401 via `POST /auth/refresh`.
+- The portal gate reads `dt_session`, a first-party hint with no credential, because `dt_refresh` lives on the API origin. Login and refresh mark it; logout and a failed refresh clear it.
 - Feature UI calls hooks. Hooks call the feature `api` module. That module calls `lib/api`.
 - Query keys are only the ones in frontend-structure section 5.
 - Chart and filter dates stay `YYYY-MM-DD` strings. Calendar math uses Temporal in `lib/time/calendar.ts`.

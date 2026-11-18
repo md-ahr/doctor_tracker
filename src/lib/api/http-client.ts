@@ -1,4 +1,5 @@
 import { clearAccessToken, getAccessToken, setAccessToken } from "@/lib/auth/access-token";
+import { clearSessionMarker, markSession } from "@/lib/auth/session-marker";
 
 import { ApiError, type ApiErrorBody, type ApiSuccess } from "./types";
 
@@ -17,6 +18,7 @@ async function refreshSession(): Promise<boolean> {
       if (!response.ok) return false;
       const body = (await response.json()) as ApiSuccess<{ accessToken: string }>;
       setAccessToken(body.data.accessToken);
+      markSession();
       return true;
     })
     .finally(() => {
@@ -47,6 +49,7 @@ export async function apiRequest<T>(
     const refreshed = await refreshSession();
     if (refreshed) return apiRequest<T>(path, init, false);
     clearAccessToken();
+    clearSessionMarker();
     if (typeof window !== "undefined") {
       // Not a React render path. A failed refresh must drop the in-memory session.
       // eslint-disable-next-line @next/next/no-location-assign-relative-destination

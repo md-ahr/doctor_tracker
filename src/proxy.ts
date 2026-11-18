@@ -1,7 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { REFRESH_COOKIE, SESSION_MARKER_COOKIE } from "@/lib/auth/cookies";
+
 export function proxy(request: NextRequest) {
-  const hasSession = request.cookies.has("dt_refresh");
+  const hasSession =
+    request.cookies.has(REFRESH_COOKIE) || request.cookies.has(SESSION_MARKER_COOKIE);
   const isLogin = request.nextUrl.pathname === "/login";
   const isRoot = request.nextUrl.pathname === "/";
 
