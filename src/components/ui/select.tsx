@@ -29,7 +29,7 @@ function SelectTrigger({
     <SelectPrimitive.Trigger
       data-size={size}
       className={cn(
-        "flex w-full items-center justify-between gap-2 rounded-(--radius-control) border border-control bg-sheet px-3 font-sans text-[15px] text-ink outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:pointer-events-none disabled:bg-inset disabled:text-ink-secondary data-placeholder:text-ink-tertiary data-[size=compact]:h-(--control-height-compact) data-[size=field]:h-(--control-height)",
+        "flex w-full items-center justify-between gap-2 rounded-(--radius-control) border border-control bg-sheet px-3 font-sans text-[13px] text-ink transition-colors duration-150 outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:pointer-events-none disabled:bg-inset disabled:text-ink-secondary data-placeholder:text-ink-tertiary data-[size=compact]:h-(--control-height-compact) data-[size=field]:h-(--control-height)",
         className,
       )}
       {...props}
@@ -49,7 +49,7 @@ function SelectContent({
       <SelectPrimitive.Positioner className="z-50">
         <SelectPrimitive.Popup
           className={cn(
-            "max-h-80 min-w-32 overflow-y-auto rounded-(--radius-sheet) bg-sheet text-ink shadow-(--shadow-overlay) outline-none",
+            "max-h-80 min-w-32 overflow-y-auto rounded-(--radius-sheet) border border-line bg-sheet p-1 text-ink shadow-(--shadow-overlay) outline-none",
             className,
           )}
           {...props}
@@ -78,7 +78,7 @@ function SelectItem({
   return (
     <SelectPrimitive.Item
       className={cn(
-        "flex h-9 items-center px-3 text-[15px] outline-none data-disabled:pointer-events-none data-highlighted:bg-inset data-selected:bg-selected",
+        "flex h-9 items-center rounded-lg px-3 text-[13px] outline-none data-disabled:pointer-events-none data-highlighted:bg-inset data-selected:bg-selected data-selected:text-action",
         className,
       )}
       {...props}

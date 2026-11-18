@@ -6,7 +6,7 @@ function Input({ className, ...props }: InputPrimitive.Props) {
   return (
     <InputPrimitive
       className={cn(
-        "h-(--control-height) w-full min-w-0 rounded-(--radius-control) border border-control bg-sheet px-3 font-sans text-[15px] text-ink outline-none placeholder:text-ink-tertiary focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:pointer-events-none disabled:bg-inset disabled:text-ink-secondary aria-invalid:border-danger aria-invalid:bg-danger-wash",
+        "h-(--control-height) w-full min-w-0 rounded-(--radius-control) border border-control bg-sheet px-3 font-sans text-[13px] text-ink transition-colors duration-150 outline-none placeholder:text-ink-tertiary focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:pointer-events-none disabled:bg-inset disabled:text-ink-secondary aria-invalid:border-danger aria-invalid:bg-danger-wash",
         className,
       )}
       {...props}

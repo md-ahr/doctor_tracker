@@ -29,7 +29,7 @@ const emptyFilters: PatientFilterValues = {
 };
 
 const selectClass =
-  "h-(--control-height-compact) rounded-(--radius-control) border border-control bg-sheet px-3 text-[15px] text-ink";
+  "h-(--control-height-compact) rounded-(--radius-control) border border-control bg-sheet px-3 text-[13px] text-ink transition-colors duration-150 outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus";
 
 export function PatientFilters({
   value,

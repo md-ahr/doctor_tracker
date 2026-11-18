@@ -43,22 +43,27 @@ export const CONDITION_CHART_ORDER = [
   "chronic",
 ] as const satisfies readonly PatientCondition[];
 
-export const CONDITION_INKS: Record<PatientCondition, { label: string; ink: string }> = {
-  critical: { label: "Critical", ink: "#8E2F2A" },
-  serious: { label: "Serious", ink: "#8A4B12" },
-  observation: { label: "Observation", ink: "#2C4A6E" },
-  stable: { label: "Stable", ink: "#145C4A" },
-  recovering: { label: "Recovering", ink: "#3E5A14" },
-  chronic: { label: "Chronic", ink: "#5C3D55" },
+export const CONDITION_INKS: Record<
+  PatientCondition,
+  { label: string; ink: string; wash: string }
+> = {
+  critical: { label: "Critical", ink: "#be123c", wash: "#ffe4e6" },
+  serious: { label: "Serious", ink: "#b45309", wash: "#fef3c7" },
+  observation: { label: "Observation", ink: "#4338ca", wash: "#eef2ff" },
+  stable: { label: "Stable", ink: "#0f766e", wash: "#ccfbf1" },
+  recovering: { label: "Recovering", ink: "#15803d", wash: "#dcfce7" },
+  chronic: { label: "Chronic", ink: "#6d28d9", wash: "#f3e8ff" },
 };
 
 export const CHART_COLORS = {
-  patientsPerDoctor: "#1A2332",
-  patientsRegistered: "#1B6B56",
-  doctorsCreated: "#2C4A6E",
-  axis: "#6A6258",
-  grid: "#E4DDD2",
-  specialization: "#3E4A5C",
+  patientsPerDoctor: "#0f172a",
+  patientsRegistered: "#4f46e5",
+  doctorsCreated: "#f43f5e",
+  axis: "#94a3b8",
+  grid: "#eef2f7",
+  specialization: "#64748b",
+  quiet: "#0d9488",
+  watched: "#f43f5e",
 } as const;
 
 export function sumCounts(points: DashboardDayPoint[]): number {
@@ -71,12 +76,23 @@ export function seriesIsEmpty(points: DashboardDayPoint[]): boolean {
 
 export function conditionsInChartOrder(
   rows: DashboardConditionCount[],
-): Array<DashboardConditionCount & { label: string; ink: string }> {
+): Array<DashboardConditionCount & { label: string; ink: string; wash: string }> {
   const counts = new Map(rows.map((row) => [row.condition, row.patientCount]));
   return CONDITION_CHART_ORDER.map((condition) => ({
     condition,
     patientCount: counts.get(condition) ?? 0,
     label: CONDITION_INKS[condition].label,
     ink: CONDITION_INKS[condition].ink,
+    wash: CONDITION_INKS[condition].wash,
   }));
+}
+
+export function initials(name: string): string {
+  const parts = name.trim().split(/\s+/).slice(0, 2);
+  return parts.map((part) => part.slice(0, 1).toUpperCase()).join("") || "?";
+}
+
+export function sharePercent(value: number, total: number): number {
+  if (total <= 0) return 0;
+  return Math.round((value / total) * 100);
 }

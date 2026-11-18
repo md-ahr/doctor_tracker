@@ -29,6 +29,6 @@ test("renders the four figures from the dashboard totals and series", () => {
 
   for (const value of ["12", "148", "5", "1"]) {
     expect(screen.getByText(value).className).toContain("tabular-nums");
-    expect(screen.getByText(value).className).toContain("text-[40px]");
+    expect(screen.getByText(value).className).toContain("text-[34px]");
   }
 });

@@ -1,16 +1,15 @@
-import { Atkinson_Hyperlegible_Next, Newsreader } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 
-export const displayFont = Newsreader({
+export const displayFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["500", "600"],
+  weight: ["500", "600", "700"],
   display: "swap",
   variable: "--font-display-loaded",
 });
 
-export const uiFont = Atkinson_Hyperlegible_Next({
+export const uiFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
-  adjustFontFallback: false,
   variable: "--font-ui-loaded",
 });

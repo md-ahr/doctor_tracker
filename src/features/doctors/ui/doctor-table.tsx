@@ -30,7 +30,7 @@ export function DoctorTable({ items, meta, onPageChange }: DoctorTableProps) {
 
   return (
     <div>
-      <div className="hidden min-[720px]:block">
+      <div className="hidden min-[1024px]:block">
         <Table>
           <TableHeader>
             <TableRow>
@@ -58,7 +58,7 @@ export function DoctorTable({ items, meta, onPageChange }: DoctorTableProps) {
           </TableBody>
         </Table>
       </div>
-      <ul className="min-[720px]:hidden">
+      <ul className="min-[1024px]:hidden">
         {items.map((doctor) => (
           <li className="border-b border-line py-4" key={doctor.id}>
             <Link className="font-semibold" href={`/doctors/${doctor.id}`}>

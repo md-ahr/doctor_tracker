@@ -15,7 +15,7 @@ export default function DoctorDetailPage({ params }: DoctorDetailPageProps) {
   const doctor = useDoctor(doctorId);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <DoctorSummary doctorId={doctorId} />
       <PatientScreen doctorId={doctorId} doctorName={doctor.data?.name} />
     </div>

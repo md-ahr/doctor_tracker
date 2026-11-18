@@ -36,21 +36,23 @@ export function DashboardRangeControl({
   }
 
   return (
-    <div className="flex flex-wrap items-end gap-4">
-      <div className="grid gap-2">
+    <div className="range-control">
+      <div className="range-control-field">
         <Label htmlFor="dashboard-from">From</Label>
         <Input
           aria-invalid={reversed}
+          className="h-(--control-height-compact)"
           id="dashboard-from"
           onValueChange={(value) => update(value, draftTo)}
           type="date"
           value={draftFrom}
         />
       </div>
-      <div className="grid gap-2">
+      <div className="range-control-field">
         <Label htmlFor="dashboard-to">To</Label>
         <Input
           aria-invalid={reversed}
+          className="h-(--control-height-compact)"
           id="dashboard-to"
           onValueChange={(value) => update(draftFrom, value)}
           type="date"
@@ -58,17 +60,18 @@ export function DashboardRangeControl({
         />
       </div>
       <Button
+        className="h-(--control-height-compact)"
         onClick={() => {
           const next = defaultDashboardRange(timeZone);
           update(next.from, next.to);
         }}
         type="button"
-        variant="quiet"
+        variant="secondary"
       >
         Last 30 days
       </Button>
       {reversed ? (
-        <p className="text-sm text-danger-text" role="status">
+        <p className="basis-full text-xs text-danger-text" role="status">
           From must be on or before To.
         </p>
       ) : null}

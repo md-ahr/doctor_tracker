@@ -1,13 +1,10 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, Cell, LabelList, Tooltip, XAxis, YAxis } from "recharts";
-
 import {
-  CHART_COLORS,
   conditionsInChartOrder,
+  sharePercent,
   type DashboardConditionCount,
 } from "@/features/dashboard/model/dashboard";
-import { ChartBlock, chartTooltipStyle } from "@/features/dashboard/ui/chart-block";
 
 type PatientsByConditionChartProps = {
   conditions: DashboardConditionCount[];
@@ -15,47 +12,47 @@ type PatientsByConditionChartProps = {
 
 export function PatientsByConditionChart({ conditions }: PatientsByConditionChartProps) {
   const rows = conditionsInChartOrder(conditions);
+  const total = rows.reduce((sum, row) => sum + row.patientCount, 0);
 
   return (
-    <ChartBlock caption="All active patients, in fixed condition order." title="By condition">
-      {(width) => (
-        <BarChart
-          data={rows}
-          height={280}
-          layout="vertical"
-          margin={{ top: 8, right: 32, left: 8, bottom: 0 }}
-          width={Math.max(width, 280)}
-        >
-          <CartesianGrid horizontal stroke={CHART_COLORS.grid} vertical={false} />
-          <XAxis
-            allowDecimals={false}
-            axisLine={false}
-            tick={{ fill: CHART_COLORS.axis, fontSize: 12 }}
-            tickLine={false}
-            type="number"
-          />
-          <YAxis
-            axisLine={false}
-            dataKey="label"
-            tick={{ fill: CHART_COLORS.patientsPerDoctor, fontSize: 12 }}
-            tickLine={false}
-            type="category"
-            width={108}
-          />
-          <Tooltip contentStyle={chartTooltipStyle} formatter={(value) => [value, "Patients"]} />
-          <Bar dataKey="patientCount" radius={[0, 2, 2, 0]}>
-            {rows.map((row) => (
-              <Cell fill={row.ink} key={row.condition} />
-            ))}
-            <LabelList
-              dataKey="patientCount"
-              fill={CHART_COLORS.patientsPerDoctor}
-              fontSize={12}
-              position="right"
-            />
-          </Bar>
-        </BarChart>
-      )}
-    </ChartBlock>
+    <section className="portal-card">
+      <div className="card-heading">
+        <div>
+          <h2>By condition</h2>
+          <p>All active patients, in fixed condition order.</p>
+        </div>
+        <span className="card-count">{total} patients</span>
+      </div>
+
+      <div className="condition-list">
+        {rows.map((row) => {
+          const share = sharePercent(row.patientCount, total);
+
+          return (
+            <div key={row.condition}>
+              <div className="condition-row-head">
+                <span className="condition-label">
+                  <span
+                    aria-hidden="true"
+                    className="condition-dot"
+                    style={{ backgroundColor: row.ink }}
+                  />
+                  {row.label}
+                </span>
+                <span className="condition-count">
+                  {row.patientCount} <span>· {share}%</span>
+                </span>
+              </div>
+              <div className="condition-track">
+                <span
+                  className="condition-fill"
+                  style={{ backgroundColor: row.ink, width: `${share}%` }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
   );
 }

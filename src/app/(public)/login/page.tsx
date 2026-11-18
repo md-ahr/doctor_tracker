@@ -20,11 +20,11 @@ export default function LoginPage() {
               src={clinicPhoto}
             />
             <div className="absolute inset-0 bg-linear-to-t from-ink/80 via-ink/25 to-ink/10" />
-            <div className="relative flex h-full flex-col justify-end px-7 py-8 text-paper min-[720px]:px-10 min-[720px]:py-12">
-              <h1 className="max-w-[12ch] text-[40px] leading-[0.95] font-medium text-paper min-[720px]:text-[52px]">
+            <div className="relative flex h-full flex-col justify-end px-7 py-8 text-white min-[720px]:px-10 min-[720px]:py-12">
+              <h1 className="max-w-[12ch] text-[40px] leading-[0.95] font-bold text-white min-[720px]:text-[52px]">
                 Keep the directory clear
               </h1>
-              <p className="mt-4 max-w-[34ch] text-sm leading-relaxed text-paper/90">
+              <p className="mt-4 max-w-[34ch] text-sm leading-relaxed text-white/90">
                 Doctors, patients, and the daily counts live in one place.
               </p>
             </div>

@@ -63,7 +63,13 @@ export function DoctorFilters({ value, facets, dateError, onChange }: DoctorFilt
     <div className="flex flex-wrap items-end gap-2">
       <div className="flex min-w-48 flex-1 flex-col gap-1">
         <Label htmlFor="doctor-search">Search</Label>
-        <Input id="doctor-search" onChange={onSearch} placeholder="Amelia Rahman" value={search} />
+        <Input
+          className="h-(--control-height-compact)"
+          id="doctor-search"
+          onChange={onSearch}
+          placeholder="Amelia Rahman"
+          value={search}
+        />
       </div>
       <FilterSelect
         label="Specialization"
@@ -82,6 +88,7 @@ export function DoctorFilters({ value, facets, dateError, onChange }: DoctorFilt
         <Input
           aria-describedby={dateError ? "doctor-date-error" : undefined}
           aria-invalid={dateError || undefined}
+          className="h-(--control-height-compact)"
           id="doctor-from"
           onChange={(event) => commit({ createdFrom: event.target.value })}
           type="date"
@@ -93,6 +100,7 @@ export function DoctorFilters({ value, facets, dateError, onChange }: DoctorFilt
         <Input
           aria-describedby={dateError ? "doctor-date-error" : undefined}
           aria-invalid={dateError || undefined}
+          className="h-(--control-height-compact)"
           id="doctor-to"
           onChange={(event) => commit({ createdTo: event.target.value })}
           type="date"
@@ -137,7 +145,7 @@ function FilterSelect({
     <div className="flex min-w-40 flex-col gap-1">
       <Label htmlFor={id}>{label}</Label>
       <select
-        className="h-(--control-height) rounded-(--radius-control) border border-control bg-sheet px-3 text-[15px] text-ink"
+        className="h-(--control-height-compact) rounded-(--radius-control) border border-control bg-sheet px-3 text-[13px] text-ink transition-colors duration-150 outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
         id={id}
         onChange={(event) => onChange(event.target.value)}
         value={value}

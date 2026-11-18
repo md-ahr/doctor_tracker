@@ -31,6 +31,6 @@ test("draws the shared date axis when a day has a registration", () => {
   );
 
   expect(screen.queryByText("Nothing registered in this range")).toBeNull();
-  expect(screen.getByText("2026-11-17")).toBeTruthy();
-  expect(screen.getByText("2026-11-18")).toBeTruthy();
+  expect(screen.getAllByText("17 Nov").length).toBeGreaterThan(0);
+  expect(screen.getAllByText("18 Nov").length).toBeGreaterThan(0);
 });

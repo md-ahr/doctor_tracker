@@ -156,7 +156,7 @@ export function DoctorFormDialog({ doctor, open, onOpenChange }: DoctorFormDialo
           })}
           {rootError ? (
             <p
-              className="rounded-sm border border-danger-text/40 bg-danger-wash px-4 py-3 text-sm text-danger-text"
+              className="rounded-xl border border-danger-text/30 bg-danger-wash px-4 py-3 text-xs text-danger-text"
               role="alert"
             >
               {rootError}

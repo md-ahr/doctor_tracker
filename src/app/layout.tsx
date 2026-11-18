@@ -11,7 +11,11 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html className={`${displayFont.variable} ${uiFont.variable}`} lang="en">
+    <html
+      className={`${displayFont.variable} ${uiFont.variable}`}
+      data-scroll-behavior="smooth"
+      lang="en"
+    >
       <body>
         <Providers>{children}</Providers>
       </body>

@@ -6,10 +6,11 @@ type ChartBlockProps = {
   title: string;
   caption: string;
   legend?: ReactNode;
+  actions?: ReactNode;
   children: (width: number) => ReactNode;
 };
 
-export function ChartBlock({ title, caption, legend, children }: ChartBlockProps) {
+export function ChartBlock({ title, caption, legend, actions, children }: ChartBlockProps) {
   const frame = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(640);
 
@@ -27,11 +28,16 @@ export function ChartBlock({ title, caption, legend, children }: ChartBlockProps
   }, []);
 
   return (
-    <section className="rounded-(--radius-sheet) border border-line bg-sheet p-4">
-      <h2>{title}</h2>
-      <p className="mt-1 text-xs text-ink-secondary">{caption}</p>
+    <section className="portal-card">
+      <div className="card-heading">
+        <div>
+          <h2>{title}</h2>
+          <p>{caption}</p>
+        </div>
+        {actions ? <div className="flex shrink-0 items-center gap-2">{actions}</div> : null}
+      </div>
       {legend ? <div className="mt-3">{legend}</div> : null}
-      <div className="mt-4 max-h-90 overflow-auto" ref={frame}>
+      <div className="chart-frame" ref={frame}>
         {children(width)}
       </div>
     </section>
@@ -39,8 +45,16 @@ export function ChartBlock({ title, caption, legend, children }: ChartBlockProps
 }
 
 export const chartTooltipStyle = {
-  background: "#fffcf7",
-  border: "1px solid #E4DDD2",
-  borderRadius: 4,
-  fontSize: 12,
+  background: "#ffffff",
+  border: "1px solid #e9eef6",
+  borderRadius: 12,
+  boxShadow: "0 18px 40px -24px rgba(15, 23, 42, 0.35)",
+  fontSize: 11,
+  padding: "8px 10px",
+};
+
+export const chartAxisTick = {
+  fill: "#94a3b8",
+  fontSize: 10.5,
+  fontWeight: 600,
 };

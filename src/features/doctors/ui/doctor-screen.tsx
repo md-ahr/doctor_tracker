@@ -74,61 +74,84 @@ export function DoctorScreen() {
   const showFilteredEmpty = list.isSuccess && total === 0 && filtered;
 
   return (
-    <section className="portal-card">
-      <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
+    <div className="flex flex-col gap-6">
+      <header className="page-header">
         <div>
+          <p className="page-eyebrow">Directory</p>
           <h1>Doctors</h1>
-          <p className="mt-1 text-sm text-ink-secondary">
+          <p className="page-context">
             Directory of doctors. Date filter uses the day the record was created.
           </p>
         </div>
-        <DoctorFormDialog onOpenChange={setCreating} open={creating} />
+        <div className="page-actions">
+          <DoctorFormDialog onOpenChange={setCreating} open={creating} />
+        </div>
       </header>
 
-      {list.isError ? (
-        <div className="mb-4">
-          <DataError
-            message={directoryErrorMessage(list.error)}
-            onRetry={() => void list.refetch()}
-          />
+      <section className="portal-card portal-card-flush">
+        <div className="portal-card-pad flex flex-wrap items-start justify-between gap-3 border-b border-line">
+          <div>
+            <h2 className="text-[18px] leading-tight">Directory</h2>
+            <p className="mt-1 text-xs text-ink-secondary">
+              Search, filter, and open a doctor to manage their patients.
+            </p>
+          </div>
+          <span className="card-count">
+            {list.isLoading ? "Loading" : `${total} ${total === 1 ? "doctor" : "doctors"}`}
+          </span>
         </div>
-      ) : null}
 
-      {list.isLoading ? <DataLoading label="Loading doctors" /> : null}
+        {list.isError ? (
+          <div className="portal-card-pad">
+            <DataError
+              message={directoryErrorMessage(list.error)}
+              onRetry={() => void list.refetch()}
+            />
+          </div>
+        ) : null}
 
-      {!list.isLoading && !showEmptyDirectory ? (
-        <div className="mb-6">
-          <DoctorFilters
-            dateError={datesInvalid}
-            facets={{
-              specializations: facets.data?.specializations ?? [],
-              hospitals: facets.data?.hospitals ?? [],
-            }}
-            onChange={onFiltersChange}
-            value={filters}
+        {list.isLoading ? (
+          <div className="portal-card-pad">
+            <DataLoading label="Loading doctors" />
+          </div>
+        ) : null}
+
+        {!list.isLoading && !showEmptyDirectory ? (
+          <div className="portal-card-pad border-b border-line">
+            <DoctorFilters
+              dateError={datesInvalid}
+              facets={{
+                specializations: facets.data?.specializations ?? [],
+                hospitals: facets.data?.hospitals ?? [],
+              }}
+              onChange={onFiltersChange}
+              value={filters}
+            />
+          </div>
+        ) : null}
+
+        {showEmptyDirectory ? (
+          <DataEmpty
+            action={
+              <Button onClick={() => setCreating(true)} type="button">
+                Add doctor
+              </Button>
+            }
+            guidance="Add the first doctor to start the directory."
+            title="No doctors yet"
           />
-        </div>
-      ) : null}
+        ) : null}
 
-      {showEmptyDirectory ? (
-        <DataEmpty
-          action={
-            <Button onClick={() => setCreating(true)} type="button">
-              Add doctor
-            </Button>
-          }
-          guidance="Add the first doctor to start the directory."
-          title="No doctors yet"
-        />
-      ) : null}
+        {showFilteredEmpty ? (
+          <DataEmpty guidance="Clear the search or widen the dates." title="No doctors match" />
+        ) : null}
 
-      {showFilteredEmpty ? (
-        <DataEmpty guidance="Clear the search or widen the dates." title="No doctors match" />
-      ) : null}
-
-      {list.isSuccess && total > 0 ? (
-        <DoctorTable items={list.data.items} meta={list.data.meta} onPageChange={setPage} />
-      ) : null}
-    </section>
+        {list.isSuccess && total > 0 ? (
+          <div className="portal-card-pad">
+            <DoctorTable items={list.data.items} meta={list.data.meta} onPageChange={setPage} />
+          </div>
+        ) : null}
+      </section>
+    </div>
   );
 }

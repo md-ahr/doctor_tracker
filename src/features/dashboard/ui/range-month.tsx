@@ -17,16 +17,24 @@ export function RangeMonth({ from, to }: RangeMonthProps) {
   const days = Array.from({ length: monthStart.daysInMonth }, (_, index) =>
     monthStart.add({ days: index }),
   );
+  const windowDays = Math.round(
+    (Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000,
+  );
 
   return (
-    <section className="rounded-(--radius-sheet) border border-line bg-sheet p-4">
-      <h2>{monthStart.toLocaleString("en-GB", { month: "long", year: "numeric" })}</h2>
-      <p className="mt-1 text-xs text-ink-secondary">
-        {windowLabel(start)} – {windowLabel(end)}
-      </p>
-      <div aria-hidden="true" className="mt-4 grid grid-cols-7 gap-y-2 text-center">
+    <section className="portal-card">
+      <div className="card-heading">
+        <div>
+          <h2>{monthStart.toLocaleString("en-GB", { month: "long", year: "numeric" })}</h2>
+          <p>
+            {windowLabel(start)} – {windowLabel(end)}
+          </p>
+        </div>
+        <span className="card-count">{windowDays + 1} days</span>
+      </div>
+      <div aria-hidden="true" className="calendar-grid">
         {weekdays.map((day) => (
-          <span className="text-xs text-ink-tertiary" key={day}>
+          <span className="calendar-weekday" key={day}>
             {day}
           </span>
         ))}
@@ -40,19 +48,25 @@ export function RangeMonth({ from, to }: RangeMonthProps) {
           const edge = day.equals(start) || day.equals(end);
           return (
             <span
-              className={
-                edge
-                  ? "mx-auto grid size-7 place-items-center rounded-full bg-action text-[14px] text-action-fg tabular-nums"
-                  : inside
-                    ? "grid h-7 place-items-center bg-selected text-[14px] text-ink tabular-nums"
-                    : "grid h-7 place-items-center text-[14px] text-ink tabular-nums"
-              }
+              className="calendar-day"
+              data-edge={edge ? "true" : undefined}
+              data-in-range={inside ? "true" : undefined}
               key={day.toString()}
             >
               {day.day}
             </span>
           );
         })}
+      </div>
+      <div className="calendar-legend">
+        <span>
+          <i aria-hidden="true" />
+          Range edges
+        </span>
+        <span>
+          <i aria-hidden="true" data-soft="true" />
+          Selected days
+        </span>
       </div>
     </section>
   );

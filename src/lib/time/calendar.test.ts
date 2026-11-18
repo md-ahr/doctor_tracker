@@ -21,7 +21,7 @@ test("returns the last 30 inclusive calendar days as date strings", () => {
   const range = defaultDashboardRange("UTC", parsePlainDate("2026-11-18"));
 
   expect(range).toEqual({ from: "2026-10-20", to: "2026-11-18" });
-  expect(formatChartDate(range.from)).toBe("2026-10-20");
+  expect(formatChartDate(range.from)).toBe("20 Oct");
 });
 
 test("keeps a plain date and reads an instant as a UTC calendar day", () => {

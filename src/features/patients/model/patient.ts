@@ -15,12 +15,12 @@ export const CONDITION_MARKS: Record<
   PatientCondition,
   { label: string; ink: string; wash: string }
 > = {
-  critical: { label: "Critical", ink: "#8E2F2A", wash: "#F8E8E6" },
-  serious: { label: "Serious", ink: "#8A4B12", wash: "#F8EEDF" },
-  observation: { label: "Observation", ink: "#2C4A6E", wash: "#E6EDF5" },
-  stable: { label: "Stable", ink: "#145C4A", wash: "#E5F2ED" },
-  recovering: { label: "Recovering", ink: "#3E5A14", wash: "#EEF3E0" },
-  chronic: { label: "Chronic", ink: "#5C3D55", wash: "#F3EAF0" },
+  critical: { label: "Critical", ink: "#be123c", wash: "#ffe4e6" },
+  serious: { label: "Serious", ink: "#b45309", wash: "#fef3c7" },
+  observation: { label: "Observation", ink: "#4338ca", wash: "#eef2ff" },
+  stable: { label: "Stable", ink: "#0f766e", wash: "#ccfbf1" },
+  recovering: { label: "Recovering", ink: "#15803d", wash: "#dcfce7" },
+  chronic: { label: "Chronic", ink: "#6d28d9", wash: "#f3e8ff" },
 };
 
 export interface Patient {

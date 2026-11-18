@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -81,27 +81,10 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
   const showEmptyDirectory = list.isSuccess && total === 0 && !filtered;
   const showFilteredEmpty = list.isSuccess && total === 0 && filtered;
 
-  return (
-    <section className="portal-card">
-      <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
-        <div>
-          {scoped ? <h2>Patients</h2> : <h1>Patients</h1>}
-          {scoped ? null : (
-            <p className="mt-1 text-sm text-ink-secondary">Active patients across every doctor.</p>
-          )}
-        </div>
-        {doctorId ? (
-          <PatientCreateDialog
-            doctorId={doctorId}
-            doctorName={doctorName}
-            onOpenChange={setCreating}
-            open={creating}
-          />
-        ) : null}
-      </header>
-
+  const body: ReactNode = (
+    <>
       {list.isError ? (
-        <div className="mb-4">
+        <div className="portal-card-pad">
           <DataError
             message={directoryErrorMessage(list.error)}
             onRetry={() => void list.refetch()}
@@ -109,10 +92,14 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
         </div>
       ) : null}
 
-      {list.isLoading ? <DataLoading label="Loading patients" /> : null}
+      {list.isLoading ? (
+        <div className="portal-card-pad">
+          <DataLoading label="Loading patients" />
+        </div>
+      ) : null}
 
       {!list.isLoading && !showEmptyDirectory ? (
-        <div className="mb-6">
+        <div className="portal-card-pad border-b border-line">
           <PatientFilters
             dateError={datesInvalid}
             doctors={directory.data ?? []}
@@ -149,13 +136,15 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
       ) : null}
 
       {list.isSuccess && total > 0 ? (
-        <PatientTable
-          items={list.data.items}
-          meta={list.data.meta}
-          onEdit={setEditing}
-          onPageChange={setPage}
-          showDoctor={!scoped}
-        />
+        <div className="portal-card-pad">
+          <PatientTable
+            items={list.data.items}
+            meta={list.data.meta}
+            onEdit={setEditing}
+            onPageChange={setPage}
+            showDoctor={!scoped}
+          />
+        </div>
       ) : null}
 
       {editing ? (
@@ -169,6 +158,50 @@ export function PatientScreen({ doctorId, doctorName }: PatientScreenProps) {
           patient={editing}
         />
       ) : null}
+    </>
+  );
+
+  const card = (
+    <section className="portal-card portal-card-flush">
+      <div className="portal-card-pad flex flex-wrap items-start justify-between gap-3 border-b border-line">
+        <div>
+          <h2 className="text-[18px] leading-tight">{scoped ? "Patients" : "Patient registry"}</h2>
+          <p className="mt-1 text-xs text-ink-secondary">
+            {scoped
+              ? "Search this doctor's list, then edit or remove a record."
+              : "Active patients across every doctor, with condition and registration filters."}
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="card-count">
+            {list.isLoading ? "Loading" : `${total} ${total === 1 ? "patient" : "patients"}`}
+          </span>
+          {scoped ? (
+            <PatientCreateDialog
+              doctorId={doctorId}
+              doctorName={doctorName}
+              onOpenChange={setCreating}
+              open={creating}
+            />
+          ) : null}
+        </div>
+      </div>
+      {body}
     </section>
+  );
+
+  if (scoped) return card;
+
+  return (
+    <div className="flex flex-col gap-6">
+      <header className="page-header">
+        <div>
+          <p className="page-eyebrow">Registry</p>
+          <h1>Patients</h1>
+          <p className="page-context">Active patients across every doctor.</p>
+        </div>
+      </header>
+      {card}
+    </div>
   );
 }

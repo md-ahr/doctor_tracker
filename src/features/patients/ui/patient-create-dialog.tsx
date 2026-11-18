@@ -94,7 +94,7 @@ export function PatientCreateDialog({
           <PatientFields doctors={[]} form={form} includeDoctor={false} />
           {rootError ? (
             <p
-              className="mt-4 rounded-sm border border-danger-text/40 bg-danger-wash px-4 py-3 text-sm text-danger-text"
+              className="mt-4 rounded-xl border border-danger-text/30 bg-danger-wash px-4 py-3 text-xs text-danger-text"
               role="alert"
             >
               {rootError}

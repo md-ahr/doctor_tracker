@@ -34,29 +34,53 @@ export function DoctorSummary({ doctorId }: DoctorSummaryProps) {
 
   return (
     <section className="portal-card">
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1>{record.name}</h1>
-          <p className="mt-1 text-sm text-ink-secondary">
-            {record.specialization} · {record.hospital}
-          </p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex min-w-0 items-center gap-4">
+          <span
+            aria-hidden="true"
+            className="grid size-14 shrink-0 place-items-center rounded-2xl bg-selected text-[20px] font-bold text-action"
+          >
+            {initials(record.name)}
+          </span>
+          <div className="min-w-0">
+            <h1>{record.name}</h1>
+            <p className="page-context">
+              {record.specialization} · {record.hospital}
+            </p>
+          </div>
         </div>
-        <DoctorFormDialog doctor={record} />
-      </header>
-      <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+        <div className="page-actions">
+          <DoctorFormDialog doctor={record} />
+        </div>
+      </div>
+
+      <dl className="mt-6 grid grid-cols-1 gap-4 border-t border-line pt-5 min-[480px]:grid-cols-3">
         <div>
-          <dt className="text-xs font-semibold text-ink-secondary">Phone</dt>
-          <dd>{record.phone}</dd>
+          <dt className="text-[11px] font-semibold tracking-[0.06em] text-ink-tertiary uppercase">
+            Phone
+          </dt>
+          <dd className="mt-1 text-[13px] font-medium text-ink">{record.phone}</dd>
+        </div>
+        <div className="min-w-0">
+          <dt className="text-[11px] font-semibold tracking-[0.06em] text-ink-tertiary uppercase">
+            Email
+          </dt>
+          <dd className="mt-1 truncate text-[13px] font-medium text-ink">{record.email}</dd>
         </div>
         <div>
-          <dt className="text-xs font-semibold text-ink-secondary">Email</dt>
-          <dd>{record.email}</dd>
-        </div>
-        <div>
-          <dt className="text-xs font-semibold text-ink-secondary">Patients</dt>
-          <dd>{record.activePatientCount}</dd>
+          <dt className="text-[11px] font-semibold tracking-[0.06em] text-ink-tertiary uppercase">
+            Active patients
+          </dt>
+          <dd className="mt-1 text-[13px] font-medium text-ink tabular-nums">
+            {record.activePatientCount}
+          </dd>
         </div>
       </dl>
     </section>
   );
+}
+
+function initials(name: string): string {
+  const parts = name.trim().split(/\s+/).slice(0, 2);
+  return parts.map((part) => part.slice(0, 1).toUpperCase()).join("") || "?";
 }

@@ -56,5 +56,6 @@ test("loads one dashboard query and passes the series into the charts", async ()
   expect(await screen.findByRole("heading", { name: "Over this range" })).toBeTruthy();
   expect(screen.getByRole("heading", { name: "By condition" })).toBeTruthy();
   expect(screen.getByRole("heading", { name: "Patients per doctor" })).toBeTruthy();
+  expect(screen.getByRole("heading", { name: "Care mix" })).toBeTruthy();
   expect(calls).toBe(1);
 });

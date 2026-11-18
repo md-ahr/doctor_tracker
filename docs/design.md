@@ -16,40 +16,39 @@ One theme only. The paper surface is the identity. A dark theme is out of scope.
 
 ### 1.1 What this look is built from
 
-| Choice       | Decision                                                                                                                                    |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| Ground       | Warm paper, `#F7F4EE`. Never pure white as the page, never cool gray.                                                                       |
-| Type         | Newsreader for the wordmark, page titles, and dashboard figures. Atkinson Hyperlegible for every control, label, table cell, and paragraph. |
-| Action color | Verdigris `#1B6B56`, used for the primary button, the active nav mark, links, and the focus ring.                                           |
-| Shape        | 2px corners on controls. 4px on sheets and dialogs. Pills are reserved for condition marks.                                                 |
-| Depth        | A change of paper tone plus a 1px rule. Shadow exists only on dialogs and menus.                                                            |
-| Icons        | Rare. Three nav items are words. An icon appears only when it names a tool, such as search.                                                 |
+| Choice       | Decision                                                                                                                                               |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Ground       | Warm paper, `#F7F4EE`. Never pure white as the page, never cool gray.                                                                                  |
+| Type         | Newsreader for the wordmark, page titles, and dashboard figures. Atkinson Hyperlegible for every control, label, table cell, and paragraph.            |
+| Action color | Verdigris `#1B6B56`, used for the primary button, the active nav mark, links, and the focus ring.                                                      |
+| Shape        | 2px corners on controls. 4px on sheets and dialogs. Pills are reserved for condition marks.                                                            |
+| Depth        | A change of paper tone plus a 1px rule. Shadow exists only on dialogs and menus.                                                                       |
+| Icons        | Navigation pairs an 18px line icon with its word. Figure cards use a 36px icon badge. The search field uses a magnifier. No icon-only control is used. |
 
-These choices are the difference between this portal and a default component kit: no cool-gray page, no blue primary, no 8px-rounded buttons, no shadow on every card, no icon-and-pill sidebar, no uppercase tracking on every label.
+These choices are the difference between this portal and a default component kit: no cool-gray page, no blue primary, no 8px-rounded buttons, no shadow on every card, no icon-only sidebar, no uppercase tracking on every label.
 
 ### 1.2 Arrangement
 
 `docs/ui-example/medic-dashboard-reference.png` decides where the dashboard regions sit. It does not decide color. The lavender surfaces, purple action, and cool gray page in that file are not part of this portal. Fills, inks, borders, and chart series stay the values in §4. Those values do not change to match the picture.
 
-From 720px up the dashboard content is two columns inside the main column, gap 24px. The wide column is about two thirds. The narrow column is the rest. Both columns start at the same top.
+From 1024px up the dashboard content is two columns inside the main column, gap 24px. The wide column is about two thirds. The narrow column is the rest. Both columns start at the same top. Below 1024px the columns stack. The four figures are 2×2 until 1280px, then one row.
 
 Wide column, top to bottom:
 
-1. Page title and context line.
-2. Range row: From and To. From 720px up, "Last 30 days" is in the content top bar. Below 720px it sits in this row.
-3. Three figure sheets in one row: Doctors, Patients, Registered. The anatomy is §10.2. Registered may draw a sparkline of `patientsRegisteredByDay` in `green-600`. Doctors and Patients do not, because those totals are not a daily series.
-4. "Over this range". A wash of `green-600` under the patients line is allowed so the plot reads as the area chart in the reference. The wash is that same green, not a new color. Dots and the doctors series stay as specified in §10.2.
-5. "Patients per doctor".
+1. Page title and context line, with the range control in the header's right edge.
+2. Four figure sheets: Patients, Doctors, Registered, and Doctors added. The anatomy is §10.2. Registered draws a sparkline of `patientsRegisteredByDay` in `green-600`; Doctors added draws one of `doctorsCreatedByDay` in the observation ink. The row is 2×2 below 1280px and four across from 1280px.
+3. "Over this range". A wash of `green-600` under the patients line is allowed so the plot reads as the area chart in the reference. The wash is that same green, not a new color. Dots and the doctors series stay as specified in §10.2.
+4. "Patients per doctor". A table card with the doctor name, specialization, and the active count with an inline bar. It replaces the horizontal bar chart.
 
 Narrow column, top to bottom:
 
 1. The month of the range's end date. The title is the month and year in the section-title style. The caption is the window, such as "20 Oct 2026 – 18 Nov 2026". Weekday letters are Mo, Tu, We, Th, Fr, Sa, Su, 12px, ink-500, not uppercase. Day numbers are 14px, tabular. Days inside the window use `green-100`. From and To, when they fall in that month, use `green-600` with `paper-0` text. Days are not buttons. From and To fields remain the control. The grid is `aria-hidden="true"`.
 2. "By condition".
-3. The Doctors added figure, with a sparkline of `doctorsCreatedByDay` in the observation ink from §4.4.
+3. "Care mix". A donut derived from the same condition counts: stable and recovering versus critical and watch, with the total in the centre and a two-row legend.
 
-Dashboard sheets use `paper-1`, a 1px `rule`, and `radius-sheet`. They do not add a shadow and they do not add a color. Doctors and Patients list pages stay as §9.5: a table has no outer sheet.
+Dashboard sheets use `paper-1`, a 1px `rule`, a 12px radius, and the 1px ambient shadow. They do not add a new color. Doctors and Patients list pages use the same card with a flush table region.
 
-Below 720px the columns stack in this order: title, range, the four figures as a 2×2, Over this range, the month, By condition, Doctors added, Patients per doctor.
+Below 1024px the columns stack in this order: title and range, the four figures as a 2×2, Over this range, Patients per doctor, month, By condition, Care mix.
 
 The picture also shows payment, stock, help, appointments, and balance rings. Those are not screens in this portal. Do not add them.
 
@@ -219,19 +218,20 @@ The content max keeps a table from stretching into an unreadable line on a wide 
 | ---------------- | ----- | ------------------------- |
 | `radius-control` | 2px   | Buttons, inputs, selects  |
 | `radius-sheet`   | 4px   | Login panel, dialog, menu |
+| `radius-card`    | 12px  | Page and dashboard cards  |
 | `radius-mark`    | 999px | Condition marks only      |
 
 ### 5.4 Rules and shadow
 
 Regions separate with a 1px `rule`. Controls use a 1px `rule-strong` border. There is no border on the page title and no border around a whole table. The table is a sequence of row rules.
 
-Shadow is one value, used only by dialogs and menus:
+Shadow is one overlay value for dialogs and menus, plus one 1px ambient value for cards:
 
 ```css
 --shadow-overlay: 0 16px 40px rgba(26, 35, 50, 0.12);
 ```
 
-Cards do not float. A summary block on the doctor page is a region with a bottom rule, not a shadowed box. Dashboard sheets in §1.2 use `paper-1` and a 1px `rule` only. They do not take a new shadow or a new color.
+A summary block on the doctor page is a region inside the shared card. Dashboard and list cards in §1.2 use `paper-1`, a 1px `rule`, a 12px radius, and the 1px ambient shadow. They do not take a new color.
 
 ### 5.5 Focus
 
@@ -251,15 +251,15 @@ Dialogs enter by fading and moving 4px up. They do not scale. `prefers-reduced-m
 
 From 720px up, the shell is a fixed left rail and a scrolling main column.
 
-The rail is `paper-0` with a 1px `rule` on its right edge. It does not use a different background from the page. Structure, top to bottom:
+The rail is `paper-1` with a 1px `rule` on its right edge, so it reads as a sheet beside the paper ground. Structure, top to bottom:
 
 1. Wordmark, 20px from the top and 24px from the left. "Doctor Tracker" in Newsreader 500, 22px, ink-900. A 24px by 2px green-600 rule sits 8px under the wordmark.
-2. Navigation, 32px below that rule. Three items: Dashboard, Doctors, Patients. Atkinson 15px. Inactive is ink-700. Active is ink-900, weight 600, with a 2px by 16px green-600 bar at the left of the label, 8px away from the word. Hit area is 40px tall and the full rail width. Padding-left is 24px.
-3. Admin block, pinned to the bottom with 24px padding. Admin name in 14px ink-900, email in 12px ink-700, then a "Log out" text button.
+2. Navigation, 24px below that rule. Three items: Dashboard, Doctors, Patients. Each item is an 18px line icon followed by the word in Atkinson 15px. Inactive is ink-700. Active is green-700, weight 600, on a `green-100` pill, with a 3px by 18px green-600 bar at the left edge of the pill. Hit area is 44px tall and the full rail width. Row gap is 4px.
+3. Admin block, pinned to the bottom with 16px padding above a 1px rule. Admin name in 14px ink-900, email in 12px ink-700, then a "Log out" text button.
 
-The main column has a top bar, 56px, `paper-0`, with a 1px `rule` on its bottom edge. It does not cover the rail and it does not use a second background. Search sits at the left when §9.4 gives the page a search field. The primary action sits at the right. The dashboard has no search; "Last 30 days" sits at the right of this bar, and From and To stay in the content under the title. There is no icon column. The page title lives once, in the content under the top bar.
+The main column has a sticky top bar, 72px, `paper-0`, with a 1px `rule` on its bottom edge. The admin identity and avatar sit at the left, a pill search field in the middle, and the primary action at the right. The page title lives once, in the content under the top bar. The dashboard range control stays in the content header, not the top bar.
 
-Below 720px this content bar is not a second strip. Search and the primary action return to the title row in §7, under the compact bar that replaces the rail.
+Below 720px the top bar is hidden. The primary action returns to the page title row, and the page's own filter row carries search.
 
 Below 720px the rail is replaced by a top bar, 56px, with the wordmark at the left and the three links in a row at the right if they fit. Below 480px the three links wrap onto a second row under the wordmark and the bar grows to fit. The admin name and "Log out" sit on that bar's right end, and the email is omitted. Do not introduce a hamburger for three destinations.
 
@@ -364,7 +364,7 @@ Date fields are native date inputs, styled as fields, labeled "From" and "To". T
 
 ### 9.5 Tables
 
-Desktop, from 720px:
+Desktop tables start at 1024px. Between 720px and 1023px the table uses the stacked-record layout, because the rail leaves too little width for six patient columns.
 
 - Header row 36px, fill `paper-2`, labels 12px weight 600 ink-700, sentence case, left aligned. Count columns are right aligned.
 - Body row 52px, bottom border 1px `rule`. Name is 14px weight 600. Other cells are 14px weight 400 ink-900. Secondary detail inside a cell, such as an email under a phone, is 12px ink-700.
@@ -417,13 +417,14 @@ There is no "forgot password" and no registration link. Those flows do not exist
 
 ### 10.2 Dashboard
 
-The regions and their order are §1.2. From, To, and a quiet "Last 30 days" button restore or set the window. The default window is the last 30 days inclusive in the API timezone. "Last 30 days" sits at the right of the content top bar from 720px up, and in the range row below that. The caption under the title already explains that totals ignore the range.
+The regions and their order are §1.2. From, To, and a quiet "Last 30 days" button restore or set the window. The default window is the last 30 days inclusive in the API timezone. They sit in the range control at the right of the page header and wrap under the title on narrow screens. The caption under the title already explains that totals ignore the range.
 
-Each figure is a sheet. Below 720px the four figures are a 2×2 grid. Each figure is:
+Each figure is a sheet with an icon badge in the top-right. The four figures are a 2×2 grid until 1280px, then one row. Each figure is:
 
 - Eyebrow, uppercase, 11px
 - Number, Newsreader 40px, tabular
 - Caption, 12px ink-700, naming the scope
+- A sparkline for Registered and Doctors added
 
 | Figure     | Eyebrow       | Source                           | Caption       |
 | ---------- | ------------- | -------------------------------- | ------------- |
@@ -434,19 +435,17 @@ Each figure is a sheet. Below 720px the four figures are a 2×2 grid. Each figur
 
 The last two are derived in the client from series the API already returns. They are labeled "In this range" so they cannot be read as all-time totals.
 
-From 720px up, "Over this range" is the wide column and "By condition" is the narrow column, as in §1.2. Below 720px they stack, with 48px between chart blocks. Each chart block has a section title and a 12px caption, then the plot at 280px tall (240px below 720px). The month grid is not a chart and has no plot height.
+From 1024px up, "Over this range" is the wide column and "By condition" is the narrow column, as in §1.2. Below 1024px they stack, with 48px between chart blocks. Each chart block has a section title and a 12px caption, then the plot at 280px tall. The month grid is not a chart and has no plot height.
 
-| Chart               | Title               | Caption                                                            | Form                                                                                                                      |
-| ------------------- | ------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| Patients per doctor | Patients per doctor | All active patients. Includes doctors with zero.                   | Horizontal bars, ink-900. Label is the doctor name, with specialization in ink-700 after it. Value at the end of the bar. |
-| By condition        | By condition        | All active patients, in fixed condition order.                     | Horizontal bars in the condition inks. The word is the label. Zero still draws the label and a value of 0.                |
-| Over time           | Over this range     | Patients registered and doctors created, including days with zero. | Two lines on one date axis. Green for patients, observation ink for doctors. Dots on each day.                            |
+| Chart               | Title               | Caption                                                            | Form                                                                                                               |
+| ------------------- | ------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Patients per doctor | Patients per doctor | All active patients. Includes doctors with zero.                   | Table card. Doctor name, specialization, and the count with an inline bar.                                         |
+| By condition        | By condition        | All active patients, in fixed condition order.                     | Horizontal bars in the condition inks. The word is the label. Zero still draws the label and a value of 0.         |
+| Over time           | Over this range     | Patients registered and doctors created, including days with zero. | Two lines on one date axis. Green for patients, observation ink for doctors. A green wash under the patients line. |
 
-Grid lines are horizontal only, in `rule`. No vertical grid. No chart background fill. Tooltip is a `paper-1` sheet, radius 4px, 12px type, showing the date or name and the count. Legends are a single line under the title, using a 8px square and the series name, for the line chart only. The bar charts are labeled directly and have no legend.
+Grid lines are horizontal only, in `rule`. No vertical grid. No chart background fill. Tooltip is a `paper-1` sheet, radius 4px, 12px type, showing the date or name and the count. The line legend is a single line in the card header, using an 8px square and the series name. The bar charts are labeled directly and have no legend.
 
-A long doctor list scrolls inside the chart block, max height 360px, so the rest of the dashboard stays reachable. The block says "12 doctors" in the caption.
-
-An all-zero line series replaces the plot with the empty copy in §8.2. The four figures remain.
+The chart card clips overflow so a fixed-width plot cannot widen the page. An all-zero line series replaces the plot with the empty copy in §8.2. The four figures remain.
 
 ### 10.3 Doctors
 
@@ -511,13 +510,14 @@ Hit targets are at least 40px on the primary controls and 36px on compact ones. 
 
 ## 13. Responsive summary
 
-| Width     | Shell                                                          | Tables           | Figures                                          | Charts                              |
-| --------- | -------------------------------------------------------------- | ---------------- | ------------------------------------------------ | ----------------------------------- |
-| ≥ 720px   | Left rail 216px, content top bar, dashboard two columns (§1.2) | Rows and columns | Three across, Doctors added in the narrow column | Wide and narrow columns, 280px tall |
-| 480–719px | Rail becomes a top bar, links in a row                         | Stacked records  | 2×2                                              | Stacked, 240px tall                 |
-| < 480px   | Rail becomes a top bar, links wrap                             | Stacked records  | 2×2                                              | Stacked, 240px tall                 |
+| Width      | Shell                                                   | Tables           | Figures  | Charts                              |
+| ---------- | ------------------------------------------------------- | ---------------- | -------- | ----------------------------------- |
+| ≥ 1024px   | Left rail 216px, content top bar, dashboard two columns | Rows and columns | 4 across | Wide and narrow columns, 280px tall |
+| 720–1023px | Left rail 216px, content top bar, dashboard one column  | Stacked records  | 2×2      | Stacked, 280px tall                 |
+| 480–719px  | Rail becomes a top bar, links in a row                  | Stacked records  | 2×2      | Stacked, 240px tall                 |
+| < 480px    | Rail becomes a top bar, links wrap                      | Stacked records  | 2×2      | Stacked, 240px tall                 |
 
-Breakpoints are 720px and 480px. No other layout changes.
+Breakpoints are 1280px, 1024px, 720px, and 480px. The shell changes at 720px; the dashboard and table density change at 1024px and 1280px.
 
 ## 14. Token sheet
 
@@ -570,9 +570,11 @@ Copy these into the global stylesheet when implementation starts. Semantic token
 
   --radius-control: 2px;
   --radius-sheet: 4px;
+  --radius-card: 12px;
   --radius-mark: 999px;
 
   --shadow-overlay: 0 16px 40px rgba(26, 35, 50, 0.12);
+  --shadow-card: 0 1px 2px rgba(26, 35, 50, 0.04);
 
   --control-height: 40px;
   --control-height-compact: 36px;
@@ -599,3 +601,18 @@ Condition pairs stay as a map next to the patient catalog, not as extra global v
 | FR-UI-05 Delete confirmation                                               | §9.7                                  |
 | FR-DASH-01–05 Figures and charts                                           | §10.2                                 |
 | README visual evidence, desktop and mobile                                 | §13 defines the two widths to capture |
+
+## 16. Reference-parity implementation
+
+The dashboard and portal pages follow the region anatomy of `docs/ui-example/medic-dashboard-reference.png` with the tokens in §4. Color, type, and the paper ground are unchanged.
+
+| Decision             | Implementation                                                                                                                                                                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shell                | The rail is a `paper-1` sheet with icon-and-label links, an active `green-100` pill, and the account block pinned to the bottom. The top bar is sticky, 72px, with the admin identity, a pill search field, and the primary action. |
+| Cards                | `portal-card`: `paper-1`, 1px `rule`, 12px radius, and a 1px ambient shadow. Table cards are flush and use `portal-card-pad` for inner regions.                                                                                     |
+| Dashboard columns    | Two columns from 1024px, not 720px, because the 216px rail leaves too little room for the right column. The four figures are 2x2 until 1280px, then one row.                                                                        |
+| Figures              | Each figure has an icon badge, eyebrow, 40px figure, caption, and a sparkline for the two range series.                                                                                                                             |
+| Patients per doctor  | A table card with doctor, specialization, and a count plus inline bar. It replaces the horizontal Recharts bar.                                                                                                                     |
+| Care mix             | A donut card derived from the condition counts: stable and recovering versus critical and watch.                                                                                                                                    |
+| Tables               | Desktop tables start at 1024px. Between 720px and 1023px the existing stacked-record layout is used, so six patient columns never clip inside the rail layout.                                                                      |
+| Out-of-scope widgets | Payment, product and stock, appointments, and the balance ring are not added because the API has no data for them.                                                                                                                  |

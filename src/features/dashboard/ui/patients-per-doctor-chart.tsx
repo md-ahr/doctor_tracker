@@ -1,87 +1,89 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, LabelList, Tooltip, XAxis, YAxis } from "recharts";
+import Link from "next/link";
 
-import { CHART_COLORS, type DashboardDoctorCount } from "@/features/dashboard/model/dashboard";
-import { ChartBlock, chartTooltipStyle } from "@/features/dashboard/ui/chart-block";
+import { DataEmpty } from "@/components/ui/data-state";
+import {
+  CHART_COLORS,
+  initials,
+  sharePercent,
+  type DashboardDoctorCount,
+} from "@/features/dashboard/model/dashboard";
 
 type PatientsPerDoctorChartProps = {
   doctors: DashboardDoctorCount[];
 };
 
+const avatarTones = [
+  { background: "#eef2ff", color: "#4338ca" },
+  { background: "#ccfbf1", color: "#0f766e" },
+  { background: "#ffe4e6", color: "#be123c" },
+  { background: "#fef3c7", color: "#b45309" },
+  { background: "#f3e8ff", color: "#6d28d9" },
+] as const;
+
+const visibleDoctors = 5;
+
 export function PatientsPerDoctorChart({ doctors }: PatientsPerDoctorChartProps) {
-  const height = Math.max(280, doctors.length * 36);
-  const caption = `${doctors.length} ${doctors.length === 1 ? "doctor" : "doctors"}. All active patients. Includes doctors with zero.`;
+  const ranked = [...doctors].sort((left, right) => right.patientCount - left.patientCount);
+  const visible = ranked.slice(0, visibleDoctors);
+  const max = Math.max(...ranked.map((doctor) => doctor.patientCount), 1);
 
   return (
-    <ChartBlock caption={caption} title="Patients per doctor">
-      {(width) => (
-        <BarChart
-          data={doctors}
-          height={height}
-          layout="vertical"
-          margin={{ top: 8, right: 36, left: 8, bottom: 0 }}
-          width={Math.max(width, 320)}
-        >
-          <CartesianGrid horizontal stroke={CHART_COLORS.grid} vertical={false} />
-          <XAxis
-            allowDecimals={false}
-            axisLine={false}
-            tick={{ fill: CHART_COLORS.axis, fontSize: 12 }}
-            tickLine={false}
-            type="number"
-          />
-          <YAxis
-            axisLine={false}
-            dataKey="doctorId"
-            tick={(props) => (
-              <DoctorTick
-                doctors={doctors}
-                payload={props.payload}
-                x={typeof props.x === "number" ? props.x : undefined}
-                y={typeof props.y === "number" ? props.y : undefined}
-              />
-            )}
-            tickLine={false}
-            type="category"
-            width={148}
-          />
-          <Tooltip
-            contentStyle={chartTooltipStyle}
-            formatter={(value) => [value, "Patients"]}
-            labelFormatter={(doctorId) => {
-              const doctor = doctors.find((item) => item.doctorId === doctorId);
-              return doctor ? `${doctor.name}, ${doctor.specialization}` : String(doctorId);
-            }}
-          />
-          <Bar dataKey="patientCount" fill={CHART_COLORS.patientsPerDoctor} radius={[0, 2, 2, 0]}>
-            <LabelList
-              dataKey="patientCount"
-              fill={CHART_COLORS.patientsPerDoctor}
-              fontSize={12}
-              position="right"
-            />
-          </Bar>
-        </BarChart>
+    <section className="portal-card">
+      <div className="card-heading">
+        <div>
+          <h2>Patients per doctor</h2>
+          <p>
+            {doctors.length} {doctors.length === 1 ? "doctor" : "doctors"} · all active patients
+          </p>
+        </div>
+        <Link className="text-link" href="/doctors">
+          View all
+        </Link>
+      </div>
+
+      {ranked.length === 0 ? (
+        <DataEmpty
+          guidance="Add a doctor to see the active patient load."
+          title="No doctors in the directory"
+        />
+      ) : (
+        <ul className="roster-list">
+          {visible.map((doctor, index) => {
+            const tone = avatarTones[index % avatarTones.length];
+            const share = sharePercent(doctor.patientCount, max);
+
+            return (
+              <li className="roster-row" key={doctor.doctorId}>
+                <span
+                  aria-hidden="true"
+                  className="roster-avatar"
+                  style={{ backgroundColor: tone.background, color: tone.color }}
+                >
+                  {initials(doctor.name)}
+                </span>
+                <div className="roster-main">
+                  <p className="roster-name">{doctor.name}</p>
+                  <p className="roster-meta">{doctor.specialization}</p>
+                  <div className="roster-bar">
+                    <span
+                      style={{
+                        backgroundColor: CHART_COLORS.patientsRegistered,
+                        width: `${share}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="roster-count">
+                  <strong>{doctor.patientCount}</strong>
+                  <span>patients</span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       )}
-    </ChartBlock>
-  );
-}
-
-type DoctorTickProps = {
-  x?: number;
-  y?: number;
-  payload?: { value?: string };
-  doctors: DashboardDoctorCount[];
-};
-
-function DoctorTick({ x = 0, y = 0, payload, doctors }: DoctorTickProps) {
-  const doctor = doctors.find((item) => item.doctorId === payload?.value);
-  if (!doctor) return <text />;
-  return (
-    <text fontSize={12} textAnchor="end" x={x} y={y}>
-      <tspan fill={CHART_COLORS.patientsPerDoctor}>{doctor.name}</tspan>
-      <tspan fill={CHART_COLORS.specialization}>{` ${doctor.specialization}`}</tspan>
-    </text>
+    </section>
   );
 }

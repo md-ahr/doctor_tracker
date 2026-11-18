@@ -32,7 +32,7 @@ import { ApiError } from "@/lib/api/types";
 import { toPlainDate } from "@/lib/time/calendar";
 
 const fieldClass =
-  "h-(--control-height) w-full rounded-(--radius-control) border border-control bg-sheet px-3 font-sans text-[15px] text-ink outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus aria-invalid:border-danger aria-invalid:bg-danger-wash";
+  "h-(--control-height) w-full rounded-(--radius-control) border border-control bg-sheet px-3 font-sans text-[13px] text-ink outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus aria-invalid:border-danger aria-invalid:bg-danger-wash";
 
 const sexOptions = [
   { value: "", label: "Not recorded" },
@@ -165,7 +165,7 @@ export function PatientFields({ form, includeDoctor, doctors, currentDoctor }: P
         <textarea
           aria-describedby={errors.notes ? "patient-notes-error" : undefined}
           aria-invalid={errors.notes ? true : undefined}
-          className="max-h-[200px] min-h-24 w-full rounded-(--radius-control) border border-control bg-sheet px-3 py-3 font-sans text-[15px] text-ink outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus aria-invalid:border-danger aria-invalid:bg-danger-wash"
+          className="max-h-[200px] min-h-24 w-full rounded-(--radius-control) border border-control bg-sheet px-3 py-3 font-sans text-[13px] text-ink outline-none focus-visible:border-focus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus aria-invalid:border-danger aria-invalid:bg-danger-wash"
           id="patient-notes"
           {...form.register("notes")}
         />
@@ -238,7 +238,7 @@ export function PatientFormDialog({
           />
           {rootError ? (
             <p
-              className="mt-4 rounded-sm border border-danger-text/40 bg-danger-wash px-4 py-3 text-sm text-danger-text"
+              className="mt-4 rounded-xl border border-danger-text/30 bg-danger-wash px-4 py-3 text-xs text-danger-text"
               role="alert"
             >
               {rootError}

@@ -5,14 +5,14 @@ import { cn } from "@/lib/utils";
 function Table({ className, ...props }: ComponentProps<"table">) {
   return (
     <table
-      className={cn("w-full border-collapse font-sans text-sm text-ink", className)}
+      className={cn("w-full border-collapse font-sans text-[13px] text-ink", className)}
       {...props}
     />
   );
 }
 
 function TableHeader({ className, ...props }: ComponentProps<"thead">) {
-  return <thead className={cn("[&_tr]:h-9", className)} {...props} />;
+  return <thead className={cn("[&_tr]:h-10", className)} {...props} />;
 }
 
 function TableBody({ className, ...props }: ComponentProps<"tbody">) {
@@ -27,7 +27,7 @@ function TableRow({ className, ...props }: ComponentProps<"tr">) {
   return (
     <tr
       className={cn(
-        "h-(--row-height) border-b border-line transition-colors duration-120 ease-out hover:bg-inset data-[state=selected]:bg-selected",
+        "h-(--row-height) border-b border-line transition-colors duration-150 ease-out last:border-b-0 hover:bg-[#f8fafc] data-[state=selected]:bg-selected",
         className,
       )}
       {...props}
@@ -39,7 +39,7 @@ function TableHead({ className, ...props }: ComponentProps<"th">) {
   return (
     <th
       className={cn(
-        "bg-inset px-3 text-left align-middle text-xs font-semibold text-ink-secondary",
+        "bg-inset px-3 text-left align-middle text-[10.5px] font-semibold tracking-[0.05em] text-ink-secondary uppercase",
         className,
       )}
       {...props}

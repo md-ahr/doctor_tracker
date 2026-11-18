@@ -51,13 +51,13 @@ export function LoginForm() {
         <div className="flex items-center gap-2.5">
           <span
             aria-hidden="true"
-            className="grid size-8 place-items-center rounded-lg bg-action text-action-fg"
+            className="grid size-9 place-items-center rounded-xl bg-linear-to-br from-[#fb7185] to-[#e11d48] text-white shadow-[0_10px_22px_-14px_rgba(225,29,72,0.85)]"
           >
             <DirectoryMark />
           </span>
-          <p className="font-serif text-[22px] leading-none">Doctor Tracker</p>
+          <p className="text-[20px] leading-none font-bold tracking-[-0.02em]">Doctor Tracker</p>
         </div>
-        <h2 className="mt-8 text-[28px] leading-tight">Welcome back</h2>
+        <h2 className="mt-8 text-[26px] leading-tight">Welcome back</h2>
         <p className="mt-2 text-sm text-ink-secondary">Sign in to the directory.</p>
       </div>
 
@@ -129,8 +129,14 @@ export function LoginForm() {
 
 function DirectoryMark() {
   return (
-    <svg aria-hidden="true" fill="none" height="16" viewBox="0 0 16 16" width="16">
-      <path d="M8 2.5v11M2.5 8h11" stroke="currentColor" strokeLinecap="round" strokeWidth="1.75" />
+    <svg aria-hidden="true" fill="none" height="18" viewBox="0 0 24 24" width="18">
+      <path
+        d="M3 12h3.2l1.8-4.5 3 9L14 8l1.9 4H21"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
     </svg>
   );
 }

@@ -12,7 +12,28 @@ export function isDateOrderValid(from: string, to: string): boolean {
 }
 
 export function formatChartDate(value: string): string {
-  return value;
+  try {
+    const date = Temporal.PlainDate.from(value);
+    return `${date.day} ${date.toLocaleString("en-GB", { month: "short" })}`;
+  } catch {
+    return value;
+  }
+}
+
+export function formatWeekday(value: string): string {
+  try {
+    return Temporal.PlainDate.from(value).toLocaleString("en-GB", { weekday: "long" });
+  } catch {
+    return value;
+  }
+}
+
+export function formatMonthShort(value: string): string {
+  try {
+    return Temporal.PlainDate.from(value).toLocaleString("en-GB", { month: "short" });
+  } catch {
+    return value;
+  }
 }
 
 export function defaultDashboardRange(

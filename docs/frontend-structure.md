@@ -133,13 +133,13 @@ The client reads `success`, `message`, `data`, and `meta`. It does not invent a 
 
 ## 6. Screens
 
-| Route                 | Renders                                                                           | Primary action   |
-| --------------------- | --------------------------------------------------------------------------------- | ---------------- |
-| `/login`              | Email and password form                                                           | Sign in          |
-| `/dashboard`          | Four figures, patients-per-doctor bar, condition bar, two daily lines, date range | Change the range |
-| `/doctors`            | Filters, table, pagination                                                        | Add doctor       |
-| `/doctors/[doctorId]` | Doctor summary and that doctor's patient table                                    | Add patient      |
-| `/patients`           | Filters, including doctor and condition, table, pagination                        | Edit or delete   |
+| Route                 | Renders                                                                                        | Primary action   |
+| --------------------- | ---------------------------------------------------------------------------------------------- | ---------------- |
+| `/login`              | Email and password form                                                                        | Sign in          |
+| `/dashboard`          | Four figures, daily lines, doctors table, calendar, condition bars, care-mix donut, date range | Change the range |
+| `/doctors`            | Filters, table, pagination                                                                     | Add doctor       |
+| `/doctors/[doctorId]` | Doctor summary and that doctor's patient table                                                 | Add patient      |
+| `/patients`           | Filters, including doctor and condition, table, pagination                                     | Edit or delete   |
 
 Add and edit open a dialog. Delete opens a confirm dialog that names the patient. The portal layout links to Dashboard, Doctors, and Patients.
 
