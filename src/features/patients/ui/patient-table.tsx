@@ -50,7 +50,7 @@ export function PatientTable({ items, meta, showDoctor, onEdit, onPageChange }: 
 
   return (
     <div>
-      <div className="hidden min-[1024px]:block">
+      <div className="hidden lg:block">
         <Table>
           <TableHeader>
             <TableRow>
@@ -89,7 +89,7 @@ export function PatientTable({ items, meta, showDoctor, onEdit, onPageChange }: 
           </TableBody>
         </Table>
       </div>
-      <ul className="min-[1024px]:hidden">
+      <ul className="lg:hidden">
         {items.map((patient) => (
           <li className="border-b border-line py-4" key={patient.id}>
             <p className="font-semibold">{patient.fullName}</p>

@@ -39,7 +39,7 @@ function TableHead({ className, ...props }: ComponentProps<"th">) {
   return (
     <th
       className={cn(
-        "bg-inset px-3 text-left align-middle text-[10.5px] font-semibold tracking-[0.05em] text-ink-secondary uppercase",
+        "bg-inset px-3 text-left align-middle text-[10.5px] font-semibold tracking-wider text-ink-secondary uppercase",
         className,
       )}
       {...props}
