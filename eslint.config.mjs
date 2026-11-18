@@ -15,6 +15,9 @@ const eslintConfig = defineConfig([
     "node_modules/**",
     "coverage/**",
     ".cursor/**",
+    "test-results/**",
+    "playwright-report/**",
+    ".next-e2e/**",
   ]),
   {
     rules: {

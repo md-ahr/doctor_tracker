@@ -1007,7 +1007,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 12.1 — Playwright setup
 
-- [ ] **Deliverable:** `playwright.config.ts`, auth fixture or login helper against real API or mocked.
+- [x] **Deliverable:** `playwright.config.ts`, auth fixture or login helper against real API or mocked.
 
 **Files:**
 
@@ -1019,7 +1019,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 12.2 — E2E: form errors and delete confirm
 
-- [ ] **Deliverable:** Invalid login message; delete dialog shows patient name.
+- [x] **Deliverable:** Invalid login message; delete dialog shows patient name.
 
 **Files:**
 
@@ -1031,7 +1031,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 12.3 — E2E: dashboard empty series
 
-- [ ] **Deliverable:** Range with zero registrations shows empty copy.
+- [x] **Deliverable:** Range with zero registrations shows empty copy.
 
 **Files:**
 
@@ -1043,7 +1043,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 12.4 — Web README and technical decisions
 
-- [ ] **Deliverable:** Setup (`NEXT_PUBLIC_API_URL`), scripts, link to API; **two decisions** from LLD §9 (TanStack Query vs Redux; dashboard read-time aggregation — client perspective).
+- [x] **Deliverable:** Setup (`NEXT_PUBLIC_API_URL`), scripts, link to API; **two decisions** from LLD §9 (TanStack Query vs Redux; dashboard read-time aggregation — client perspective).
 
 **Files:**
 
@@ -1055,7 +1055,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 12.5 — Manual screenshot pass
 
-- [ ] **Deliverable:** Desktop + mobile screenshots of Dashboard, Doctors, Patients (LLD §8).
+- [x] **Deliverable:** Desktop + mobile screenshots of Dashboard, Doctors, Patients (LLD §8).
 
 **Files:**
 
