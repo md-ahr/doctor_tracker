@@ -702,7 +702,7 @@ request.
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { login } from "@/lib/api/doctor-tracker-api";
-import { ApiError } from "@/lib/api/types";
+import { notifyError, notifySuccess } from "@/lib/toast";
 
 export function LoginForm() {
   const router = useRouter();
@@ -711,11 +711,10 @@ export function LoginForm() {
   async function onSubmit(values: { email: string; password: string }) {
     try {
       await login(values);
+      notifySuccess("Signed in");
       router.push("/dashboard");
     } catch (error) {
-      if (error instanceof ApiError) {
-        form.setError("root", { message: error.message });
-      }
+      notifyError("Sign in failed", error, "The sign-in request could not be completed.");
     }
   }
 
@@ -723,7 +722,6 @@ export function LoginForm() {
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <input type="email" {...form.register("email")} />
       <input type="password" {...form.register("password")} />
-      <p>{form.formState.errors.root?.message}</p>
       <button type="submit">Sign in</button>
     </form>
   );

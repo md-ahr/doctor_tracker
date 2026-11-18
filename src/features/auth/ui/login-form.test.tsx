@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, expect, test, vi } from "vitest";
 
@@ -36,7 +36,7 @@ beforeEach(() => {
   toastError.mockReset();
 });
 
-test("shows the API error message when login fails", async () => {
+test("reports login failures only through a toast, not inline", async () => {
   login.mockRejectedValue(new ApiError(401, "INVALID_CREDENTIALS", "Invalid email or password"));
   const user = userEvent.setup();
   render(<LoginForm />);
@@ -45,11 +45,13 @@ test("shows the API error message when login fails", async () => {
   await user.type(screen.getByLabelText("Password"), "correct horse");
   await user.click(screen.getByRole("button", { name: "Sign in" }));
 
-  expect((await screen.findByRole("status")).textContent).toBe("Invalid email or password");
-  expect(push).not.toHaveBeenCalled();
-  expect(toastError).toHaveBeenCalledWith("Sign in failed", {
-    description: "Invalid email or password",
+  await waitFor(() => {
+    expect(toastError).toHaveBeenCalledWith("Sign in failed", {
+      description: "Invalid email or password",
+    });
   });
+  expect(screen.queryByRole("status")).toBeNull();
+  expect(push).not.toHaveBeenCalled();
 });
 
 test("opens the dashboard after a successful login", async () => {

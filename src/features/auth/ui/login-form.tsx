@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ApiError } from "@/lib/api/types";
-import { errorMessage } from "@/lib/api/error-message";
 import { notifyError, notifySuccess } from "@/lib/toast";
 
 export function LoginForm() {
@@ -33,19 +32,11 @@ export function LoginForm() {
       const fieldDetails = error.details.filter(
         (detail) => detail.path === "email" || detail.path === "password",
       );
-      if (fieldDetails.length === 0) {
-        form.setError("root", {
-          message: errorMessage(error, "The email or password is incorrect."),
-        });
-        return;
-      }
       for (const detail of fieldDetails) {
         form.setError(detail.path as "email" | "password", { message: detail.message });
       }
     }
   }
-
-  const rootError = form.formState.errors.root?.message;
 
   return (
     <form
@@ -116,15 +107,6 @@ export function LoginForm() {
           </p>
         ) : null}
       </div>
-
-      {rootError ? (
-        <p
-          className="rounded-(--radius-control) border border-danger/40 bg-danger-wash px-4 py-3 text-sm text-danger-text"
-          role="status"
-        >
-          {rootError}
-        </p>
-      ) : null}
 
       <Button className="mt-1 w-full" disabled={form.formState.isSubmitting} type="submit">
         Sign in
