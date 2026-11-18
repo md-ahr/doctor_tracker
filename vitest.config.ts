@@ -11,10 +11,12 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.join(root, "src"),
+      "msw/node": path.join(root, "src/test/msw/server.ts"),
     },
   },
   test: {
     environment: "jsdom",
     include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    setupFiles: ["./src/test/setup.ts"],
   },
 });

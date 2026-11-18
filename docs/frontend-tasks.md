@@ -992,7 +992,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 11.1 — Shared MSW handlers
 
-- [ ] **Deliverable:** Default handlers for auth, list envelopes, dashboard fixture; used in Vitest setup.
+- [x] **Deliverable:** Default handlers for auth, list envelopes, dashboard fixture; used in Vitest setup.
 
 **Files:**
 
