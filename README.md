@@ -2,6 +2,14 @@
 
 Admin portal for the doctor directory, the patient registry, and the dashboard. This app is its own repository. It reads and writes through the [Doctor Tracker API](https://doctor-tracker-api.ahr-web-pro.workers.dev/api/docs). When both checkouts sit side by side, the API project is `api-doctor-tracker`.
 
+## Production
+
+| App    | URL                                    |
+| ------ | -------------------------------------- |
+| Portal | https://task-doctor-tracker.vercel.app |
+
+Deployed on Vercel. The Vercel project sets `NEXT_PUBLIC_API_URL` to `/api/v1` and `API_ORIGIN` to the deployed API origin, so the rewrite in `next.config.ts` keeps the HttpOnly refresh cookie first-party.
+
 ## Setup
 
 Requires Node.js 22 (`nvm use`). Node 22 and stable Safari have no native `Temporal`, so the app installs `temporal-polyfill` from `src/lib/time/temporal.ts` before calendar code runs. Do not branch on browser support; keep calendar math in `src/lib/time/calendar.ts`.
