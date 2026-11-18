@@ -287,7 +287,7 @@ flowchart BT
 
 **Aggregation instead of a patient counter on the doctor.** A counter makes the dashboard cheap and makes every patient write a two-document update. Those two writes need a transaction to stay correct, and a missed decrement stays wrong forever. At 10,000 patients an indexed `$group` is the simpler correct design. A counter becomes worthwhile when that aggregation stops meeting NFR-PERF-02.
 
-**Bearer token plus a scoped refresh cookie.** The UI origin and the API origin are different. Data requests use the `Authorization` header, so a third-party page cannot submit them with a cookie. The refresh cookie is `HttpOnly`, so script cannot read it. Refresh and logout additionally check the calling origin.
+**Bearer token plus a scoped refresh cookie.** Data requests use the `Authorization` header, so a third-party page cannot submit them with a cookie. The portal reaches the API through a server-side rewrite on its own origin, so the refresh cookie is first-party and survives a reload even where third-party cookies are blocked. The cookie is `HttpOnly`, so script cannot read it. Refresh and logout additionally check the calling origin.
 
 **Soft delete without a restore screen.** A patient row is one document. Setting `deletedAt` is atomic. Active queries include `deletedAt: null` and are backed by partial indexes, so the extra field does not slow the active list.
 
@@ -372,14 +372,15 @@ flowchart LR
   Render --> Atlas[(Atlas MongoDB)]
 ```
 
-| Env                                           | Used by  | Purpose                         |
-| --------------------------------------------- | -------- | ------------------------------- |
-| `NEXT_PUBLIC_API_URL`                         | Web      | Public API origin               |
-| `MONGODB_URI`                                 | API      | Atlas connection                |
-| `JWT_ACCESS_SECRET`                           | API      | Access-token signing            |
-| `FRONTEND_ORIGIN`                             | API      | CORS and cookie-origin check    |
-| `APP_TIMEZONE`                                | API      | Calendar buckets. Default `UTC` |
-| `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` | API seed | Initial admin                   |
+| Env                                           | Used by  | Purpose                           |
+| --------------------------------------------- | -------- | --------------------------------- |
+| `NEXT_PUBLIC_API_URL`                         | Web      | Same-origin API path (`/api/v1`)  |
+| `API_ORIGIN`                                  | Web      | Rewrite target on the Next server |
+| `MONGODB_URI`                                 | API      | Atlas connection                  |
+| `JWT_ACCESS_SECRET`                           | API      | Access-token signing              |
+| `FRONTEND_ORIGIN`                             | API      | CORS and cookie-origin check      |
+| `APP_TIMEZONE`                                | API      | Calendar buckets. Default `UTC`   |
+| `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` | API seed | Initial admin                     |
 
 The API does not read request-specific state from memory. Render can replace the instance without migrating sessions. Atlas M0 is enough for the interview data size. Health checks hit `GET /health`.
 

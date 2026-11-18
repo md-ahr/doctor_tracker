@@ -356,9 +356,9 @@ Server field errors from `error.details` land on the same slot. A form-level ser
 
 ### 9.4 Filter bar
 
-A single wrapping row, gap 8px, aligned to the bottom of the controls. From 720px up, search sits in the content top bar and grows there, min-width 200px. The filter row then starts with the selects. Below 720px, search comes first in the filter row. Then the date pair. Then "Clear", a quiet button, visible only when a filter is set. Doctor detail keeps its search with that doctor's patients, in the top bar from 720px up and above the table below 720px.
+A single wrapping grid, gap 12px, aligned to the bottom of the controls. From 720px up, search sits in the content top bar and grows there, min-width 200px. The filter row then starts with the selects. Below 720px, search comes first in the filter row. Then the date pair. "Apply" is the primary action and "Reset" is a secondary button that appears only when a filter is set.
 
-Search does not call the API on each keystroke. It waits 300ms after the last change. Changing any filter resets the page to 1.
+Search and selects update the draft locally. Nothing is sent to the API until the admin presses Apply. Enter inside the filter form also applies. Changing any applied filter resets the page to 1. If From is after To, the field error "From is after To" shows under the pair, Apply is disabled, and no request is sent.
 
 Date fields are native date inputs, styled as fields, labeled "From" and "To". They send `YYYY-MM-DD`. If From is after To, the field error "From is after To" shows under the pair and the request is not sent.
 
@@ -367,6 +367,7 @@ Date fields are native date inputs, styled as fields, labeled "From" and "To". T
 Desktop tables start at 1024px. Between 720px and 1023px the table uses the stacked-record layout, because the rail leaves too little width for six patient columns.
 
 - Header row 36px, fill `paper-2`, labels 12px weight 600 ink-700, sentence case, left aligned. Count columns are right aligned.
+- The last column is pinned to the right edge: its header and its cells are right aligned, so the row closes against the card edge instead of leaving a loose gap after the final value. On the Doctors table that is Created; on the Patients table that is the row actions.
 - Body row 52px, bottom border 1px `rule`. Name is 14px weight 600. Other cells are 14px weight 400 ink-900. Secondary detail inside a cell, such as an email under a phone, is 12px ink-700.
 - Hover fill is `paper-2`. The row is a link when the whole row navigates (the doctor list). Edit and Delete are real buttons and do not trigger the row link.
 - No zebra stripes. No outer card. No rounded container.
@@ -383,9 +384,13 @@ Column order:
 
 Patients is a count, right aligned. Created and Registered print as `12 Nov 2026`, in the application's timezone, from the `YYYY-MM-DD` or ISO value. Do not show a time of day.
 
+On the Doctors table the date is the last column, so its header and cells align to the right edge of the table. The column keeps the first four columns at their measured widths and takes the leftover width on wide screens, which is why Hospital is a fixed 290px from 1280px up: an elastic text column would otherwise push the count and date apart.
+
+On the Patients table the row actions are the last column, so the header and the Edit and Delete buttons align to the right edge of the table. The buttons stay a real button pair, and the stacked record below 1024px keeps them on the last line, left aligned.
+
 ### 9.6 Pagination
 
-Left side, caption: "Showing 1–20 of 148". Right side: Previous, "Page 2 of 8", Next. Previous and Next are compact secondary buttons. They are disabled at the ends, not hidden. Page size is fixed at 20. There is no page-size selector. A single page hides the whole pagination row and keeps the showing-caption.
+Left side, caption: "Showing 1–15 of 148". Right side: a "Rows per page" select with 15, 30, and 50 (default 15), then first, previous, numbered page buttons (distant pages collapse into an ellipsis), next, and last compact secondary buttons. The navigation controls are disabled at the ends, not hidden, and the icon controls carry an accessible name. Changing the page size resets the page to 1. The row renders whenever there is at least one result so the page size stays reachable.
 
 ### 9.7 Dialogs
 

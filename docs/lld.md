@@ -227,7 +227,7 @@ Example:
 | Condition                        | `critical`, `serious`, `stable`, `recovering`, `chronic`, `observation`                     |
 | Search `q`                       | Trimmed, 1–100 characters when present                                                      |
 | `page`                           | Integer ≥ 1, default 1                                                                      |
-| `limit`                          | Integer 1–50, default 20                                                                    |
+| `limit`                          | Integer 1–100, default 20                                                                   |
 | Sort                             | A whitelist per endpoint. Anything else is `VALIDATION_ERROR`.                              |
 
 ### 2.4 Health
@@ -306,7 +306,7 @@ Also sets:
 Set-Cookie: dt_refresh=<opaque>; HttpOnly; Secure; SameSite=None; Path=/api/v1/auth; Max-Age=604800
 ```
 
-`SameSite=None` is required because the portal origin and the API origin differ. Localhost is treated as a secure site by Chromium, so `Secure` cookies work against `http://localhost` during the interview demo.
+`SameSite=None` keeps the cookie usable when the API is called directly, but the portal does not call it directly: `next.config.ts` rewrites `/api/v1/*` to `API_ORIGIN` in the Next server, so the browser only ever talks to its own origin and the cookie is first-party. That distinction is what keeps the session alive across a reload in browsers that block third-party cookies. Localhost is treated as a secure site by Chromium, so `Secure` cookies work against `http://localhost` during the interview demo.
 
 The access token payload is:
 
@@ -741,6 +741,7 @@ The repository interfaces above are the functions each model file exports. Servi
 
 `lib/api/http-client.ts`:
 
+- calls `/api/v1` on the portal origin; `next.config.ts` rewrites it to `API_ORIGIN` server-side, so the refresh cookie is first-party
 - sends `credentials: "include"`
 - sets `Authorization` when a token is present
 - on `401` from a data call, calls `POST /auth/refresh` once and retries the original request once
@@ -759,7 +760,7 @@ Query keys:
 
 These are the only TanStack Query keys. Login, logout, refresh, and form state are not cached. After a doctor write, invalidate `["doctors"]`. After a patient write or delete, invalidate `["patients"]`, `["doctors", doctorId]`, and `["dashboard"]`. Stale time is 30 seconds, except the dashboard, which is 60 seconds. Edit a patient from the row already in the list. Do not add a patient-detail query to open the dialog.
 
-`proxy.ts` only checks for the presence of the `dt_refresh` cookie to decide whether to allow a portal URL. The API remains the authority. A stolen or expired cookie still fails on refresh.
+`proxy.ts` allows a portal URL when it sees the `dt_refresh` cookie, or the first-party `dt_session` marker. The cookie is scoped to `/api/v1/auth` and is HttpOnly, so the middleware cannot rely on it alone. The marker carries no credential, and a failed refresh clears it. The API remains the authority. A stolen or expired cookie still fails on refresh.
 
 ## 4. Dependencies
 
@@ -826,9 +827,10 @@ API:
 
 Web:
 
-| Variable              | Required | Rule                          |
-| --------------------- | -------- | ----------------------------- |
-| `NEXT_PUBLIC_API_URL` | yes      | API origin, no trailing slash |
+| Variable              | Required | Rule                                          |
+| --------------------- | -------- | --------------------------------------------- |
+| `NEXT_PUBLIC_API_URL` | yes      | API path prefix, `/api/v1`                    |
+| `API_ORIGIN`          | yes      | Rewrite target, API origin, no trailing slash |
 
 Each repository ships `.env.example` with these keys and empty secrets.
 
@@ -1184,13 +1186,13 @@ Queries that filter specialization or hospital pass that collation. Queries that
 
 Index selection:
 
-| Query shape                                      | Index                                                                                                                       |
-| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| A doctor's patients, optional date window        | `doctorId, registeredAt, _id`                                                                                               |
-| Registration window, no doctor and no condition  | `registeredAt, _id`                                                                                                         |
-| Condition, with or without a registration window | `condition, registeredAt`                                                                                                   |
-| Doctor and condition together                    | `doctorId` index. Condition is a residual predicate. A doctor's patient list is the selective side.                         |
-| Search text only                                 | The active date index limits the sort, and the regex is residual. This is the known scan-prone shape. Page size stays ≤ 50. |
+| Query shape                                      | Index                                                                                                                        |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| A doctor's patients, optional date window        | `doctorId, registeredAt, _id`                                                                                                |
+| Registration window, no doctor and no condition  | `registeredAt, _id`                                                                                                          |
+| Condition, with or without a registration window | `condition, registeredAt`                                                                                                    |
+| Doctor and condition together                    | `doctorId` index. Condition is a residual predicate. A doctor's patient list is the selective side.                          |
+| Search text only                                 | The active date index limits the sort, and the regex is residual. This is the known scan-prone shape. Page size stays ≤ 100. |
 
 No index is declared for `fullName`. An unanchored regex would not use it.
 
