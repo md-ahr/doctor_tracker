@@ -33,7 +33,7 @@ export function PortalNav({ collapsed = false, onNavigate }: PortalNavProps = {}
         </div>
       </div>
 
-      <div className="portal-nav-section">
+      <div className="portal-nav-section pt-6">
         <p className="portal-nav-caption">Menu</p>
         <ul className="portal-nav-links">
           {links.map((link) => {

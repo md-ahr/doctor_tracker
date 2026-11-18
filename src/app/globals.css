@@ -95,7 +95,9 @@
   --control-height-compact: 38px;
   --row-height: 56px;
   --content-max: 1600px;
-  --page-gutter: clamp(16px, 2vw, 40px);
+  /* Space the shell hands back to the content when the rail collapses. */
+  --content-gain: 0px;
+  --page-gutter: clamp(16px, 2vw, 20px);
   --rail-width: 256px;
   --rail-width-collapsed: 78px;
 
@@ -208,6 +210,7 @@ a {
 /* Shell ------------------------------------------------------------------ */
 
 .portal-frame {
+  --content-max-live: calc(var(--content-max) + var(--content-gain));
   min-height: 100dvh;
   background: var(--paper-0);
   color: var(--ink-900);
@@ -431,20 +434,22 @@ a {
   position: sticky;
   top: 0;
   z-index: 40;
+  background: rgba(255, 255, 255, 0.7);
   border-bottom: 1px solid transparent;
-  background: color-mix(in srgb, var(--paper-0) 86%, transparent);
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.04);
   backdrop-filter: blur(14px);
 }
 
 .portal-top-inner {
   display: flex;
   width: 100%;
-  max-width: var(--content-max);
+  max-width: var(--content-max-live);
   min-height: 76px;
   align-items: center;
   gap: 14px;
   margin-inline: auto;
   padding: 14px var(--page-gutter);
+  transition: max-width 220ms ease-out;
 }
 
 .portal-menu-button,
@@ -666,9 +671,11 @@ a {
 .portal-main {
   width: 100%;
   min-width: 0;
-  max-width: var(--content-max);
+  max-width: var(--content-max-live);
   margin-inline: auto;
   padding: 8px var(--page-gutter) 48px;
+  margin-top: 20px;
+  transition: max-width 220ms ease-out;
 }
 
 .portal-boot {
@@ -722,7 +729,6 @@ a {
 .page-header {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 22px;
@@ -1353,6 +1359,12 @@ a {
   .portal-frame[data-rail="closed"] .portal-nav {
     width: var(--rail-width-collapsed);
     padding-inline: 12px;
+  }
+
+  /* Collapsing the rail widens the stage. Hand that width to the content
+     column instead of letting it pool into the left and right gutters. */
+  .portal-frame[data-rail="closed"] {
+    --content-gain: calc(var(--rail-width) - var(--rail-width-collapsed));
   }
 
   .portal-frame[data-rail="closed"] .portal-stage {
