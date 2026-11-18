@@ -13,6 +13,16 @@ export function isDateOrderValid(from: string, to: string): boolean {
   return Temporal.PlainDate.compare(parsePlainDate(from), parsePlainDate(to)) <= 0;
 }
 
+/** True for an empty value or a canonical `YYYY-MM-DD` calendar day. */
+export function isPlainDate(value: string): boolean {
+  if (value.length === 0) return true;
+  try {
+    return Temporal.PlainDate.from(value).toString() === value;
+  } catch {
+    return false;
+  }
+}
+
 export function formatChartDate(value: string): string {
   try {
     const date = Temporal.PlainDate.from(value);

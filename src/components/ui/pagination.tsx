@@ -1,0 +1,252 @@
+"use client";
+
+import { useId, type ReactNode } from "react";
+
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS, type PageSize } from "@/lib/paging";
+import type { PageMeta } from "@/lib/api/types";
+
+export { PAGE_SIZE_OPTIONS };
+export type { PageSize };
+
+/** Numbers kept visible around the current page. */
+const WINDOW_SIZE = 3;
+
+/** Below this many pages every number fits without collapsing. */
+const MAX_FULL_PAGES = 7;
+
+export type PaginationItem = number | "ellipsis";
+
+/**
+ * Builds the visible page slots, e.g. `1 2 3 … 15 16 17`.
+ * Numbers adjacent to the current page plus the first and last page stay
+ * visible; larger gaps collapse into a single ellipsis marker.
+ */
+export function getPageItems(page: number, totalPages: number): PaginationItem[] {
+  if (totalPages <= MAX_FULL_PAGES) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+
+  const current = Math.min(Math.max(page, 1), totalPages);
+  const windowStart = Math.min(
+    Math.max(current - Math.floor(WINDOW_SIZE / 2), 1),
+    totalPages - WINDOW_SIZE + 1,
+  );
+  const visible = new Set<number>([1, totalPages]);
+
+  for (let candidate = windowStart; candidate < windowStart + WINDOW_SIZE; candidate += 1) {
+    visible.add(candidate);
+  }
+
+  const items: PaginationItem[] = [];
+  let previous = 0;
+
+  for (const candidate of [...visible].sort((a, b) => a - b)) {
+    const gap = candidate - previous - 1;
+    if (gap === 1) items.push(candidate - 1);
+    else if (gap > 1) items.push("ellipsis");
+    items.push(candidate);
+    previous = candidate;
+  }
+
+  return items;
+}
+
+type PaginationProps = {
+  meta?: PageMeta;
+  limit: PageSize;
+  itemCount: number;
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (limit: PageSize) => void;
+};
+
+export function Pagination({
+  meta,
+  limit,
+  itemCount,
+  onPageChange,
+  onPageSizeChange,
+}: PaginationProps) {
+  const sizeId = useId();
+  const total = meta?.total ?? itemCount;
+  const page = meta?.page ?? 1;
+  const totalPages = meta?.totalPages ?? Math.max(1, Math.ceil(total / limit));
+  const currentPage = Math.min(Math.max(page, 1), Math.max(totalPages, 1));
+  const start = total === 0 ? 0 : (currentPage - 1) * limit + 1;
+  const end = Math.min(currentPage * limit, total);
+  const pageItems = getPageItems(page, totalPages);
+
+  // Everything already fits on one screen, so the pager earns no space.
+  if (total <= DEFAULT_PAGE_SIZE) return null;
+
+  return (
+    <div className="mt-4 flex flex-col gap-3 border-t border-line pt-4 text-sm text-ink-secondary sm:flex-row sm:items-center sm:justify-between">
+      <p className="tabular-nums">
+        Showing{" "}
+        <span className="font-semibold text-ink">
+          {start}–{end}
+        </span>{" "}
+        of <span className="font-semibold text-ink">{total.toLocaleString("en-GB")}</span>
+      </p>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+        <div className="flex items-center gap-2">
+          <label
+            className="text-xs font-medium whitespace-nowrap text-ink-secondary"
+            htmlFor={sizeId}
+          >
+            Rows per page
+          </label>
+          <Select
+            onValueChange={(value) => {
+              const next = Number(value ?? 0);
+              if (PAGE_SIZE_OPTIONS.includes(next as PageSize)) onPageSizeChange(next as PageSize);
+            }}
+            value={String(limit)}
+          >
+            <SelectTrigger className="w-20 justify-between px-2.5" id={sizeId} size="compact">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {PAGE_SIZE_OPTIONS.map((size) => (
+                <SelectItem key={size} value={String(size)}>
+                  {size}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <nav aria-label="Pagination" className="flex flex-wrap items-center gap-1.5">
+          <span className="sr-only">
+            Page {page} of {totalPages}
+          </span>
+          <PagerButton disabled={page <= 1} label="First page" onClick={() => onPageChange(1)}>
+            <DoubleChevronIcon direction="left" />
+          </PagerButton>
+          <PagerButton
+            disabled={page <= 1}
+            label="Previous page"
+            onClick={() => onPageChange(page - 1)}
+          >
+            <ChevronIcon direction="left" />
+          </PagerButton>
+          {pageItems.map((item, index) =>
+            item === "ellipsis" ? (
+              <span
+                className="w-6 text-center text-xs font-semibold text-ink-secondary select-none"
+                key={`ellipsis-${index}`}
+              >
+                …<span className="sr-only">More pages</span>
+              </span>
+            ) : (
+              <Button
+                aria-current={item === page ? "page" : undefined}
+                aria-label={`Page ${item}`}
+                className="w-(--control-height-compact) px-0 tabular-nums"
+                key={item}
+                onClick={() => {
+                  if (item !== page) onPageChange(item);
+                }}
+                size="compact"
+                title={`Page ${item}`}
+                type="button"
+                variant={item === page ? "primary" : "secondary"}
+              >
+                {item}
+              </Button>
+            ),
+          )}
+          <PagerButton
+            disabled={page >= totalPages}
+            label="Next page"
+            onClick={() => onPageChange(page + 1)}
+          >
+            <ChevronIcon direction="right" />
+          </PagerButton>
+          <PagerButton
+            disabled={page >= totalPages}
+            label="Last page"
+            onClick={() => onPageChange(totalPages)}
+          >
+            <DoubleChevronIcon direction="right" />
+          </PagerButton>
+        </nav>
+      </div>
+    </div>
+  );
+}
+
+function PagerButton({
+  label,
+  disabled,
+  onClick,
+  children,
+}: {
+  label: string;
+  disabled: boolean;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <Button
+      aria-label={label}
+      className="w-(--control-height-compact) px-0"
+      disabled={disabled}
+      onClick={onClick}
+      size="compact"
+      title={label}
+      type="button"
+      variant="secondary"
+    >
+      {children}
+    </Button>
+  );
+}
+
+function ChevronIcon({ direction }: { direction: "left" | "right" }) {
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      height="15"
+      viewBox="0 0 24 24"
+      width="15"
+      style={direction === "right" ? { transform: "rotate(180deg)" } : undefined}
+    >
+      <path
+        d="m14.5 5.5-6.5 6.5 6.5 6.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+}
+
+function DoubleChevronIcon({ direction }: { direction: "left" | "right" }) {
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      height="15"
+      viewBox="0 0 24 24"
+      width="15"
+      style={direction === "right" ? { transform: "rotate(180deg)" } : undefined}
+    >
+      <path
+        d="M12.5 5.5 6 12l6.5 6.5M19.5 5.5 13 12l6.5 6.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+}
