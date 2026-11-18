@@ -14,7 +14,7 @@ export function PortalTopbar() {
       <div className="flex items-center gap-3">
         <span
           aria-hidden="true"
-          className="grid size-10 place-items-center rounded-full bg-[#d9c8ff] text-sm font-semibold text-[#4b2f86]"
+          className="grid size-10 shrink-0 place-items-center rounded-full bg-selected text-sm font-semibold text-ink"
         >
           {initial}
         </span>
@@ -36,7 +36,7 @@ export function PortalTopbar() {
       </form>
 
       <Link
-        className="inline-flex h-11 items-center justify-center justify-self-end rounded-full bg-(--portal-violet) px-5 text-sm font-semibold text-white hover:bg-(--portal-violet-deep)"
+        className="inline-flex h-10 shrink-0 items-center justify-center rounded-[2px] bg-action px-4 text-[15px] font-semibold text-action-fg hover:bg-action-hover"
         href="/patients"
       >
         + New patient
@@ -51,7 +51,7 @@ function SearchIcon() {
       aria-hidden="true"
       fill="none"
       height="16"
-      stroke="var(--portal-muted)"
+      stroke="var(--ink-500)"
       strokeLinecap="round"
       strokeWidth="1.8"
       viewBox="0 0 24 24"

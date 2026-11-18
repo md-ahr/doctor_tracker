@@ -15,7 +15,7 @@ export default function PortalLayout({ children }: PortalLayoutProps) {
         <PortalNav />
         <div className="portal-stage">
           <PortalTopbar />
-          <main>{children}</main>
+          <main className="portal-main">{children}</main>
         </div>
       </div>
     </PortalSessionGate>

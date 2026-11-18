@@ -964,7 +964,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 10.1 — Loading and error patterns
 
-- [ ] **Deliverable:** Shared empty/loading/error for tables and dashboard per design §8.
+- [x] **Deliverable:** Shared empty/loading/error for tables and dashboard per design §8.
 
 **Files:**
 
@@ -978,7 +978,7 @@ Implement methods in `web/src/lib/api/doctor-tracker-api.ts`. Each task adds met
 
 ### Task 10.2 — Responsive portal layout
 
-- [ ] **Deliverable:** Nav and content column usable on mobile widths per design.
+- [x] **Deliverable:** Nav and content column usable on mobile widths per design.
 
 **Files:**
 
